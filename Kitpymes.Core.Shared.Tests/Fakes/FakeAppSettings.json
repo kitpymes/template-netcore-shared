@@ -1,0 +1,12 @@
+{
+    "FakeSettings": {
+        "FacebookSettings": {
+            "Enabled": true,
+            "Key": "sdf98fsdf98dsj9f8"
+        },
+        "GoogleSettings": {
+            "Enabled": false,
+            "Key": null
+        }
+    }
+}

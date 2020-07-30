@@ -1,0 +1,78 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30204.135
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kitpymes.Core.Shared", "Kitpymes.Core.Shared\Kitpymes.Core.Shared.csproj", "{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{05B0C26C-3AE9-46C9-A755-6C7592C3FAC6}"
+	ProjectSection(SolutionItems) = preProject
+		docs\_config.yml = docs\_config.yml
+		docs\LICENSE.txt = docs\LICENSE.txt
+		docs\README.md = docs\README.md
+		docs\README_NUGET.md = docs\README_NUGET.md
+		docs\RELEASE_NOTES.txt = docs\RELEASE_NOTES.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "analyzers", "analyzers", "{E3F4A8FB-7B7B-4236-851D-7A75B2EEA480}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		docs\analyzers\stylecop.json = docs\analyzers\stylecop.json
+		docs\analyzers\stylecop.ruleset = docs\analyzers\stylecop.ruleset
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "images", "images", "{ED7CEF96-5D02-4528-9063-69CD9D6DCAAC}"
+	ProjectSection(SolutionItems) = preProject
+		docs\images\logo.ico = docs\images\logo.ico
+		docs\images\logo.png = docs\images\logo.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "screenshot", "screenshot", "{4AB602EE-B6A8-4747-B38E-28FB206C515F}"
+	ProjectSection(SolutionItems) = preProject
+		docs\images\screenshot\resultados_addperson.png = docs\images\screenshot\resultados_addperson.png
+		docs\images\screenshot\resultados_changename.png = docs\images\screenshot\resultados_changename.png
+		docs\images\screenshot\resultados_testing.png = docs\images\screenshot\resultados_testing.png
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{9865DDDD-C2E1-4B44-A76A-2B63AAD0D36A}"
+	ProjectSection(SolutionItems) = preProject
+		docs\props\Common.Build.props = docs\props\Common.Build.props
+		docs\props\Pack.Build.props = docs\props\Pack.Build.props
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "signassembly", "signassembly", "{59A6DCD5-FDD4-4FF9-9C72-E81876B924B4}"
+	ProjectSection(SolutionItems) = preProject
+		docs\signassembly\SignStrong.snk = docs\signassembly\SignStrong.snk
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kitpymes.Core.Shared.Tests", "Kitpymes.Core.Shared.Tests\Kitpymes.Core.Shared.Tests.csproj", "{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E3F4A8FB-7B7B-4236-851D-7A75B2EEA480} = {05B0C26C-3AE9-46C9-A755-6C7592C3FAC6}
+		{ED7CEF96-5D02-4528-9063-69CD9D6DCAAC} = {05B0C26C-3AE9-46C9-A755-6C7592C3FAC6}
+		{4AB602EE-B6A8-4747-B38E-28FB206C515F} = {ED7CEF96-5D02-4528-9063-69CD9D6DCAAC}
+		{9865DDDD-C2E1-4B44-A76A-2B63AAD0D36A} = {05B0C26C-3AE9-46C9-A755-6C7592C3FAC6}
+		{59A6DCD5-FDD4-4FF9-9C72-E81876B924B4} = {05B0C26C-3AE9-46C9-A755-6C7592C3FAC6}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {8D725F14-B824-4C2A-A1C4-6009225D97E2}
+	EndGlobalSection
+EndGlobal
