@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Kitpymes.Core.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Kitpymes.Core.Shared;
 
 namespace Api.Nuget.Controllers
 {
@@ -21,7 +21,11 @@ namespace Api.Nuget.Controllers
 
         public WeatherForecastController(ILogger<WeatherForecastController> logger)
         {
+            var defaultValue = Summaries.ToDefaultValue();
+
             _logger = logger;
+
+            _logger.LogInformation("Summaries default value: " + defaultValue);
         }
 
         [HttpGet]
