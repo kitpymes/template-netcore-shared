@@ -15,12 +15,24 @@ namespace Kitpymes.Core.Shared.Tests
 
             var options = action.ToConfigureOrDefault();
 
-            mock.Setup(x => x.Scheme).Returns(options.Scheme);
+            if (!string.IsNullOrWhiteSpace(options.Scheme))
+            {
+                mock.Setup(x => x.Scheme).Returns(options.Scheme);
+            }
+
+            if (!string.IsNullOrWhiteSpace(options.Method))
+            {
+                mock.Setup(x => x.Method).Returns(options.Method);
+            }
+
+            if (options.Body != null)
+            {
+                mock.Setup(x => x.Body).Returns(options.Body);
+            }
+
             mock.Setup(x => x.Host).Returns(options.Host);
             mock.Setup(x => x.Path).Returns(options.Path);
             mock.Setup(x => x.PathBase).Returns(options.PathBase);
-            mock.Setup(x => x.Method).Returns(options.Method);
-            mock.Setup(x => x.Body).Returns(options.Body);
             mock.Setup(x => x.QueryString).Returns(options.QueryString);
             mock.Setup(x => x.Headers).Returns(options.Headers);
 
@@ -34,25 +46,25 @@ namespace Kitpymes.Core.Shared.Tests
             return this;
         }
 
-        public override Stream Body { get; set; }
+        public override Stream? Body { get; set; }
         public override long? ContentLength { get; set; }
-        public override string ContentType { get; set; }
-        public override IRequestCookieCollection Cookies { get; set; }
-        public override IFormCollection Form { get; set; }
+        public override string? ContentType { get; set; }
+        public override IRequestCookieCollection? Cookies { get; set; }
+        public override IFormCollection? Form { get; set; }
         public override IHeaderDictionary Headers { get; } = new HeaderDictionary();
         public override HostString Host { get; set; }
         public override bool IsHttps { get; set; }
-        public override string Method { get; set; }
+        public override string? Method { get; set; }
         public override PathString Path { get; set; }
         public override PathString PathBase { get; set; }
-        public override string Protocol { get; set; }
-        public override IQueryCollection Query { get; set; }
+        public override string? Protocol { get; set; }
+        public override IQueryCollection? Query { get; set; }
         public override QueryString QueryString { get; set; }
-        public override string Scheme { get; set; }
+        public override string? Scheme { get; set; }
 
         public override bool HasFormContentType { get; }
 
-        public override HttpContext HttpContext { get; }
+        public override HttpContext? HttpContext { get; }
 
         public override Task<IFormCollection> ReadFormAsync(CancellationToken cancellationToken = default)
         {

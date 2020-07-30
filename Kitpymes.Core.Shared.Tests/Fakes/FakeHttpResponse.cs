@@ -14,11 +14,23 @@ namespace Kitpymes.Core.Shared.Tests
 
             var options = action.ToConfigureOrDefault();
 
-            mock.Setup(x => x.ContentType).Returns(options.ContentType);
+            if (!string.IsNullOrWhiteSpace(options.ContentType))
+            {
+                mock.Setup(x => x.ContentType).Returns(options.ContentType);
+            }
+
+            if (options.Body != null)
+            {
+                mock.Setup(x => x.Body).Returns(options.Body);
+            }
+
+            if (options.Cookies != null)
+            {
+                mock.Setup(x => x.Cookies).Returns(options.Cookies);
+            }
+
             mock.Setup(x => x.StatusCode).Returns(options.StatusCode);
             mock.Setup(x => x.Headers).Returns(options.Headers);
-            mock.Setup(x => x.Body).Returns(options.Body);
-            mock.Setup(x => x.Cookies).Returns(options.Cookies);
 
             return mock.Object;
         }
@@ -31,11 +43,11 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         public override long? ContentLength { get; set; }
-        public override string ContentType { get; set; }
-        public override IResponseCookies Cookies { get; }
+        public override string? ContentType { get; set; }
+        public override IResponseCookies? Cookies { get; }
         public override IHeaderDictionary Headers { get; } = new HeaderDictionary();
         public override int StatusCode { get; set; }
-        public override Stream Body { get; set; }
+        public override Stream? Body { get; set; }
         public override bool HasStarted => throw new NotImplementedException();
         public override HttpContext HttpContext => throw new NotImplementedException();
 

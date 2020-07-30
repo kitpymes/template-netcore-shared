@@ -1,4 +1,4 @@
-﻿# <img src="https://github.com/kitpymes/template-netcore-shared/raw/master/docs/images/logo.png" height="30px"> Shared
+﻿# <img src="https://github.com/kitpymes/template-netcore-shared/raw/master/docs/images/logo.png" height="30px"> Kitpymes.Core.Shared
 
 **Extensiones y utilidades comunes utilizadas en los proyectos**
 

@@ -53,7 +53,7 @@ namespace Kitpymes.Core.Shared.Tests
             var httpContext = FakeHttpContext.Configure(x =>
             {
                 x.Connection.RemoteIpAddress = ipExpected;
-                x.User.ToAdd(authenticationType, (claimTypeExpected, claimValueExpected));
+                x.User?.ToAdd(authenticationType, (claimTypeExpected, claimValueExpected));
                 x.Request = new FakeHttpRequest
                 {
                     ContentType = contentTypeExpected,

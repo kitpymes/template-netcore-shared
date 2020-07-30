@@ -1,4 +1,4 @@
-name: Validations
+name: Kitpymes.Core.Shared
 
 on: [push]
 

@@ -16,7 +16,11 @@ namespace Kitpymes.Core.Shared.Tests
 
             var options = action.ToConfigureOrDefault();
 
-            mock.Setup(m => m.User).Returns(options.User);
+            if (options.User != null)
+            {
+                mock.Setup(m => m.User).Returns(options.User);
+            }
+            
             mock.Setup(m => m.Request).Returns(options.Request);
             mock.Setup(m => m.Connection).Returns(options.Connection);
             mock.Setup(m => m.Response).Returns(options.Response);
@@ -26,15 +30,15 @@ namespace Kitpymes.Core.Shared.Tests
 
         public FakeConnectionInfo Connection { get; set; } = new FakeConnectionInfo();
         public FakeHttpRequest Request { get; set; } = new FakeHttpRequest();
-        public ClaimsPrincipal User { get; set; } = new ClaimsPrincipal();
+        public ClaimsPrincipal? User { get; set; } = new ClaimsPrincipal();
         public FakeHttpResponse Response { get; set; } = new FakeHttpResponse();
 
-        public IFeatureCollection Features { get; set; }
-        public IDictionary<object, object> Items { get; set; }
+        public IFeatureCollection? Features { get; set; }
+        public IDictionary<object, object>? Items { get; set; }
         public CancellationToken RequestAborted { get; set; }
-        public IServiceProvider RequestServices { get; set; }
-        public ISession Session { get; set; }
-        public string TraceIdentifier { get; set; }
-        public WebSocketManager WebSockets { get; }
+        public IServiceProvider? RequestServices { get; set; }
+        public ISession? Session { get; set; }
+        public string? TraceIdentifier { get; set; }
+        public WebSocketManager? WebSockets { get; }
     }
 }
