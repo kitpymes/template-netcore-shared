@@ -92,6 +92,8 @@
     <Choose>
       <When Condition=" '$(IsTestsProject)' == 'false' and '$(IsApiProject)' == 'false' ">
         <PropertyGroup>
+          <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+          <RunAnalyzersDuringLiveAnalysis>true</RunAnalyzersDuringLiveAnalysis>
           <CodeAnalysisRuleSet>$(SolutionDir)docs\analyzers\stylecop.ruleset</CodeAnalysisRuleSet>
         </PropertyGroup>
 

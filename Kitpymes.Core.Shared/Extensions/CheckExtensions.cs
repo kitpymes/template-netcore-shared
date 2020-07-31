@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrEmpty<TSource>(this TSource source)
+        public static bool ToIsNullOrEmpty<TSource>([NotNullWhen(false)] this TSource source)
         => source is null || (source is string && string.IsNullOrWhiteSpace(source as string)) || source.Equals(default(TSource));
 
         /// <summary>
@@ -57,7 +57,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrAny<TSource>(this IEnumerable<TSource> source)
+        public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource> source)
         => source is null || !source.Any();
 
         /// <summary>
