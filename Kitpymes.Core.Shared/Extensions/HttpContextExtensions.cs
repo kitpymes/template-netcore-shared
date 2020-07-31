@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>string | null | ApplicationException: si el parámetro httpContext es nulo.</returns>
         public static bool ToTryIPv6(this HttpContext httpContext, [MaybeNullWhen(false)] out string value)
         {
-            var ip = httpContext.ToIPv6();
+            var ip = httpContext.ToThrowIfNullOrEmpty(nameof(httpContext)).ToIPv6();
 
             if (string.IsNullOrWhiteSpace(ip))
             {

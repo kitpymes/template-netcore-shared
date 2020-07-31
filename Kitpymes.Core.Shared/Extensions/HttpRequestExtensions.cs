@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>string | null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out string value)
         {
-            value = httpRequest.ToHeader(key);
+            value = httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).ToHeader(key);
 
             if (string.IsNullOrWhiteSpace(value))
             {
