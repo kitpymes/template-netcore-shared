@@ -35,7 +35,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
         public static bool ToIsNullOrEmpty<TSource>(this TSource source)
-        => source.ToHasErrors(() => source is null || (source is string && string.IsNullOrWhiteSpace(source as string)) || source.Equals(default(TSource)));
+        => source is null || (source is string && string.IsNullOrWhiteSpace(source as string)) || source.Equals(default(TSource));
 
         /// <summary>
         /// Verifica si un valor es nulo o vacío.
@@ -58,7 +58,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
         public static bool ToIsNullOrAny<TSource>(this IEnumerable<TSource> source)
-        => source.ToHasErrors(() => source is null || !source.Any());
+        => source is null || !source.Any();
 
         /// <summary>
         /// Verifica si una colección es nula o no contiene valores.

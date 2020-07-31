@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpContext">Encapsula toda la información específica de HTTP sobre una solicitud HTTP individual.</param>
         /// <param name="value">Valor a devolver.</param>
         /// <returns>string | null | ApplicationException: si el parámetro httpContext es nulo.</returns>
-        public static bool ToTryIPv6(this HttpContext httpContext, [MaybeNullWhen(false)] out string value)
+        public static bool ToTryIPv6(this HttpContext httpContext, [MaybeNullWhen(false)] out string? value)
         {
             var ip = httpContext.ToThrowIfNullOrEmpty(nameof(httpContext)).ToIPv6();
 

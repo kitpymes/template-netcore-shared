@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="key">Clave del valor del header a obtener.</param>
         /// <param name="value">Valor del header.</param>
         /// <returns>string | null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
-        public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out string value)
+        public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out string? value)
         {
             value = httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).ToHeader(key);
 

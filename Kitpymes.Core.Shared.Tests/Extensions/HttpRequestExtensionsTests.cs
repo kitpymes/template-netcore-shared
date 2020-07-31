@@ -60,7 +60,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(key, value1Expected, value2Expected));
 
-            if (fakeHttpRequest.ToTryHeader(key, out var valueActual))
+            if (fakeHttpRequest.ToTryHeader(key, out var valueActual) && !string.IsNullOrWhiteSpace(valueActual))
             {
                 Assert.IsTrue(valueActual.Contains(value1Expected));
                 Assert.IsTrue(valueActual.Contains(value2Expected));
