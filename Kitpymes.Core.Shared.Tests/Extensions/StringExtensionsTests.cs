@@ -430,6 +430,12 @@ namespace Kitpymes.Core.Shared.Tests
         {
             var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             var sourceDirectoryPath = proyectDirectoryPath + "\\Fakes";
+
+            if (!sourceDirectoryPath.ToDirectoryExists())
+            {
+                Directory.CreateDirectory(sourceDirectoryPath);
+            }
+
             var fileZipPath = sourceDirectoryPath + ".zip";
             var destinationDirectoryPath = proyectDirectoryPath;
 
@@ -445,6 +451,12 @@ namespace Kitpymes.Core.Shared.Tests
         {
             var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             var sourceDirectoryPath = proyectDirectoryPath + "\\Fakes";
+
+            if (!sourceDirectoryPath.ToDirectoryExists())
+            {
+                Directory.CreateDirectory(sourceDirectoryPath);
+            }
+
             var customZipName = Guid.NewGuid().ToString();
             var fileZipPath = proyectDirectoryPath + $"\\{customZipName}.zip";
             var destinationDirectoryPath = proyectDirectoryPath;
@@ -462,6 +474,12 @@ namespace Kitpymes.Core.Shared.Tests
             var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             var folderNameToZip = "\\Fakes";
             var sourceDirectoryPath = proyectDirectoryPath + folderNameToZip;
+            
+            if (!sourceDirectoryPath.ToDirectoryExists())
+            {
+                Directory.CreateDirectory(sourceDirectoryPath);
+            }
+
             var zipNamePath = sourceDirectoryPath + ".zip";
             var destinationDirectoryPath = proyectDirectoryPath;
             var destinationDirectoryPathToExtractFiles = "FakeFolderZip".ToDirectoryTemporary();
