@@ -434,7 +434,10 @@ namespace Kitpymes.Core.Shared.Tests
             if (!sourceDirectoryPath.ToDirectoryExists())
             {
                 Directory.CreateDirectory(sourceDirectoryPath);
-                File.CreateText(sourceDirectoryPath + "\\test.txt");
+
+                using FileStream fs = File.Create(sourceDirectoryPath + "\\test.txt");
+                byte[] info = new UTF8Encoding(true).GetBytes("This is some text in the file.");
+                fs.Write(info, 0, info.Length);
             }
 
             var fileZipPath = sourceDirectoryPath + ".zip";
@@ -456,7 +459,10 @@ namespace Kitpymes.Core.Shared.Tests
             if (!sourceDirectoryPath.ToDirectoryExists())
             {
                 Directory.CreateDirectory(sourceDirectoryPath);
-                File.CreateText(sourceDirectoryPath + "\\test.txt");
+
+                using FileStream fs = File.Create(sourceDirectoryPath + "\\test.txt");
+                byte[] info = new UTF8Encoding(true).GetBytes("This is some text in the file.");
+                fs.Write(info, 0, info.Length);
             }
 
             var customZipName = Guid.NewGuid().ToString();
@@ -476,11 +482,14 @@ namespace Kitpymes.Core.Shared.Tests
             var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
             var folderNameToZip = "\\Fakes";
             var sourceDirectoryPath = proyectDirectoryPath + folderNameToZip;
-            
+
             if (!sourceDirectoryPath.ToDirectoryExists())
             {
                 Directory.CreateDirectory(sourceDirectoryPath);
-                File.CreateText(sourceDirectoryPath + "\\test.txt");
+
+                using FileStream fs = File.Create(sourceDirectoryPath + "\\test.txt");
+                byte[] info = new UTF8Encoding(true).GetBytes("This is some text in the file.");
+                fs.Write(info, 0, info.Length);
             }
 
             var zipNamePath = sourceDirectoryPath + ".zip";
