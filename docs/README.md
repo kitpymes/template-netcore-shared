@@ -286,12 +286,6 @@ public static class QueryableExtensions
     { }
 
     public static IQueryable<T> ToPaged<T>(this IQueryable<T> queryable, string property, bool ascending = true, int index = 1, int size = 20) { }
-
-    private static IQueryable<T> ToOrder<T>(this IQueryable<T> queryable, string property, bool ascending)
-    { }
-
-    private static IQueryable<T> ToOrder<T, TKey>(this IQueryable<T> queryable, IEnumerable<string> properties, bool ascending)
-    { }
 }
 ```
 
