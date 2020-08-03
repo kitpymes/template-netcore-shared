@@ -255,14 +255,9 @@ namespace Kitpymes.Core.Shared
             {
                 var filePath = $"{directoryPath}/{jsonFileName}.json";
 
-                if (filePath.ToFileExists())
-                {
-                    builder.AddJsonFile(filePath, optional, reloadOnChange);
-                }
-                else
-                {
-                    optional.ToThrowIfNotFound(nameof(jsonFileName));
-                }
+                filePath.ToThrowIfNotFoundFile(nameof(jsonFileName));
+
+                builder.AddJsonFile(filePath, optional, reloadOnChange);
             }
 
             return builder;

@@ -31,18 +31,18 @@ namespace Kitpymes.Core.Shared
         /// <summary>
         /// Verifica si un valor es nulo o vacío.
         /// </summary>
-        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrEmpty<TSource>(this TSource source)
+        public static bool ToIsNullOrEmpty(this object? source)
         {
             switch (source)
             {
+                case Enum _ when source is Enum:
+                case bool _ when source is bool:
+                    return false;
                 case null:
                 case string s when string.IsNullOrWhiteSpace(s):
                     return true;
-                case bool _ when source is bool:
-                    return false;
                 default:
                     return Equals(source, source.ToDefaultValue());
             }
@@ -119,6 +119,19 @@ namespace Kitpymes.Core.Shared
         => source.ToThrow(() => !source.ToDirectoryExists(), Util.Messages.NotFound(paramName));
 
         #endregion NotFoundDirectory
+
+        #region NotFoundFile
+
+        /// <summary>
+        /// Verifica si existe una fila.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="paramName">Nombre de la variable o parámetro.</param>
+        /// <returns>string | ApplicationException: "{paramName} is not found".</returns>
+        public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName)
+        => source.ToThrow(() => !source.ToFileExists(), Util.Messages.NotFound(paramName));
+
+        #endregion NotFoundFile
 
         /// <summary>
         /// Valida si una o varias condiciones son verdaderas.
