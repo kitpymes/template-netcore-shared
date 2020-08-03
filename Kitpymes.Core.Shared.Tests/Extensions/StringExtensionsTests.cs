@@ -650,11 +650,11 @@ namespace Kitpymes.Core.Shared.Tests
 
         #region ToDirectorySaveFileAsync
 
+#if DEBUG
+
         [TestMethod]
         public async Task ToDirectorySaveFileAsync_Passing_ValidValue_Returns_False()
         {
-#if DEBUG
-
             var folderName = Guid.NewGuid().ToString();
             var destinationDirectoryPath = folderName.ToDirectoryTemporary();
             var fileName = Guid.NewGuid().ToString() + ".txt";
@@ -668,9 +668,9 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(valueActual);
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
+        }
 
 #endif
-        }
 
         #endregion ToDirectorySaveFileAsync
 
