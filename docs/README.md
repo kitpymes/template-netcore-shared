@@ -445,15 +445,6 @@ public static class Enums
 ```
 
 ```cs
-public static class Exceptions
-{
-    public static ApplicationException ToThrow(string message) { }
-
-    public static ApplicationException ToThrow(Exception exception) { }
-}
-```
-
-```cs
 public static class Messages
 {
     public static string NullOrEmpty(string paramName) => $"{paramName} is null or empty";
