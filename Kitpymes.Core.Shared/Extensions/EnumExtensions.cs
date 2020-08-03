@@ -62,11 +62,9 @@ namespace Kitpymes.Core.Shared
         public static TAttribute? ToAttribute<TAttribute>(this Enum name)
             where TAttribute : Attribute
         {
-            var validEnum = name.ToThrowIfNullOrEmpty(nameof(name));
+            var type = name.GetType();
 
-            var type = validEnum.GetType();
-
-            var memberInfo = type.GetMember(validEnum.ToString()).FirstOrDefault(m => m.DeclaringType == type);
+            var memberInfo = type.GetMember(name.ToString()).FirstOrDefault(m => m.DeclaringType == type);
 
             var attribute = Attribute.GetCustomAttribute(memberInfo, typeof(TAttribute), false);
 

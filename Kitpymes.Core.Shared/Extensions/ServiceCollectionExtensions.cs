@@ -261,7 +261,7 @@ namespace Kitpymes.Core.Shared
                 }
                 else
                 {
-                    optional.ToThrowIfNullOrEmpty(nameof(jsonFileName));
+                    optional.ToThrowIfNotFound(nameof(jsonFileName));
                 }
             }
 
