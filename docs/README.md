@@ -111,7 +111,7 @@ public static class ByteExtensions
 ```cs
 public static class CheckExtensions
 {
-    public static bool ToIsNullOrEmpty<TSource>(this TSource source) { }
+    public static bool ToIsNullOrEmpty(this object? source) { }
 
     public static TSource ToThrowIfNullOrEmpty<TSource>([NotNull] this TSource source, string paramName) { }
 
@@ -121,11 +121,13 @@ public static class CheckExtensions
 
     public static TSource ToThrowIfNotFound<TSource>([NotNull] this TSource source, string paramName) { }
 
+    public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName) {}
+
     public static string? ToThrowIfNotFoundDirectory([NotNull] this string? source, string paramName) { }
   
     public static TSource ToThrow<TSource>([NotNull] this TSource source, Func<bool> predicate, string message) { }
 
-    public static bool ToHasErrors<TSource>(this TSource source, Func<bool> predicate) { }
+    public static bool ToHasErrors<TSource>([NotNullWhen(false)] this TSource source, Func<bool> predicate) { }
 }
 ```
 

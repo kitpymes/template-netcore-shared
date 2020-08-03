@@ -434,6 +434,7 @@ namespace Kitpymes.Core.Shared.Tests
             if (!sourceDirectoryPath.ToDirectoryExists())
             {
                 Directory.CreateDirectory(sourceDirectoryPath);
+                File.CreateText(sourceDirectoryPath);
             }
 
             var fileZipPath = sourceDirectoryPath + ".zip";
@@ -455,6 +456,7 @@ namespace Kitpymes.Core.Shared.Tests
             if (!sourceDirectoryPath.ToDirectoryExists())
             {
                 Directory.CreateDirectory(sourceDirectoryPath);
+                File.CreateText(sourceDirectoryPath);
             }
 
             var customZipName = Guid.NewGuid().ToString();
@@ -478,6 +480,7 @@ namespace Kitpymes.Core.Shared.Tests
             if (!sourceDirectoryPath.ToDirectoryExists())
             {
                 Directory.CreateDirectory(sourceDirectoryPath);
+                File.CreateText(sourceDirectoryPath);
             }
 
             var zipNamePath = sourceDirectoryPath + ".zip";
