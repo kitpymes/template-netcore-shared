@@ -34,8 +34,19 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrEmpty<TSource>([NotNullWhen(false)] this TSource source)
-        => source is null || (source is string && string.IsNullOrWhiteSpace(source as string)) || source.Equals(default(TSource));
+        public static bool ToIsNullOrEmpty<TSource>(this TSource source)
+        {
+            switch (source)
+            {
+                case null:
+                case string s when string.IsNullOrWhiteSpace(s):
+                    return true;
+                case bool _ when source is bool:
+                    return false;
+                default:
+                    return Equals(source, source.ToDefaultValue());
+            }
+        }
 
         /// <summary>
         /// Verifica si un valor es nulo o vacío.
@@ -55,10 +66,20 @@ namespace Kitpymes.Core.Shared
         /// Verifica si una colección es nula o no contiene valores.
         /// </summary>
         /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
-        /// <param name="source">El valor a verificar.</param>
+        /// <param name="input">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource> source)
-        => source is null || !source.Any();
+        public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource>? input)
+        {
+            switch (input)
+            {
+                case null:
+                case Array a when a.Length < 1:
+                case ICollection<object> c when c.Count < 1:
+                    return true;
+                default:
+                    return !input.Any();
+            }
+        }
 
         /// <summary>
         /// Verifica si una colección es nula o no contiene valores.
@@ -108,7 +129,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="message">Mensaje a mostrar en la ApplicationException.</param>
         /// <returns>TSource | ApplicationException: si source es nulo o si la evaluación del predicado es verdadero.</returns>
         public static TSource ToThrow<TSource>([NotNull] this TSource source, Func<bool> predicate, string message)
-        => source is null || predicate is null || predicate() ? throw Util.Exceptions.ToThrow(message) : source;
+        => source.ToHasErrors(predicate) ? throw new ApplicationException(message) : source;
 
         /// <summary>
         /// Valida si una o varias condiciones son verdaderas.
@@ -117,7 +138,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="predicate">Función a evaluar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToHasErrors<TSource>(this TSource source, Func<bool> predicate)
+        public static bool ToHasErrors<TSource>([NotNullWhen(false)] this TSource source, Func<bool> predicate)
         => source is null || predicate is null || predicate();
     }
 }
