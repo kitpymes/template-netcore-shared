@@ -2,7 +2,12 @@
 
 **Extensiones y utilidades comunes compartidas en los proyectos**
 
-[![Build Status](https://github.com/kitpymes/template-netcore-shared/workflows/Kitpymes.Core.Shared/badge.svg)](https://github.com/kitpymes/template-netcore-shared/actions)[![NuGet Status](https://img.shields.io/nuget/v/Kitpymes.Core.Shared)](https://www.nuget.org/packages/Kitpymes.Core.Shared/)[![NuGet Download](https://img.shields.io/nuget/dt/Kitpymes.Core.Shared)](https://www.nuget.org/stats/packages/Kitpymes.Core.Shared?groupby=Version)[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kitpymes/template-netcore-shared/blob/master/docs/LICENSE.txt)[![Size Repo](https://img.shields.io/github/repo-size/kitpymes/template-netcore-shared)](https://github.com/kitpymes/template-netcore-shared/)[![Last Commit](https://img.shields.io/github/last-commit/kitpymes/template-netcore-shared)](https://github.com/kitpymes/template-netcore-shared/)
+[![Build Status](https://github.com/kitpymes/template-netcore-shared/workflows/Kitpymes.Core.Shared/badge.svg)](https://github.com/kitpymes/template-netcore-shared/actions)
+[![NuGet Status](https://img.shields.io/nuget/v/Kitpymes.Core.Shared)](https://www.nuget.org/packages/Kitpymes.Core.Shared/)
+[![NuGet Download](https://img.shields.io/nuget/dt/Kitpymes.Core.Shared)](https://www.nuget.org/stats/packages/Kitpymes.Core.Shared?groupby=Version)
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/kitpymes/template-netcore-shared/blob/master/docs/LICENSE.txt)
+[![Size Repo](https://img.shields.io/github/repo-size/kitpymes/template-netcore-shared)](https://github.com/kitpymes/template-netcore-shared/)
+[![Last Commit](https://img.shields.io/github/last-commit/kitpymes/template-netcore-shared)](https://github.com/kitpymes/template-netcore-shared/)
 
 
 ## 📋 Requerimientos 

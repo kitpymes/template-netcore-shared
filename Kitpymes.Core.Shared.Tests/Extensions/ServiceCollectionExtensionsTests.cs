@@ -232,7 +232,7 @@ namespace Kitpymes.Core.Shared.Tests
         {
             var directoryPath = Directory.GetCurrentDirectory();
             var jsonFileName = Guid.NewGuid().ToString();
-            var expectedMessage = Util.Messages.NotFound($"{directoryPath}\\{jsonFileName}.json");
+            var expectedMessage = Util.Messages.NotFound($"{directoryPath}/{jsonFileName}.json");
 
             var services = new ServiceCollection();
             var exceptionActual = Assert.ThrowsException<ApplicationException>

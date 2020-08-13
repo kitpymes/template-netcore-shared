@@ -253,7 +253,7 @@ namespace Kitpymes.Core.Shared
         {
             foreach (var (jsonFileName, optional, reloadOnChange) in files)
             {
-                var filePath = $"{directoryPath}\\{jsonFileName}.json";
+                var filePath = $"{directoryPath}/{jsonFileName}.json";
 
                 filePath.ToThrowIfNotFoundFile(nameof(jsonFileName));
 
