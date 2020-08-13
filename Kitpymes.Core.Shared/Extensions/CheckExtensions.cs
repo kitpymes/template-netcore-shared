@@ -10,7 +10,6 @@ namespace Kitpymes.Core.Shared
     using System;
     using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
 
     /*
       Clase de extensión CheckExtensions
@@ -34,19 +33,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
         public static bool ToIsNullOrEmpty(this object? source)
-        {
-            switch (source)
-            {
-                case Enum _ when source is Enum:
-                case bool _ when source is bool:
-                    return false;
-                case null:
-                case string s when string.IsNullOrWhiteSpace(s):
-                    return true;
-                default:
-                    return Equals(source, source.ToDefaultValue());
-            }
-        }
+        => Util.Check.IsNullOrEmpty(source).HasErrors;
 
         /// <summary>
         /// Verifica si un valor es nulo o vacío.
@@ -69,17 +56,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="input">El valor a verificar.</param>
         /// <returns>true | false.</returns>
         public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource>? input)
-        {
-            switch (input)
-            {
-                case null:
-                case Array a when a.Length < 1:
-                case ICollection<object> c when c.Count < 1:
-                    return true;
-                default:
-                    return !input.Any();
-            }
-        }
+        => Util.Check.IsNullOrAny(input).HasErrors;
 
         /// <summary>
         /// Verifica si una colección es nula o no contiene valores.
@@ -87,7 +64,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSource">Tipo del valor de la colección a verificar.</typeparam>
         /// <param name="source">La colección a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
-        /// <returns>v{TSource} | ApplicationException: "{paramName} is null or not values".</returns>
+        /// <returns>IEnumerable{TSource} | ApplicationException: "{paramName} is null or not values".</returns>
         public static IEnumerable<TSource> ToThrowIfNullOrAny<TSource>([NotNull] this IEnumerable<TSource> source, string paramName)
         => source.ToThrow(() => source.ToIsNullOrAny(), Util.Messages.NullOrAny(paramName));
 
@@ -112,11 +89,19 @@ namespace Kitpymes.Core.Shared
         /// <summary>
         /// Verifica si existe el path de un directorio.
         /// </summary>
+        /// <param name="input">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsNotFoundDirectory([NotNullWhen(false)] this string? input)
+        => Util.Check.IsDirectory(input).HasErrors;
+
+        /// <summary>
+        /// Verifica si existe el path de un directorio.
+        /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
-        /// <returns>string | ApplicationException: "{paramName} is not found".</returns>
+        /// <returns>string | ApplicationException: "{valueOrParamName} is not found".</returns>
         public static string? ToThrowIfNotFoundDirectory([NotNull] this string? source, string paramName)
-        => source.ToThrow(() => !source.ToDirectoryExists(), Util.Messages.NotFound(paramName));
+        => source.ToThrow(() => source.ToIsNotFoundDirectory(),  Util.Messages.NotFound(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
         #endregion NotFoundDirectory
 
@@ -125,11 +110,19 @@ namespace Kitpymes.Core.Shared
         /// <summary>
         /// Verifica si existe una fila.
         /// </summary>
+        /// <param name="input">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsNotFoundFile([NotNullWhen(false)] this string? input)
+        => Util.Check.IsFile(input).HasErrors;
+
+        /// <summary>
+        /// Verifica si existe una fila.
+        /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
-        /// <returns>string | ApplicationException: "{paramName} is not found".</returns>
+        /// <returns>string | ApplicationException: "{valueOrParamName} is not found".</returns>
         public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName)
-        => source.ToThrow(() => !source.ToFileExists(), Util.Messages.NotFound(paramName));
+        => source.ToThrow(() => source.ToIsNotFoundFile(), Util.Messages.NotFound(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
         #endregion NotFoundFile
 

@@ -1,6 +1,6 @@
 ﻿# <img src="https://github.com/kitpymes/template-netcore-shared/raw/master/docs/images/logo.png" height="30px"> Kitpymes.Core.Shared
 
-**Extensiones y utilidades comunes utilizadas en los proyectos**
+**Extensiones y utilidades comunes compartidas en los proyectos**
 
 [![Build Status](https://github.com/kitpymes/template-netcore-shared/workflows/Kitpymes.Core.Shared/badge.svg)](https://github.com/kitpymes/template-netcore-shared/actions)
 [![NuGet Status](https://img.shields.io/nuget/v/Kitpymes.Core.Shared)](https://www.nuget.org/packages/Kitpymes.Core.Shared/)
@@ -121,9 +121,13 @@ public static class CheckExtensions
 
     public static TSource ToThrowIfNotFound<TSource>([NotNull] this TSource source, string paramName) { }
 
-    public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName) {}
+    public static bool ToIsNotFoundDirectory([NotNullWhen(false)] this string? input) { }
 
     public static string? ToThrowIfNotFoundDirectory([NotNull] this string? source, string paramName) { }
+
+    public static bool ToIsNotFoundFile([NotNullWhen(false)] this string? input) { }
+
+    public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName) {}
   
     public static TSource ToThrow<TSource>([NotNull] this TSource source, Func<bool> predicate, string message) { }
 
@@ -254,6 +258,8 @@ public static class HttpRequestExtensions
     public static string ToPath(this HttpRequest httpRequest) { }
 
     public static string? ToSubdomain(this HttpRequest httpRequest) { }
+
+    public static bool ToTryContentType(this HttpRequest httpRequest, [MaybeNullWhen(false)] out string? value) { }
 }
 ```
 
@@ -266,6 +272,14 @@ public static class HttpResponseExtensions
         string message,
         string contentType = MediaTypeNames.Application.Json,
         params (string key, string[] values)[] headers) { }
+}
+```
+
+```cs
+public static class IntegerExtensions
+{
+    [return: NotNull]
+    public static string ToStringFormat(this int input, IFormatProvider? formatProvider = null) { }
 }
 ```
 
@@ -304,8 +318,7 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ToConfiguration(this IServiceCollection services, string directoryPath, params (string jsonFileName, bool optional, bool reloadOnChange)[] files) { }
 
-    public static IServiceCollection ToConfiguration(this IServiceCollection services, params (string key, string? value)[] configuration)
-    { }
+    public static IServiceCollection ToConfiguration(this IServiceCollection services, params (string key, string? value)[] configuration) { }
 
     public static IServiceCollection ToConfiguration(this IServiceCollection services, IConfiguration configuration) { }
 
@@ -361,7 +374,6 @@ public static class StringExtensions
 
     public static int? ToInt(this string? input, int? defaultValue = null) { }
 
-    /// <param name="removeSourceDirectoryPath">Si queremos remover el directorio.</param>
     public static void ToZipCreate(
         this string? sourceDirectoryPath,
         string? destinationDirectoryPath,
@@ -375,8 +387,6 @@ public static class StringExtensions
         bool overwriteFiles = false) { }
 
     public static string ToContentType(this string? fileName, string defaultValue = MediaTypeNames.Application.Octet) { }
-
-    public static bool ToDirectoryExists(this string? directoryPath) { }
 
     public static string? ToDirectoryFindFilePath(this string? directoryPath, string fileName, bool ignoreCase = true) { }
 
@@ -396,8 +406,6 @@ public static class StringExtensions
         params string[] includeExtensions) { }
 
     public static string ToDirectoryTemporary(this string folderName) { }
-
-    public static bool ToFileExists(this string? filePath) { }
 
     public static string ToFormat(this string value, params object[] args) { }
 
@@ -428,6 +436,72 @@ public static class TypeExtensions
 ### Utilities
 
 ```cs
+public static class Check
+{
+    public static (bool HasErrors, int Count) IsNullOrAny(params IEnumerable?[] values) {}
+
+    public static (bool HasErrors, int Count) IsCustom(params Func<bool>[] values) {}
+
+    public static (bool HasErrors, int Count) IsEqual(object? value, params object?[] valuesCompare) {}
+
+    public static (bool HasErrors, int Count) IsGreater(long max, params object?[] values) {}
+
+    public static (bool HasErrors, int Count) IsLess(long min, params object?[] values) {}
+
+    public static (bool HasErrors, int Count) IsNullOrEmpty(params object?[] values) {}
+
+    public static (bool HasErrors, int Count) IsRange(long min, long max, params object?[] values) {}
+
+    public static (bool HasErrors, int Count) IsRegex(string regex, params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsDirectory(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsEmail(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsFileExtension(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsFile(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsName(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsPassword(long min, params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsSubdomain(params string?[] values) {}
+}
+```
+
+```cs
+public static class Regexp
+{
+    public const string ForDate = @"^((((0?[1-9]|[12]\d|3[01])[\.\-\/](0?[13578]|1[02])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|[12]\d|30)[\.\-\/](0?[13456789]|1[012])[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|((0?[1-9]|1\d|2[0-8])[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?\d{2}))|(29[\.\-\/]0?2[\.\-\/]((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))|(((0[1-9]|[12]\d|3[01])(0[13578]|1[02])((1[6-9]|[2-9]\d)?\d{2}))|((0[1-9]|[12]\d|30)(0[13456789]|1[012])((1[6-9]|[2-9]\d)?\d{2}))|((0[1-9]|1\d|2[0-8])02((1[6-9]|[2-9]\d)?\d{2}))|(2902((1[6-9]|[2-9]\d)?(0[48]|[2468][048]|[13579][26])|((16|[2468][048]|[3579][26])00)|00)))) ?((20|21|22|23|[01]\d|\d)(([:.][0-5]\d){1,2}))?$";
+
+    public const string ForDecimal = @"^((-?[1-9]+)|[0-9]+)(\.?|\,?)([0-9]*)$";
+
+    public const string ForEmail = @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$";
+
+    public const string ForHex = "^#?([a-f0-9]{6}|[a-f0-9]{3})$";
+
+    public const string ForInteger = "^((-?[1-9]+)|[0-9]+)$";
+
+    public const string ForLogin = "^[a-z0-9_-]{10,50}$";
+
+    public const string ForPassword = @"^.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$";
+
+    public const string ForTag = @"^<([a-z1-6]+)([^<]+)*(?:>(.*)<\/\1>| *\/>)$";
+
+    public const string ForTime = @"^([01]?[0-9]|2[0-3]):[0-5][0-9]$";
+
+    public const string ForUrl = @"^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$";
+
+    public const string ForHostname = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
+
+    public const string ForName = @"^[a-zA-Z ]*$";
+
+    public const string ForSubdomain = @"^[a-zA-Z0-9]*$";
+}
+```
+
+```cs
 public static class Enums
 {
     public static int ToCount<TEnum>()
@@ -451,7 +525,7 @@ public static class Messages
 
     public static string NullOrAny(string paramName) => $"{paramName} is null or not values";
 
-    public static string NotFound(string paramName) => $"{paramName} is not found";
+    public static string NotFound(string valueOrParamName) => $"{valueOrParamName} is not found";
 }
 ```
 

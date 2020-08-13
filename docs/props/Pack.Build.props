@@ -5,14 +5,14 @@
   <Choose>
     <When Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <PropertyGroup>
-        <Version>1.0.1</Version>
+        <Version>1.0.2</Version>
         <ApplicationIcon>$(SolutionDir)docs\images\logo.ico</ApplicationIcon>
         <PackageId>$(AssemblyName)</PackageId>
         <Authors>Kitpymes, Sebastian R Ferrari</Authors>
         <Owners>Kitpymes</Owners>
         <Title>Kitpymes.Core.Shared</Title>
         <Copyright>Copyright © $([System.DateTime]::Now.Year) by Kitpymes and Contributors. All rights reserved.</Copyright>
-        <Description>Extensiones y utilidades comunes utilizadas en los proyectos.</Description>
+        <Description>Extensiones y utilidades comunes compartidas en los proyectos.</Description>
         <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
         <PackageLicenseFile>LICENSE.txt</PackageLicenseFile>
         <PackageLicenseType>file</PackageLicenseType>

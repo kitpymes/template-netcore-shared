@@ -34,23 +34,32 @@ namespace Kitpymes.Core.Shared
     /// </remarks>
     public static class StringExtensions
     {
-        #region ToReplace
+        #region ToRemove
 
         /// <summary>
-        /// Remueve los espacios de un cadena.
+        /// Caracteres que se requieren remover.
         /// </summary>
-        /// <param name="input">Valor de la cadena.</param>
-        /// <param name="replace">Valor que va a ser reemplazado, por defecto remueve los valores vacios.</param>
-        /// <returns>La nueva cadena sin espacios o la misma cadena si es nula o vacia.</returns>
-        public static string? ToReplace(this string? input, string replace = " ")
+        /// <param name="input">Cadena a remplazar.</param>
+        /// <param name="removes">Caracteres que se quieren remover.</param>
+        /// <returns>La cadena con los caracteres removidos.</returns>
+        public static string ToRemove(this string input, params string[] removes)
         {
             if (string.IsNullOrWhiteSpace(input))
             {
-                return input;
+                return string.Empty;
             }
 
-            return new string(input.Replace(replace, string.Empty, StringComparison.CurrentCulture).Trim());
+            foreach (var remove in removes)
+            {
+                input = input.Replace(remove, string.Empty, StringComparison.CurrentCulture);
+            }
+
+            return input;
         }
+
+        #endregion ToRemove
+
+        #region ToReplace
 
         /// <summary>
         /// Reemplaza el valor de una cadena por otro.
@@ -353,14 +362,6 @@ namespace Kitpymes.Core.Shared
         #region ToDirectory
 
         /// <summary>
-        /// Verifica si existe el directorio.
-        /// </summary>
-        /// <param name="directoryPath">Ruta del directorio.</param>
-        /// <returns>true | false.</returns>
-        public static bool ToDirectoryExists(this string? directoryPath)
-        => !string.IsNullOrWhiteSpace(directoryPath) && Directory.Exists(directoryPath);
-
-        /// <summary>
         /// Obtiene el path de un archivo.
         /// </summary>
         /// <param name="directoryPath">Directorio donde se buscara el archivo.</param>
@@ -549,18 +550,6 @@ namespace Kitpymes.Core.Shared
         }
 
         #endregion ToDirectory
-
-        #region ToFile
-
-        /// <summary>
-        /// Verifica si exsite un archivo.
-        /// </summary>
-        /// <param name="filePath">Ruta del archivo.</param>
-        /// <returns>true | false.</returns>
-        public static bool ToFileExists(this string? filePath)
-        => !string.IsNullOrWhiteSpace(filePath) && File.Exists(filePath);
-
-        #endregion ToFile
 
         #region ToFormat
 

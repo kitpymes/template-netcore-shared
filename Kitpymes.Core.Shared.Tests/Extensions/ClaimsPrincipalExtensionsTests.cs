@@ -128,6 +128,64 @@ namespace Kitpymes.Core.Shared.Tests
 
         #endregion ToAuthenticationType
 
+        #region ToUserName
+
+        [TestMethod]
+        public void ToUserName_Passing_Null_ClaimsPrincipal_Returns_ApplicationException()
+        {
+            ClaimsPrincipal? claimsPrincipal = null;
+
+            var fakeHttpContext = FakeHttpContext.Configure(x =>
+            {
+                x.User = claimsPrincipal;
+            });
+
+            var claimsPrincipalActual = fakeHttpContext.User;
+
+            Assert.ThrowsException<ApplicationException>(() => claimsPrincipalActual.ToUserName());
+        }
+
+        [TestMethod]
+        public void ToUserName_Passing_Invalid_ClaimsPrincipal_Returns_Null()
+        {
+            var claimsPrincipal = new ClaimsPrincipal();
+            Thread.CurrentPrincipal = claimsPrincipal;
+
+            var fakeHttpContext = FakeHttpContext.Configure(x =>
+            {
+                x.User = claimsPrincipal;
+            });
+
+            var claimsPrincipalActual = fakeHttpContext.User;
+            var threadCurrentPrincipalActual = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Assert.IsNull(claimsPrincipalActual.ToUserName());
+            Assert.IsNull(threadCurrentPrincipalActual.ToUserName());
+        }
+
+        [TestMethod]
+        public void ToUserName_Passing_Valid_UserName_ClaimsPrincipal_Returns_String_UserName_Value()
+        {
+            var claimsPrincipal = new ClaimsPrincipal();
+            claimsPrincipal.ToAdd(authenticationType, (claimTypeName, claimValueName));
+            Thread.CurrentPrincipal = claimsPrincipal;
+
+            var fakeHttpContext = FakeHttpContext.Configure(x =>
+            {
+                x.User = claimsPrincipal;
+            });
+
+            var claimsPrincipalActual = fakeHttpContext.User;
+            var threadCurrentPrincipalActual = (ClaimsPrincipal)Thread.CurrentPrincipal;
+
+            Assert.AreEqual(claimValueName, claimsPrincipalActual.ToUserName());
+            Assert.AreEqual(claimValueName, threadCurrentPrincipalActual.ToUserName());
+        }
+
+        #endregion ToUserName
+
+        #region ToExists
+
         [TestMethod]
         public void ToExists_Passing_Claims_Returns_True()
         {
@@ -149,6 +207,10 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(claimsPrincipalActual.ToExists(claimTypeId));
             Assert.IsTrue(threadCurrentPrincipalActual.ToExists(claimTypeId));
         }
+
+        #endregion ToExists
+
+        #region ToGet
 
         [TestMethod]
         public void ToGet_Passing_Claims_Returns_Claim_Value_String()
@@ -221,6 +283,10 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(fakeObject.Age, threadCurrentPrincipalActual?.Age);
             CollectionAssert.AreEqual(fakeObject.Permissions, threadCurrentPrincipalActual?.Permissions);
         }
+
+        #endregion ToGet
+
+        #region ToGetAll
 
         [TestMethod]
         public void ToGetAll_Passing_Claims_Returns_Claim_Value_String_List()
@@ -330,5 +396,7 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(fakeObject1.Age, resultItemThreadCurrentPrincipalActual.Age);
             CollectionAssert.AreEqual(fakeObject1.Permissions, resultItemThreadCurrentPrincipalActual.Permissions);
         }
+
+        #endregion ToGetAll
     }
 }

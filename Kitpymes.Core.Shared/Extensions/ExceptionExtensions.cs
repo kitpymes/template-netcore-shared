@@ -46,17 +46,19 @@ namespace Kitpymes.Core.Shared
         /// <returns>Mensaje completo de la excepción.</returns>
         public static string ToFullMessage(this Exception exception)
         {
+            var validException = exception.ToThrowIfNullOrEmpty(nameof(exception));
+
             var sb = new StringBuilder();
 
-            sb.Append($"| Error: {exception.ToMessage()} ");
+            sb.Append($"| Error: {validException.ToMessage()} ");
 
-            var stackFrame = new StackTrace(exception, true)?.GetFrame(0);
+            var stackFrame = new StackTrace(validException, true)?.GetFrame(0);
 
             var declaringType = stackFrame?.GetMethod()?.DeclaringType;
 
-            if (declaringType != null)
+            if (!string.IsNullOrWhiteSpace(declaringType?.FullName))
             {
-                sb.Append($"| File: {declaringType} ");
+                sb.Append($"| File: {declaringType.FullName} ");
             }
 
             var fileLineNumber = stackFrame?.GetFileLineNumber();

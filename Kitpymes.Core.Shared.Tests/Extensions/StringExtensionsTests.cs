@@ -11,7 +11,7 @@ namespace Kitpymes.Core.Shared.Tests
     [TestClass]
     public class StringExtensionsTests
     {
-        #region ToReplace
+        #region ToRemove
 
         [DataTestMethod]
         [DataRow(" *", " ", "*")]
@@ -27,12 +27,16 @@ namespace Kitpymes.Core.Shared.Tests
         [DataRow("aeiou", "aeiou", "")]
         [DataRow("aeiou", "e", "aiou")]
         [DataRow("aeiou", "ei", "aou")]
-        public void ToReplace_Passing_ValidValue_Returns_ValueWithoutBlankSpaces(string value, string replace, string valueExpected)
+        public void ToRemove_Passing_ValidValue_Returns_ValueWithoutRemovedChars(string value, string remove, string valueExpected)
         {
-            var valueActual = value.ToReplace(replace);
+            var valueActual = value.ToRemove(remove);
 
             Assert.AreEqual(valueExpected, valueActual);
         }
+
+        #endregion ToRemove
+
+        #region ToReplace
 
         [DataTestMethod]
         [DataRow("aeiou", "*", 0, 1, "*eiou")]
@@ -520,43 +524,6 @@ namespace Kitpymes.Core.Shared.Tests
 
         #region ToDirectory
 
-        #region ToDirectoryExists
-
-        [TestMethod]
-        public void ToDirectoryExists_Passing_ValidValue_Returns_True()
-        {
-            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).FullName;
-            var valueExpected = true;
-
-            var valueActual = proyectDirectoryPath.ToDirectoryExists();
-
-            Assert.AreEqual(valueExpected, valueActual);
-        }
-
-        [TestMethod]
-        public void ToDirectoryExists_Passing_NullValue_Returns_False()
-        {
-            string? proyectDirectoryPath = null;
-            var valueExpected = false;
-
-            var valueActual = proyectDirectoryPath.ToDirectoryExists();
-
-            Assert.AreEqual(valueExpected, valueActual);
-        }
-
-        [TestMethod]
-        public void ToDirectoryExists_Passing_InvalidValue_Returns_False()
-        {
-            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).FullName + Guid.NewGuid().ToString();
-            var valueExpected = false;
-
-            var valueActual = proyectDirectoryPath.ToDirectoryExists();
-
-            Assert.AreEqual(valueExpected, valueActual);
-        }
-
-        #endregion ToDirectoryExists
-
         #region ToDirectoryFindFilePath
 
 #if DEBUG
@@ -631,7 +598,7 @@ namespace Kitpymes.Core.Shared.Tests
         #region ToDirectoryDeleteFiles
 
         [TestMethod]
-        public void ToDirectoryDeleteFiles_Passing_ValidValue_Returns_False()
+        public void ToDirectoryDeleteFiles_Passing_ValidValue_Returns_DirectoryNoExists()
         {
             var folderName = Guid.NewGuid().ToString();
             var destinationDirectoryPath = folderName.ToDirectoryTemporary();
@@ -641,9 +608,9 @@ namespace Kitpymes.Core.Shared.Tests
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
 
-            var valueActual = destinationDirectoryPath.ToDirectoryExists();
+            var valueActual = destinationDirectoryPath.ToIsNotFoundDirectory();
 
-            Assert.IsFalse(valueActual);
+            Assert.IsTrue(valueActual);
         }
 
         #endregion ToDirectoryDeleteFiles
@@ -702,14 +669,14 @@ namespace Kitpymes.Core.Shared.Tests
         #region ToDirectoryTemporary
 
         [TestMethod]
-        public void ToDirectoryTemporary_Passing_ValidValue_Returns_True()
+        public void ToDirectoryTemporary_Passing_ValidValue_Returns_DirectoryExists()
         {
             var folderName = Guid.NewGuid().ToString();
             var destinationDirectoryPath = folderName.ToDirectoryTemporary();
 
-            var valueActual = destinationDirectoryPath.ToDirectoryExists();
+            var valueActual = destinationDirectoryPath.ToIsNotFoundDirectory();
 
-            Assert.IsTrue(valueActual);
+            Assert.IsFalse(valueActual);
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
         }
@@ -717,27 +684,6 @@ namespace Kitpymes.Core.Shared.Tests
         #endregion ToDirectoryTemporary
 
         #endregion ToDirectory
-
-        #region ToFile
-
-        [TestMethod]
-        public void ToFileExists_Passing_ValidValue_Returns_True()
-        {
-            var folderName = Guid.NewGuid().ToString();
-            var destinationDirectoryPath = folderName.ToDirectoryTemporary();
-            var fileName = Guid.NewGuid().ToString();
-            var fileContent = Guid.NewGuid().ToString();
-            var filePath = destinationDirectoryPath + $"\\{fileName}.txt";
-            File.WriteAllText(filePath, fileContent);
-
-            var valueActual = filePath.ToFileExists();
-
-            Assert.IsTrue(valueActual);
-
-            destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
-        }
-
-        #endregion ToFile
 
         #region ToFormat
 

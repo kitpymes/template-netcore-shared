@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kitpymes.Core.Shared\Kitpymes.Core.Shared.csproj" />
+    <ProjectReference Include="$(SolutionDir)Kitpymes.Core.Shared\Kitpymes.Core.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>

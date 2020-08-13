@@ -38,8 +38,8 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Devuelve un mensaje.
         /// </summary>
-        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <param name="valueOrParamName">Valor o nombre del parámetro.</param>
         /// <returns>"{paramName} is not found".</returns>
-        public static string NotFound(string paramName) => $"{paramName} is not found";
+        public static string NotFound(string valueOrParamName) => $"{valueOrParamName} is not found";
     }
 }

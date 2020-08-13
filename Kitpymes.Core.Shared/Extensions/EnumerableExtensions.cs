@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="separator">Separador.</param>
         /// <returns>string: concatenado con el separador.</returns>
         public static string ToString<T>(this IEnumerable<T> enumerable, string separator)
-        => string.Join(separator, enumerable.ToArray());
+        => string.Join(separator, enumerable.ToThrowIfNullOrEmpty(nameof(enumerable)).ToArray());
 
         /// <summary>
         /// Convierte una colección nula en una instancia de la colección.
@@ -62,6 +62,6 @@ namespace Kitpymes.Core.Shared
         /// <param name="assemblies">Nombre de los assemblies a cargar.</param>
         /// <returns>IEnumerable{Assembly}.</returns>
         public static IEnumerable<Assembly> ToAssembly(this IEnumerable<string> assemblies)
-        => assemblies.Select(assembly => assembly.ToAssembly());
+        => assemblies.ToThrowIfNullOrAny(nameof(assemblies)).Select(assembly => assembly.ToAssembly());
     }
 }

@@ -13,11 +13,16 @@ namespace Kitpymes.Core.Shared.Tests
         {
             var dateTime = DateTime.Now;
             var timeSpan = new TimeSpan(dateTime.Day, dateTime.Hour, dateTime.Minute, dateTime.Second);
-            var valueExpected = $"{dateTime.Day}d - {dateTime.Hour}h:{dateTime.Minute}m:{dateTime.Second}s";
 
             var valueActual = timeSpan.ToFormat();
 
-            Assert.AreEqual(valueExpected, valueActual);
+            Assert.IsTrue
+            (
+                valueActual.Contains(dateTime.Day.ToString() + "d") 
+                || valueActual.Contains(dateTime.Hour.ToString() + "h") 
+                || valueActual.Contains(dateTime.Minute.ToString() + "m")
+                || valueActual.Contains(dateTime.Second.ToString() + "s")
+            );
         }
 
         #endregion ToFormat

@@ -55,7 +55,7 @@ namespace Kitpymes.Core.Shared
                 validHttpResponse.Headers.AppendList(key, values);
             }
 
-            await validHttpResponse.WriteAsync(message).ConfigureAwait(false);
+            await httpResponse.WriteAsync(message).ConfigureAwait(false);
         }
     }
 }

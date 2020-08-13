@@ -71,20 +71,23 @@ namespace Kitpymes.Core.Shared
                 sb.Append($"| IP: {ip} ");
             }
 
-            if (validHttpContext.Request.ToTryHeader("User-Agent", out var values))
+            if (validHttpContext.Request.ToTryHeader("User-Agent", out var userAgents))
             {
-                sb.Append($"| UserAgent: {values} ");
+                sb.Append($"| UserAgent: {userAgents} ");
             }
 
-            sb.Append($"| ContentType: {validHttpContext.Request.ContentType} ");
+            if (validHttpContext.Request.ToTryContentType(out var contentType))
+            {
+                sb.Append($"| ContentType: {contentType} ");
+            }
 
-            sb.Append($"| User: {validHttpContext.User.ToUserName()}");
+            sb.Append($"| User: {validHttpContext.User.ToUserName() ?? Environment.UserName ?? "Anonymous"}");
 
             sb.Append($"| {validHttpContext.Request.Method}: {validHttpContext.Request.ToPath()} ");
 
             if (!optionalData.ToIsNullOrEmpty())
             {
-                sb.Append($"| Data: {optionalData} ");
+                sb.Append($"| Data: {optionalData}");
             }
 
             return sb.ToString();

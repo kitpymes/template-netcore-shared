@@ -61,7 +61,10 @@ namespace Kitpymes.Core.Shared
             int index = 1,
             int size = 20)
         {
-            queryable.ToThrowIfNullOrAny(nameof(queryable));
+            if (queryable.ToIsNullOrAny())
+            {
+                return queryable;
+            }
 
             if (!string.IsNullOrWhiteSpace(property))
             {

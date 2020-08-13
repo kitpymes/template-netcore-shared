@@ -102,5 +102,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.AreEqual(subdomainExpected, subdomainActual);
         }
+
+        [TestMethod]
+        public void ToTryContentType_Passing_HttpRequestWithContentType_Value_Returns_ContentType_String_Value()
+        {
+            var valueExpected = Guid.NewGuid().ToString();
+
+            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.ContentType = valueExpected);
+
+            fakeHttpRequest.ToTryContentType(out var valueActual);
+
+            Assert.AreEqual(valueExpected, valueActual);
+        }
     }
 }

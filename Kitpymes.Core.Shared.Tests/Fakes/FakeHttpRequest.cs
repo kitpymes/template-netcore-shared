@@ -15,6 +15,11 @@ namespace Kitpymes.Core.Shared.Tests
 
             var options = action.ToConfigureOrDefault();
 
+            if (!string.IsNullOrWhiteSpace(options.ContentType))
+            {
+                mock.Setup(x => x.ContentType).Returns(options.ContentType);
+            }
+
             if (!string.IsNullOrWhiteSpace(options.Scheme))
             {
                 mock.Setup(x => x.Scheme).Returns(options.Scheme);

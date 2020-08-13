@@ -40,6 +40,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "props", "props", "{9865DDDD
 		.github\workflows\dotnetcore.yml = .github\workflows\dotnetcore.yml
 		global.json = global.json
 		docs\props\Pack.Build.props = docs\props\Pack.Build.props
+		docs\props\tests.runsettings = docs\props\tests.runsettings
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "signassembly", "signassembly", "{59A6DCD5-FDD4-4FF9-9C72-E81876B924B4}"
@@ -47,9 +48,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "signassembly", "signassembl
 		docs\signassembly\SignStrong.snk = docs\signassembly\SignStrong.snk
 	EndProjectSection
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kitpymes.Core.Shared.Tests", "Kitpymes.Core.Shared.Tests\Kitpymes.Core.Shared.Tests.csproj", "{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{092AD1DF-25EE-48CC-838A-AE5C83CF24EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Nuget", "Api.Nuget\Api.Nuget.csproj", "{75E11B55-A7B0-4D24-B0DD-F87F00034A3B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kitpymes.Core.Shared.Tests", "Kitpymes.Core.Shared.Tests\Kitpymes.Core.Shared.Tests.csproj", "{C76765DA-F8C3-4F34-96A0-B61D9516350F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -61,14 +62,10 @@ Global
 		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{942A5C37-42F2-4144-B3C6-5CA045AEE1AD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{52FB1F85-B69D-4CEC-BF75-60F65DE4AC2F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{75E11B55-A7B0-4D24-B0DD-F87F00034A3B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{75E11B55-A7B0-4D24-B0DD-F87F00034A3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75E11B55-A7B0-4D24-B0DD-F87F00034A3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{75E11B55-A7B0-4D24-B0DD-F87F00034A3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C76765DA-F8C3-4F34-96A0-B61D9516350F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C76765DA-F8C3-4F34-96A0-B61D9516350F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C76765DA-F8C3-4F34-96A0-B61D9516350F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C76765DA-F8C3-4F34-96A0-B61D9516350F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

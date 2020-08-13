@@ -49,9 +49,9 @@ namespace Kitpymes.Core.Shared
         /// Obtiene el nombre del usuario autenticado.
         /// </summary>
         /// <param name="claimsPrincipal">Una implementación System.Security.Principal.IPrincipal que admite múltiples identidades basadas en notificaciones.</param>
-        /// <returns>string | "Anonymous": si no encontro ningún usuario | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo).</returns>
-        public static string ToUserName(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).Identity?.Name ?? "Anonymous";
+        /// <returns>string | null | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo).</returns>
+        public static string? ToUserName(this ClaimsPrincipal claimsPrincipal)
+        => claimsPrincipal.ToGet<string>(ClaimTypes.Name);
 
         /// <summary>
         /// Busca a ver si existe el nombre del tipo de claim.

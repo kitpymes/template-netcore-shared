@@ -31,7 +31,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
         /// <param name="key">Clave del valor del header a obtener.</param>
         /// <param name="value">Valor del header.</param>
-        /// <returns>string | null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
+        /// <returns>true | false | value: string or null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out string? value)
         {
             value = httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).ToHeader(key);
@@ -68,7 +68,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
         /// <returns>Devuelve la URL de la solicitud HTTP | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static string ToPath(this HttpRequest httpRequest)
-        => $"{httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).Scheme}://{httpRequest?.Host.Value}{httpRequest?.Path.Value}";
+        => $"{httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).Scheme}://{httpRequest?.Host.Value}{httpRequest?.Path.Value}{httpRequest?.QueryString.Value}";
 
         /// <summary>
         /// Obtiene el hostname o subdomain de una entrada HTTP.
@@ -77,5 +77,23 @@ namespace Kitpymes.Core.Shared
         /// <returns>string | null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static string? ToSubdomain(this HttpRequest httpRequest)
         => httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).Host.Host?.Split('.')[0].Trim();
+
+        /// <summary>
+        /// Obtiene el ContentType de una entrada HTTP.
+        /// </summary>
+        /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
+        /// <param name="value">Valor a devolver.</param>
+        /// <returns>true | false | value: string or null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
+        public static bool ToTryContentType(this HttpRequest httpRequest, [MaybeNullWhen(false)] out string? value)
+        {
+            value = httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).ContentType;
+
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -216,7 +216,7 @@ namespace Kitpymes.Core.Shared.Tests
         {
             string? directoryPath = Guid.NewGuid().ToString();
             var jsonFileName = "FakeAppSettings";
-            var expectedMessage = Util.Messages.NotFound(nameof(directoryPath));
+            var expectedMessage = Util.Messages.NotFound(directoryPath);
 
             var services = new ServiceCollection();
             var exceptionActual = Assert.ThrowsException<ApplicationException>
@@ -232,7 +232,7 @@ namespace Kitpymes.Core.Shared.Tests
         {
             var directoryPath = Directory.GetCurrentDirectory();
             var jsonFileName = Guid.NewGuid().ToString();
-            var expectedMessage = Util.Messages.NotFound(nameof(jsonFileName));
+            var expectedMessage = Util.Messages.NotFound($"{directoryPath}\\{jsonFileName}.json");
 
             var services = new ServiceCollection();
             var exceptionActual = Assert.ThrowsException<ApplicationException>
