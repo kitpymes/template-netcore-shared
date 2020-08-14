@@ -8,7 +8,6 @@
 namespace Kitpymes.Core.Shared
 {
     using System;
-    using System.Linq;
 
     /*
       Clase de extensión TimeSpanExtensions

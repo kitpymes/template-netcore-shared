@@ -101,7 +101,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>string | ApplicationException: "{valueOrParamName} is not found".</returns>
         public static string? ToThrowIfNotFoundDirectory([NotNull] this string? source, string paramName)
-        => source.ToThrow(() => source.ToIsNotFoundDirectory(),  Util.Messages.NotFound(string.IsNullOrWhiteSpace(source) ? paramName : source));
+        => source.ToThrow(() => source.ToIsNotFoundDirectory(), Util.Messages.NotFound(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
         #endregion NotFoundDirectory
 

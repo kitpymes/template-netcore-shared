@@ -519,6 +519,25 @@ public static class Enums
 ```
 
 ```cs
+public static class Hash
+{
+    public static string CreateRandom(int length = 6, string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!¡@#$%€^&*?¿_-+") { }
+
+    public static string CreateSHA256(string text) { }
+
+    public static bool VerifySHA256(string text, string hash) { }
+
+    public static string CreateSHA512(string text) { }
+
+    public static bool VerifySHA512(string text, string hash) { }
+
+    public static string CreatePassword(string plainPassword) { }
+
+    public static bool VerifyPassword(string hashedPassword, string plainPassword) { }
+}
+```
+
+```cs
 public static class Messages
 {
     public static string NullOrEmpty(string paramName) => $"{paramName} is null or empty";
