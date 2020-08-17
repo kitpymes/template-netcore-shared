@@ -42,7 +42,8 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>TSource | ApplicationException: "{paramName} is null or empty".</returns>
-        public static TSource ToThrowIfNullOrEmpty<TSource>([NotNull] this TSource source, string paramName)
+        [return: NotNull]
+        public static TSource ToThrowIfNullOrEmpty<TSource>(this TSource source, string paramName)
         => source.ToThrow(() => source.ToIsNullOrEmpty(), Util.Messages.NullOrEmpty(paramName));
 
         #endregion NullOrEmpty
@@ -65,6 +66,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">La colección a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>IEnumerable{TSource} | ApplicationException: "{paramName} is null or not values".</returns>
+        [return: NotNull]
         public static IEnumerable<TSource> ToThrowIfNullOrAny<TSource>([NotNull] this IEnumerable<TSource> source, string paramName)
         => source.ToThrow(() => source.ToIsNullOrAny(), Util.Messages.NullOrAny(paramName));
 
@@ -79,7 +81,8 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>TSource | ApplicationException: "{paramName} is not found".</returns>
-        public static TSource ToThrowIfNotFound<TSource>([NotNull] this TSource source, string paramName)
+        [return: NotNull]
+        public static TSource ToThrowIfNotFound<TSource>(this TSource source, string paramName)
         => source.ToThrow(() => source.ToIsNullOrEmpty(), Util.Messages.NotFound(paramName));
 
         #endregion NotFound
@@ -100,7 +103,8 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>string | ApplicationException: "{valueOrParamName} is not found".</returns>
-        public static string? ToThrowIfNotFoundDirectory([NotNull] this string? source, string paramName)
+        [return: NotNull]
+        public static string? ToThrowIfNotFoundDirectory(this string? source, string paramName)
         => source.ToThrow(() => source.ToIsNotFoundDirectory(), Util.Messages.NotFound(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
         #endregion NotFoundDirectory
@@ -121,7 +125,8 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>string | ApplicationException: "{valueOrParamName} is not found".</returns>
-        public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName)
+        [return: NotNull]
+        public static string ToThrowIfNotFoundFile(this string? source, string paramName)
         => source.ToThrow(() => source.ToIsNotFoundFile(), Util.Messages.NotFound(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
         #endregion NotFoundFile
@@ -134,7 +139,8 @@ namespace Kitpymes.Core.Shared
         /// <param name="predicate">Función a evaluar.</param>
         /// <param name="message">Mensaje a mostrar en la ApplicationException.</param>
         /// <returns>TSource | ApplicationException: si source es nulo o si la evaluación del predicado es verdadero.</returns>
-        public static TSource ToThrow<TSource>([NotNull] this TSource source, Func<bool> predicate, string message)
+        [return: NotNull]
+        public static TSource ToThrow<TSource>(this TSource source, Func<bool> predicate, string message)
         => source.ToHasErrors(predicate) ? throw new ApplicationException(message) : source;
 
         /// <summary>
