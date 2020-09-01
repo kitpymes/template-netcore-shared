@@ -62,7 +62,7 @@ namespace Kitpymes.Core.Shared
         public static IDictionary ToDictionaryPropertyInfo<T>(this T input, bool includeNullOrEmptyProperty = false)
             where T : class
         {
-            return input.ToThrowIfNullOrEmpty(nameof(input)).GetType().GetProperties()
+            return input.ToIsNullOrEmptyThrow(nameof(input)).GetType().GetProperties()
                 .Where(property =>
                 {
                     var name = property.Name;

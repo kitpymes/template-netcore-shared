@@ -47,16 +47,6 @@ namespace Kitpymes.Core.Shared.Util
         public const string ForInteger = "^((-?[1-9]+)|[0-9]+)$";
 
         /// <summary>
-        /// Expresión regular para un login.
-        /// </summary>
-        public const string ForLogin = "^[a-z0-9_-]{10,50}$";
-
-        /// <summary>
-        /// Expresión regular para una contraseña.
-        /// </summary>
-        public const string ForPassword = @"^.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$";
-
-        /// <summary>
         /// Expresión regular para un tag.
         /// </summary>
         public const string ForTag = @"^<([a-z1-6]+)([^<]+)*(?:>(.*)<\/\1>| *\/>)$";
@@ -72,18 +62,23 @@ namespace Kitpymes.Core.Shared.Util
         public const string ForUrl = @"^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$";
 
         /// <summary>
-        /// Expresión regular para un hostname.
-        /// </summary>
-        public const string ForHostname = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
-
-        /// <summary>
         /// Expresión regular para un nombre.
         /// </summary>
-        public const string ForName = @"^[a-zA-Z ]*$";
+        public const string ForName = @"^[a-zA-Z áàäâãÁÀÄÂÃÅéèëêÉÈËÊíìïîÍÌÏÎóòöôõøÓÒÖÔÕúùüûÚÙÜÛçÇħñÑ]*$";
 
         /// <summary>
         /// Expresión regular para un subdomain.
         /// </summary>
-        public const string ForSubdomain = @"^[a-zA-Z0-9]*$";
+        public const string ForSubdomain = @"^[-._a-zA-Z0-9]*$";
+
+        /// <summary>
+        /// Expresión regular para un domain.
+        /// </summary>
+        public const string ForDomain = @"^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)[A-Za-z]{2,6}";
+
+        /// <summary>
+        /// Expresión regular para un hostname.
+        /// </summary>
+        public const string ForHostname = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
     }
 }

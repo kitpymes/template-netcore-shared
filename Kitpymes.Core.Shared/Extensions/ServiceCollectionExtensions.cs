@@ -39,7 +39,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Define un mecanismo para recuperar un objeto de servicio.</param>
         /// <returns>El servicio del tipo IWebHostEnvironment o nulo.</returns>
         public static IWebHostEnvironment ToEnvironment(this IServiceProvider services)
-        => services.ToThrowIfNullOrEmpty(nameof(services)).GetService<IWebHostEnvironment>();
+        => services.ToIsNullOrEmptyThrow(nameof(services)).GetService<IWebHostEnvironment>();
 
         /// <summary>
         /// Obtiene los datos del ambiente de ejecución.
@@ -47,7 +47,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <returns>El servicio del tipo IWebHostEnvironment o nulo.</returns>
         public static IWebHostEnvironment ToEnvironment(this IServiceCollection services)
-        => services.ToThrowIfNullOrEmpty(nameof(services)).ToService<IWebHostEnvironment>();
+        => services.ToIsNullOrEmptyThrow(nameof(services)).ToService<IWebHostEnvironment>();
 
         #endregion ToEnvironment
 
@@ -60,7 +60,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <returns>Verdadero o falso.</returns>
         public static bool ToExists<TService>(this IServiceCollection services)
-        => services.ToThrowIfNullOrEmpty(nameof(services)).ToService<TService>() != null;
+        => services.ToIsNullOrEmptyThrow(nameof(services)).ToService<TService>() != null;
 
         #endregion ToExists
 
@@ -73,7 +73,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <returns>El servicio o nulo.</returns>
         public static TService ToService<TService>(this IServiceCollection services)
-        => services.ToThrowIfNullOrEmpty(nameof(services)).BuildServiceProvider().GetService<TService>();
+        => services.ToIsNullOrEmptyThrow(nameof(services)).BuildServiceProvider().GetService<TService>();
 
         /// <summary>
         /// Registra los servicios que la clase coincidan con la interfaz, utilizando el patrón (ClassName coincide con IClassName).
@@ -87,8 +87,8 @@ namespace Kitpymes.Core.Shared
             Assembly[] assemblies,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            services.ToThrowIfNullOrEmpty(nameof(services));
-            assemblies.ToThrowIfNullOrAny(nameof(assemblies));
+            services.ToIsNullOrEmptyThrow(nameof(services));
+            assemblies.ToIsNullOrAnyThrow(nameof(assemblies));
 
             services.Scan(scan => scan
                 .FromAssemblies(assemblies)
@@ -117,8 +117,8 @@ namespace Kitpymes.Core.Shared
             string directoryPath,
             params (string jsonFileName, bool optional, bool reloadOnChange)[] files)
         {
-            services.ToThrowIfNullOrEmpty(nameof(services));
-            directoryPath.ToThrowIfNotFoundDirectory(nameof(directoryPath));
+            services.ToIsNullOrEmptyThrow(nameof(services));
+            directoryPath.ToIsDirectoryThrow(nameof(directoryPath));
 
             var configurationBuilder = new ConfigurationBuilder()
                 .SetBasePath(directoryPath)
@@ -152,7 +152,7 @@ namespace Kitpymes.Core.Shared
                 .AddInMemoryCollection(list)
                 .Build();
 
-            services.ToThrowIfNullOrEmpty(nameof(services)).ToConfiguration(configurationBuilder);
+            services.ToIsNullOrEmptyThrow(nameof(services)).ToConfiguration(configurationBuilder);
 
             return services;
         }
@@ -165,7 +165,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>La colección de servicios.</returns>
         public static IServiceCollection ToConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.ToThrowIfNullOrEmpty(nameof(services)).TryAddSingleton(configuration);
+            services.ToIsNullOrEmptyThrow(nameof(services)).TryAddSingleton(configuration);
 
             return services;
         }
@@ -184,7 +184,7 @@ namespace Kitpymes.Core.Shared
         public static TSettings ToSettings<TSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
             where TSettings : class, new()
         => services
-            .ToThrowIfNullOrEmpty(nameof(services))
+            .ToIsNullOrEmptyThrow(nameof(services))
             .ToSettings(defaultSettings.ToConfigureOrDefault())
             .ToService<TSettings>();
 
@@ -200,7 +200,7 @@ namespace Kitpymes.Core.Shared
             where TSettings : class, new()
             where TConfigureSettings : class, IConfigureOptions<TSettings>
         => services
-            .ToThrowIfNullOrEmpty(nameof(services))
+            .ToIsNullOrEmptyThrow(nameof(services))
             .ToSettings(defaultSettings.ToConfigureOrDefault())
             .AddSingleton<IConfigureOptions<TSettings>, TConfigureSettings>()
             .ToService<IOptions<TSettings>>().Value;
@@ -217,7 +217,7 @@ namespace Kitpymes.Core.Shared
         {
             TSettings settings;
 
-            if (!services.ToThrowIfNullOrEmpty(nameof(services)).ToExists<TSettings>())
+            if (!services.ToIsNullOrEmptyThrow(nameof(services)).ToExists<TSettings>())
             {
                 services.AddOptions<TSettings>();
 
@@ -254,7 +254,7 @@ namespace Kitpymes.Core.Shared
             {
                 var filePath = $"{directoryPath}/{jsonFileName}.json";
 
-                filePath.ToThrowIfNotFoundFile(nameof(jsonFileName));
+                filePath.ToIsFileThrow(nameof(jsonFileName));
 
                 builder.AddJsonFile(filePath, optional, reloadOnChange);
             }

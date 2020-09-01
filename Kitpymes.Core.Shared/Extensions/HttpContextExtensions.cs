@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>string | null | ApplicationException: si el parámetro httpContext es nulo.</returns>
         public static bool ToTryIPv6(this HttpContext httpContext, [MaybeNullWhen(false)] out string? value)
         {
-            var ip = httpContext.ToThrowIfNullOrEmpty(nameof(httpContext)).ToIPv6();
+            var ip = httpContext.ToIsNullOrEmptyThrow(nameof(httpContext)).ToIPv6();
 
             if (string.IsNullOrWhiteSpace(ip))
             {
@@ -52,7 +52,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpContext">Encapsula toda la información específica de HTTP sobre una solicitud HTTP individual.</param>
         /// <returns>string | null | ApplicationException: si el parámetro httpContext es nulo.</returns>
         public static string? ToIPv6(this HttpContext httpContext)
-        => httpContext.ToThrowIfNullOrEmpty(nameof(httpContext)).Connection?.RemoteIpAddress?.MapToIPv6()?.ToString();
+        => httpContext.ToIsNullOrEmptyThrow(nameof(httpContext)).Connection?.RemoteIpAddress?.MapToIPv6()?.ToString();
 
         /// <summary>
         /// Devuelve los detalles de una solicitud HTTP.
@@ -62,7 +62,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>Los detalles de una solicitud HTTP.</returns>
         public static string ToDetails(this HttpContext httpContext, string? optionalData = null)
         {
-            var validHttpContext = httpContext.ToThrowIfNullOrEmpty(nameof(httpContext));
+            var validHttpContext = httpContext.ToIsNullOrEmptyThrow(nameof(httpContext));
 
             var sb = new StringBuilder();
 

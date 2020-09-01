@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>Mensaje de la excepción | ApplicationException: si el parámetro exception es nulo.</returns>
         public static string ToMessage(this Exception exception)
         {
-            var validException = exception.ToThrowIfNullOrEmpty(nameof(exception));
+            var validException = exception.ToIsNullOrEmptyThrow(nameof(exception));
 
             return validException.InnerException is null
                 ? validException.Message
@@ -46,7 +46,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>Mensaje completo de la excepción.</returns>
         public static string ToFullMessage(this Exception exception)
         {
-            var validException = exception.ToThrowIfNullOrEmpty(nameof(exception));
+            var validException = exception.ToIsNullOrEmptyThrow(nameof(exception));
 
             var sb = new StringBuilder();
 

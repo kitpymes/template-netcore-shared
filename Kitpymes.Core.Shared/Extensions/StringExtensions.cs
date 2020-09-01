@@ -120,6 +120,8 @@ namespace Kitpymes.Core.Shared
                 { 'u', new[] { 'ù', 'ú', 'ü', 'û' } },
                 { 'U', new[] { 'Ù', 'Ú', 'Ü', 'Û' } },
                 { 'h', new[] { 'ħ' } },
+                { 'n', new[] { 'ñ' } },
+                { 'N', new[] { 'Ñ' } },
             };
 
             var pattern = "[^0-9a-zA-Z ";

@@ -1,3 +1,6 @@
+# v.1.0.6
+- Se agregan nuevas extensiones y utilidades.
+
 # v.1.0.5
 - Se actualizan las validaciones "Check" para que no devuelvan nulos.
 

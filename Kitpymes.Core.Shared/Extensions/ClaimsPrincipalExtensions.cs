@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>true | false | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo.</returns>
         public static bool ToIsAuthenticated(this ClaimsPrincipal claimsPrincipal)
         {
-            var identity = claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).Identity;
+            var identity = claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).Identity;
 
             return !(identity is null) && identity.IsAuthenticated;
         }
@@ -43,7 +43,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="claimsPrincipal">Una implementación System.Security.Principal.IPrincipal que admite múltiples identidades basadas en notificaciones.</param>
         /// <returns>string | null | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo).</returns>
         public static string? ToAuthenticationType(this ClaimsPrincipal claimsPrincipal)
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).Identity?.AuthenticationType;
+        => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).Identity?.AuthenticationType;
 
         /// <summary>
         /// Obtiene el nombre del usuario autenticado.
@@ -60,7 +60,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="claimType">El nombre del tipo de claim a buscar.</param>
         /// <returns>true | false | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo.</returns>
         public static bool ToExists(this ClaimsPrincipal claimsPrincipal, string claimType)
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).HasClaim(x => x.Type == claimType);
+        => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).HasClaim(x => x.Type == claimType);
 
         /// <summary>
         /// Agrega una lista de claims.
@@ -69,7 +69,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="authenticationType">Tipo de autenticación.</param>
         /// <param name="claims">La lista de claims.</param>
         public static void ToAdd(this ClaimsPrincipal claimsPrincipal, string authenticationType, IEnumerable<Claim> claims)
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).AddIdentity(new ClaimsIdentity(claims, authenticationType));
+        => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).AddIdentity(new ClaimsIdentity(claims, authenticationType));
 
         /// <summary>
         /// Agrega una lista de claims.
@@ -80,7 +80,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="values">La lista de claims.</param>
         public static void ToAdd<T>(this ClaimsPrincipal claimsPrincipal, string authenticationType, params (string claimType, T value)[] values)
         {
-            claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal));
+            claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal));
 
             var claims = new List<Claim>();
 
@@ -101,7 +101,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>TResult | null | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo.</returns>
         public static TResult? ToGet<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
             where TResult : class
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).FindFirstValue(claimType)?.ToDeserialize<TResult>();
+        => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).FindFirstValue(claimType)?.ToDeserialize<TResult>();
 
         /// <summary>
         /// Obtiene una claim.
@@ -112,7 +112,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>TResult | null | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo.</returns>
         public static TResult? ToGetValue<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
             where TResult : struct
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).FindFirstValue(claimType)?.ToDeserialize<TResult>();
+        => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).FindFirstValue(claimType)?.ToDeserialize<TResult>();
 
         /// <summary>
         /// Obtiene una lista de claims.
@@ -122,6 +122,6 @@ namespace Kitpymes.Core.Shared
         /// <param name="claimType">El nombre del tipo de claim a buscar.</param>
         /// <returns>IEnumerable{TResult} | null | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo.</returns>
         public static IEnumerable<TResult>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
-        => claimsPrincipal.ToThrowIfNullOrEmpty(nameof(claimsPrincipal)).FindAll(claimType)?.Select(x => x.Value.ToDeserialize<TResult>());
+        => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).FindAll(claimType)?.Select(x => x.Value.ToDeserialize<TResult>());
     }
 }

@@ -31,7 +31,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="application">Extensión de la configurarción de la solicitud de una aplicación.</param>
         /// <returns>IWebHostEnvironment | ApplicationException: si el parámetro de tipo IApplicationBuilder es nulo | null: si no se encuentra el servicio.</returns>
         public static IWebHostEnvironment ToEnvironment(this IApplicationBuilder application)
-        => application.ToThrowIfNullOrEmpty(nameof(application)).ToService<IWebHostEnvironment>();
+        => application.ToIsNullOrEmptyThrow(nameof(application)).ToService<IWebHostEnvironment>();
 
         /// <summary>
         /// Verifica si existe un servicio.
@@ -40,7 +40,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="application">Extensión de la configurarción de la solicitud de una aplicación.</param>
         /// <returns>true | false | ApplicationException: si el parámetro de tipo IApplicationBuilder es nulo.</returns>
         public static bool ToExists<TService>(this IApplicationBuilder application)
-        => application.ToThrowIfNullOrEmpty(nameof(application)).ToService<TService>() != null;
+        => application.ToIsNullOrEmptyThrow(nameof(application)).ToService<TService>() != null;
 
         /// <summary>
         /// Obtiene el servicio del tipo solicitado.
@@ -49,6 +49,6 @@ namespace Kitpymes.Core.Shared
         /// <param name="application">Extensión de la configurarción de la solicitud de una aplicación.</param>
         /// <returns>TService | ApplicationException: si el parámetro de tipo IApplicationBuilder es nulo | null: si no se encuentra el servicio.</returns>
         public static TService ToService<TService>(this IApplicationBuilder application)
-        => application.ToThrowIfNullOrEmpty(nameof(application)).ApplicationServices.GetService<TService>();
+        => application.ToIsNullOrEmptyThrow(nameof(application)).ApplicationServices.GetService<TService>();
     }
 }

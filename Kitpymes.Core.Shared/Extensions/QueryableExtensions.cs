@@ -81,8 +81,8 @@ namespace Kitpymes.Core.Shared
             string property,
             bool ascending)
         {
-            queryable.ToThrowIfNullOrAny(nameof(queryable));
-            property.ToThrowIfNullOrEmpty(nameof(property));
+            queryable.ToIsNullOrAnyThrow(nameof(queryable));
+            property.ToIsNullOrEmptyThrow(nameof(property));
 
             var properties = property.Split('.');
 
@@ -169,8 +169,8 @@ namespace Kitpymes.Core.Shared
             IEnumerable<string> properties,
             bool ascending)
         {
-            queryable.ToThrowIfNullOrAny(nameof(queryable));
-            properties.ToThrowIfNullOrAny(nameof(properties));
+            queryable.ToIsNullOrAnyThrow(nameof(queryable));
+            properties.ToIsNullOrAnyThrow(nameof(properties));
 
             var parameters = Expression.Parameter(typeof(T));
 

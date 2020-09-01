@@ -1,3 +1,4 @@
+using Kitpymes.Core.Shared.Tests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -7,7 +8,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Kitpymes.Core.Shared.Tests
+namespace Kitpymes.Core.Shared.Extensions.Tests
 {
     [TestClass]
 	public class ConfigurationBuilderExtensionsTests
@@ -79,19 +80,6 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(result.IsDevelopment());
         }
 
-        [TestMethod]
-        public void ToEnvironment_Passing_NotFound_Service_Returns_ApplicationException()
-        {
-            var paramName = Guid.NewGuid().ToString();
-            var messageExpected = Util.Messages.NotFound(paramName);
-            var services = new ServiceCollection();
-
-            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => services.ToEnvironment().ToThrowIfNotFound(paramName));
-
-            Assert.IsNotNull(exceptionActual);
-            Assert.AreEqual(messageExpected, exceptionActual.Message);
-        }
-
         #endregion ToEnvironment
 
         #region ToExists
@@ -142,20 +130,6 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsNotNull(serviceActual);
             Assert.AreEqual(environmentNameExpected, serviceActual.EnvironmentName);
             Assert.IsTrue(serviceActual.IsDevelopment());
-        }
-
-        [TestMethod]
-        public void ToService_Passing_NotFound_Service_Returns_ApplicationException()
-        {
-            var paramName = Guid.NewGuid().ToString();
-            var messageExpected = Util.Messages.NotFound(paramName);
-
-            var services = new ServiceCollection();
-
-            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => services.ToService<IWebHostEnvironment>().ToThrowIfNotFound(paramName));
-
-            Assert.IsNotNull(exceptionActual);
-            Assert.AreEqual(messageExpected, exceptionActual.Message);
         }
 
         #endregion ToService

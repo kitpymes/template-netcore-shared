@@ -42,7 +42,7 @@ namespace Kitpymes.Core.Shared
             string contentType = MediaTypeNames.Application.Json,
             params (string key, string[] values)[] headers)
         {
-            var validHttpResponse = httpResponse.ToThrowIfNullOrEmpty(nameof(httpResponse));
+            var validHttpResponse = httpResponse.ToIsNullOrEmptyThrow(nameof(httpResponse));
 
             validHttpResponse.Clear();
 

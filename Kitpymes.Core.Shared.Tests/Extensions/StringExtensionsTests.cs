@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitpymes.Core.Shared.Tests
+namespace Kitpymes.Core.Shared.Extensions.Tests
 {
     [TestClass]
     public class StringExtensionsTests
@@ -608,9 +608,9 @@ namespace Kitpymes.Core.Shared.Tests
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
 
-            var valueActual = destinationDirectoryPath.ToIsNotFoundDirectory();
+            var valueActual = destinationDirectoryPath.ToIsDirectory();
 
-            Assert.IsTrue(valueActual);
+            Assert.IsFalse(valueActual);
         }
 
         #endregion ToDirectoryDeleteFiles
@@ -674,9 +674,9 @@ namespace Kitpymes.Core.Shared.Tests
             var folderName = Guid.NewGuid().ToString();
             var destinationDirectoryPath = folderName.ToDirectoryTemporary();
 
-            var valueActual = destinationDirectoryPath.ToIsNotFoundDirectory();
+            var valueActual = destinationDirectoryPath.ToIsDirectory();
 
-            Assert.IsFalse(valueActual);
+            Assert.IsTrue(valueActual);
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
         }

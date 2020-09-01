@@ -1,3 +1,4 @@
+using Kitpymes.Core.Shared.Tests;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -5,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace Kitpymes.Core.Shared.Tests
+namespace Kitpymes.Core.Shared.Extensions.Tests
 {
     [TestClass]
 	public class ApplicationBuilderExtensionsTests
@@ -71,13 +72,13 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToEnvironment_Passing_Service_Not_Found_Returns_ApplicationException()
         {
-            var paramName = Guid.NewGuid().ToString();
+            var paramName = typeof(IWebHostEnvironment).Name;
             var messageExpected = Util.Messages.NotFound(paramName);
 
             var services = new ServiceCollection();
             var application = new ApplicationBuilder(services.BuildServiceProvider());
 
-            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => application.ToEnvironment().ToThrowIfNotFound(paramName));
+            var exceptionActual = Assert.ThrowsException<ApplicationException>(() =>  application.ToEnvironment().ToIsNullOrEmptyWithMessageThrow(messageExpected));
 
             Assert.IsNotNull(exceptionActual);
             Assert.AreEqual(messageExpected, exceptionActual.Message);
@@ -142,13 +143,13 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToService_Passing_Service_Not_Found_Returns_ApplicationException()
         {
-            var paramName = Guid.NewGuid().ToString();
-            var messageExpected = Util.Messages.NotFound(paramName);
+            var paramName = typeof(IWebHostEnvironment).Name;
+            var messageExpected = Util.Messages.NotFound(paramName); ;
 
             var services = new ServiceCollection();
             var application = new ApplicationBuilder(services.BuildServiceProvider());
 
-            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => application.ToService<IWebHostEnvironment>().ToThrowIfNotFound(paramName));
+            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => application.ToService<IWebHostEnvironment>().ToIsNullOrEmptyWithMessageThrow(messageExpected));
 
             Assert.IsNotNull(exceptionActual);
             Assert.AreEqual(messageExpected, exceptionActual.Message);

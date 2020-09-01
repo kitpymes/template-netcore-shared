@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>byte[] | ApplicationException si los bytes son nulo o la cantidad es menor o igual que cero.</returns>
         public static byte[] ToCompress(this byte[] bytes)
         {
-            var validBytes = bytes.ToThrowIfNullOrEmpty(nameof(bytes));
+            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
 
             using var outputStream = new MemoryStream();
 
@@ -51,7 +51,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>byte[] | ApplicationException si los bytes son nulo o la cantidad es menor o igual que cero.</returns>
         public static byte[] ToDecompress(this byte[] bytes)
         {
-            var validBytes = bytes.ToThrowIfNullOrEmpty(nameof(bytes));
+            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
 
             using var outputStream = new MemoryStream();
 
@@ -73,7 +73,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>TResult | ApplicationException si los bytes son nulo o la cantidad es menor o igual que cero.</returns>
         public static TResult ToDecompress<TResult>(this byte[] bytes)
         {
-            var validBytes = bytes.ToThrowIfNullOrEmpty(nameof(bytes));
+            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
 
             using var memoryStream = new MemoryStream();
 
@@ -96,7 +96,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>El objeto.</returns>
         public static TResult ToObject<TResult>(this byte[] bytes)
         {
-            var validBytes = bytes.ToThrowIfNullOrEmpty(nameof(bytes));
+            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
 
             using MemoryStream memoryStream = new MemoryStream(validBytes);
 

@@ -8,8 +8,8 @@
 namespace Kitpymes.Core.Shared.Util
 {
     /*
-      Clase de utilidades
-      Contiene los mensajes
+        Clase de utilidades
+        Contiene los mensajes
     */
 
     /// <summary>
@@ -22,24 +22,62 @@ namespace Kitpymes.Core.Shared.Util
     public static class Messages
     {
         /// <summary>
-        /// Devuelve un mensaje.
+        /// Devuelve "{paramName} is null or empty".
         /// </summary>
         /// <param name="paramName">Nombre del parámetro.</param>
         /// <returns>"{paramName} is null or empty".</returns>
         public static string NullOrEmpty(string paramName) => $"{paramName} is null or empty";
 
         /// <summary>
-        /// Devuelve un mensaje.
+        /// Devuelve "{paramName} is null or not values".
         /// </summary>
         /// <param name="paramName">Nombre del parámetro.</param>
         /// <returns>"{paramName} is null or not values".</returns>
         public static string NullOrAny(string paramName) => $"{paramName} is null or not values";
 
         /// <summary>
-        /// Devuelve un mensaje.
+        /// Devuelve "{valueOrParamName} is not found".
         /// </summary>
         /// <param name="valueOrParamName">Valor o nombre del parámetro.</param>
-        /// <returns>"{paramName} is not found".</returns>
+        /// <returns>"{valueOrParamName} is not found".</returns>
         public static string NotFound(string valueOrParamName) => $"{valueOrParamName} is not found";
+
+        /// <summary>
+        /// Devuelve "{valueOrParamName} has invalid format".
+        /// </summary>
+        /// <param name="valueOrParamName">Valor o nombre del parámetro.</param>
+        /// <returns>"{valueOrParamName} has invalid format".</returns>
+        public static string InvalidFormat(string valueOrParamName) => $"{valueOrParamName} has invalid format";
+
+        /// <summary>
+        /// Devuelve "{paramName} and {paramNameCompare} not equals".
+        /// </summary>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <param name="paramNameCompare">Nombre del parámetro a comprar.</param>
+        /// <returns>"{paramName} and {paramNameCompare} not equals".</returns>
+        public static string NotEquals(string paramName, string paramNameCompare) => $"{paramName} and {paramNameCompare} not equals";
+
+        /// <summary>
+        /// Devuelve "{valueOrParamName} already exists".
+        /// </summary>
+        /// <param name="valueOrParamName">Valor o nombre del parámetro.</param>
+        /// <returns>"{valueOrParamName} already exists".</returns>
+        public static string AlreadyExists(string valueOrParamName) => $"{valueOrParamName} already exists";
+
+        /// <summary>
+        /// Devuelve "{paramName} must be greater than {min}".
+        /// </summary>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <returns>"{paramName} is null or not values".</returns>
+        public static string Less(string paramName, long min) => $"{paramName} must be greater than {min}";
+
+        /// <summary>
+        /// Devuelve "{paramName} must be less than {max}".
+        /// </summary>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <returns>"{paramName} is null or not values".</returns>
+        public static string Greater(string paramName, long max) => $"{paramName} must be less than {max}";
     }
 }

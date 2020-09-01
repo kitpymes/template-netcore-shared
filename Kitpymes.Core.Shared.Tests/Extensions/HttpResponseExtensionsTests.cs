@@ -7,8 +7,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Linq;
 using System.IO;
+using Kitpymes.Core.Shared.Tests;
 
-namespace Kitpymes.Core.Shared.Tests
+namespace Kitpymes.Core.Shared.Extensions.Tests
 {
     [TestClass]
     public class HttpResponseExtensionsTests

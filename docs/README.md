@@ -111,27 +111,122 @@ public static class ByteExtensions
 ```cs
 public static class CheckExtensions
 {
-    public static bool ToIsNullOrEmpty(this object? source) { }
+    public static bool ToIsNullOrEmpty(this object? source) {}
 
-    public static TSource ToThrowIfNullOrEmpty<TSource>([NotNull] this TSource source, string paramName) { }
+    [return: NotNull]
+    public static TSource ToIsNullOrEmptyWithMessageThrow<TSource>(this TSource source, string message) {}
 
-    public static bool ToIsNullOrAny<TSource>(this IEnumerable<TSource> source) { }
+    [return: NotNull]
+    public static TSource ToIsNullOrEmptyThrow<TSource>(this TSource source, string paramName) {}
 
-    public static IEnumerable<TSource> ToThrowIfNullOrAny<TSource>([NotNull] this IEnumerable<TSource> source, string paramName) { }
+    public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource>? input) {}
 
-    public static TSource ToThrowIfNotFound<TSource>([NotNull] this TSource source, string paramName) { }
+    [return: NotNull]
+    public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>([NotNull] this IEnumerable<TSource> source, string message) {}
 
-    public static bool ToIsNotFoundDirectory([NotNullWhen(false)] this string? input) { }
+    [return: NotNull]
+    public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>([NotNull] this IEnumerable<TSource> source, string paramName) {}
 
-    public static string? ToThrowIfNotFoundDirectory([NotNull] this string? source, string paramName) { }
+    public static bool ToIsDirectory([NotNullWhen(false)] this string? input) {}
 
-    public static bool ToIsNotFoundFile([NotNullWhen(false)] this string? input) { }
+    [return: NotNull]
+    public static string? ToIsDirectoryWithMessageThrow(this string? source, string message) {}
 
-    public static string? ToThrowIfNotFoundFile([NotNull] this string? source, string paramName) {}
-  
-    public static TSource ToThrow<TSource>([NotNull] this TSource source, Func<bool> predicate, string message) { }
+    [return: NotNull]
+    public static string? ToIsDirectoryThrow(this string? source, string paramName) {}
 
-    public static bool ToHasErrors<TSource>([NotNullWhen(false)] this TSource source, Func<bool> predicate) { }
+    public static bool ToIsFile([NotNullWhen(false)] this string? input) {}
+
+    [return: NotNull]
+    public static string ToIsFileWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsFileThrow(this string? source, string paramName) {}
+
+    public static bool ToIsFileExtension([NotNullWhen(false)] this string? input) {}
+
+    [return: NotNull]
+    public static string ToIsFileExtensionWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsFileExtensionThrow(this string? source, string paramName) {}
+
+    public static bool ToIsEmail(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsEmailWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsEmailThrow(this string? source, string paramName) {}
+
+    public static bool ToIsSubdomain(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsSubdomainWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsSubdomainThrow(this string? source, string paramName) {}
+
+    public static bool ToIsDomain(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsDomainWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsDomainThrow(this string? source, string paramName) {}
+
+    public static bool ToIsHostname(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsHostnameWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsHostnameThrow(this string? source, string paramName) {}
+
+    public static bool ToIsRegexMatch(this string? source, string regex) {}
+
+    [return: NotNull]
+    public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message) {}
+
+    [return: NotNull]
+    public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName) {}
+
+    public static bool ToIsLess(this object? source, long min) {}
+
+    [return: NotNull]
+    public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName) {}
+
+    public static bool ToIsGreater(this object? source, long max) {}
+
+    [return: NotNull]
+    public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName) {}
+
+    public static bool ToIsName(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsNameWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsNameThrow(this string? source, string paramName) {}
+
+    public static bool ToIsEqual(this object? source, object? compare) {}
+
+    [return: NotNull]
+    public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare) {}
+
+    [return: NotNull]
+    public static TSource ToIsThrow<TSource>(this TSource source, Func<bool> predicate, string message) {}
+
+    public static bool ToIsErrors<TSource>([NotNullWhen(false)] this TSource source, Func<bool> predicate) {}
 }
 ```
 
@@ -467,6 +562,10 @@ public static class Check
     public static (bool HasErrors, int Count) IsPassword(long min, params string?[] values) {}
 
     public static (bool HasErrors, int Count) IsSubdomain(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsDomain(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsHostname(params string?[] values) {}
 }
 ```
 
@@ -483,21 +582,19 @@ public static class Regexp
 
     public const string ForInteger = "^((-?[1-9]+)|[0-9]+)$";
 
-    public const string ForLogin = "^[a-z0-9_-]{10,50}$";
-
-    public const string ForPassword = @"^.*(?=.{10,})(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$";
-
     public const string ForTag = @"^<([a-z1-6]+)([^<]+)*(?:>(.*)<\/\1>| *\/>)$";
 
     public const string ForTime = @"^([01]?[0-9]|2[0-3]):[0-5][0-9]$";
 
     public const string ForUrl = @"^((https?|ftp|file):\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$";
 
+    public const string ForName = @"^[a-zA-Z áàäâãÁÀÄÂÃÅéèëêÉÈËÊíìïîÍÌÏÎóòöôõøÓÒÖÔÕúùüûÚÙÜÛçÇħñÑ]*$";
+
+    public const string ForSubdomain = @"^[a-zA-Z0-9_-.]*$";
+
+    public const string ForDomain = @"^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)[A-Za-z]{2,6}";
+
     public const string ForHostname = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
-
-    public const string ForName = @"^[a-zA-Z ]*$";
-
-    public const string ForSubdomain = @"^[a-zA-Z0-9]*$";
 }
 ```
 

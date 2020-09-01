@@ -32,20 +32,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsNullOrEmpty(params object?[] values)
         {
-            var errorsIsNullOrEmpty = values.Where(value =>
-            {
-                switch (value)
-                {
-                    case null:
-                    case string s when string.IsNullOrWhiteSpace(s):
-                        return true;
-                    case Enum e when value is Enum:
-                    case bool b when value is bool:
-                        return false;
-                    default:
-                        return Equals(value, value.ToDefaultValue());
-                }
-            });
+            var errorsIsNullOrEmpty = values.Where(value => value is null || (value is string && string.IsNullOrWhiteSpace(value.ToString())));
 
             return (errorsIsNullOrEmpty.Any(), errorsIsNullOrEmpty.Count());
         }
@@ -200,7 +187,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="regex">Expresión regular a validar.</param>
         /// <param name="values">Valores a validar.</param>
         /// <returns>(bool HasErrors, int Count).</returns>
-        public static (bool HasErrors, int Count) IsRegex(string regex, params string?[] values)
+        public static (bool HasErrors, int Count) IsRegexMatch(string regex, params string?[] values)
         {
             var errorsIsRegex = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.Text.RegularExpressions.Regex.IsMatch(value, regex));
 
@@ -228,7 +215,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsName(params string?[] values)
         {
-            var errorsIsName = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegex(Regexp.ForName, value).HasErrors);
+            var errorsIsName = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForName, value).HasErrors);
 
             return (errorsIsName.Any(), errorsIsName.Count());
         }
@@ -242,7 +229,7 @@ namespace Kitpymes.Core.Shared.Util
         {
             var errorsIsEmail = values.Where(value =>
             {
-                if (IsNullOrEmpty(value).HasErrors)
+                if (IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForEmail, value).HasErrors)
                 {
                     return true;
                 }
@@ -260,19 +247,6 @@ namespace Kitpymes.Core.Shared.Util
             });
 
             return (errorsIsEmail.Any(), errorsIsEmail.Count());
-        }
-
-        /// <summary>
-        /// Comprueba si los valores ingresados son validos.
-        /// </summary>
-        /// <param name="min">La mínima cantidad de caracteres que debe contener.</param>
-        /// <param name="values">Valores a validar.</param>
-        /// <returns>(bool HasErrors, int Count).</returns>
-        public static (bool HasErrors, int Count) IsPassword(long min, params string?[] values)
-        {
-            var errorsIsPassword = values.Where(value => IsNullOrEmpty(value).HasErrors || IsLess(min, value).HasErrors);
-
-            return (errorsIsPassword.Any(), errorsIsPassword.Count());
         }
 
         /// <summary>
@@ -318,9 +292,39 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsSubdomain(params string?[] values)
         {
-            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegex(Regexp.ForSubdomain, value).HasErrors);
+            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForSubdomain, value).HasErrors);
 
             return (errorsIsSubdomain.Any(), errorsIsSubdomain.Count());
         }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados son validos.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsDomain(params string?[] values)
+        {
+            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForDomain, value).HasErrors);
+
+            return (errorsIsSubdomain.Any(), errorsIsSubdomain.Count());
+        }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados son validos.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsHostname(params string?[] values)
+        {
+            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForHostname, value).HasErrors);
+
+            return (errorsIsSubdomain.Any(), errorsIsSubdomain.Count());
+        }
+
+        /// <summary>
+        /// Lanza una ApplicationException.
+        /// </summary>
+        /// <param name="message">Mensaje.</param>
+        public static void Throw(string message) => throw new ApplicationException(message);
     }
 }

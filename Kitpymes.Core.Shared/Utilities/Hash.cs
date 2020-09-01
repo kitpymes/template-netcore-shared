@@ -128,7 +128,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>string | ApplicationException: si el parámetro plainPassword es vacio o nulo.</returns>
         public static string CreatePassword(string plainPassword)
         {
-            plainPassword.ToThrowIfNullOrEmpty(nameof(plainPassword));
+            plainPassword.ToIsNullOrEmptyThrow(nameof(plainPassword));
 
             var salt = CreateSalt(_saltLength);
 
@@ -156,8 +156,8 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>true | false | ApplicationException: si alguno de los parámetros hashedPassword o plainPassword son vacio o nulo.</returns>
         public static bool VerifyPassword(string hashedPassword, string plainPassword)
         {
-            plainPassword.ToThrowIfNullOrEmpty(nameof(plainPassword));
-            hashedPassword.ToThrowIfNullOrEmpty(nameof(hashedPassword));
+            plainPassword.ToIsNullOrEmptyThrow(nameof(plainPassword));
+            hashedPassword.ToIsNullOrEmptyThrow(nameof(hashedPassword));
 
             byte[] decodedHashedPassword;
 
@@ -306,7 +306,7 @@ namespace Kitpymes.Core.Shared.Util
 
         private static string Create(HashAlgorithm algorithm, string text)
         {
-            text.ToThrowIfNullOrEmpty(nameof(text));
+            text.ToIsNullOrEmptyThrow(nameof(text));
 
             algorithm?.ComputeHash(Encoding.UTF8.GetBytes(text));
 
@@ -319,12 +319,12 @@ namespace Kitpymes.Core.Shared.Util
 
         private static bool Verify(HashAlgorithm algorithm, string text, string hash)
         {
-            text.ToThrowIfNullOrEmpty(nameof(text));
-            hash.ToThrowIfNullOrEmpty(nameof(hash));
+            text.ToIsNullOrEmptyThrow(nameof(text));
+            hash.ToIsNullOrEmptyThrow(nameof(hash));
 
             var result = Create(algorithm, text);
 
-            return result.Equals(hash, StringComparison.OrdinalIgnoreCase);
+            return !string.IsNullOrWhiteSpace(result) && result == hash;
         }
 
         #endregion Private

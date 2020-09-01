@@ -103,7 +103,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>DateTime | ApplicationException: si el parámetro time es nulo o vacio.</returns>
         public static DateTime ToSetTime(this DateTime input, string time)
         {
-            var parts = time.ToThrowIfNullOrEmpty(nameof(time)).Split(':');
+            var parts = time.ToIsNullOrEmptyThrow(nameof(time)).Split(':');
 
             if (parts.Length < 3)
             {

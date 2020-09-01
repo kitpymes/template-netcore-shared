@@ -1,6 +1,7 @@
+using Kitpymes.Core.Shared.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Kitpymes.Core.Shared.Tests
+namespace Kitpymes.Core.Shared.Utilities.Tests
 {
     [TestClass]
     public class CheckTests
@@ -147,31 +148,19 @@ namespace Kitpymes.Core.Shared.Tests
             var (HasErrors, Count) = Util.Check.IsNullOrEmpty
             (
                 FakeTypes.ValueTypes.SimpleTypes.SByte_Null,
-                FakeTypes.ValueTypes.SimpleTypes.SByte_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Short_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Short_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Int_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Int_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Long_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Long_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Byte_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Byte_Default,
                 FakeTypes.ValueTypes.SimpleTypes.UShort_Null,
-                FakeTypes.ValueTypes.SimpleTypes.UShort_Default,
                 FakeTypes.ValueTypes.SimpleTypes.UInt_Null,
-                FakeTypes.ValueTypes.SimpleTypes.UInt_Default,
                 FakeTypes.ValueTypes.SimpleTypes.ULong_Null,
-                FakeTypes.ValueTypes.SimpleTypes.ULong_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Char_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Char_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Float_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Float_Default,
-                FakeTypes.ValueTypes.SimpleTypes.Double_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Double_Default,
+                 FakeTypes.ValueTypes.SimpleTypes.Double_Null,
                 FakeTypes.ValueTypes.SimpleTypes.Decimal_Null,
-                FakeTypes.ValueTypes.SimpleTypes.Decimal_Default,
                 FakeTypes.ValueTypes.SimpleTypes.Bool_Null,
-                //FakeTypes.ValueTypes.EnumerationTypes.ExampleEnumeration.a,
+                FakeTypes.ValueTypes.EnumerationTypes.ExampleEnumeration.a,
                 new FakeTypes.ValueTypes.StructureTypes.ExampleStructure(),
                 FakeTypes.ValueTypes.StructureTypes.Guid_Empty,
                 FakeTypes.ValueTypes.StructureTypes.Guid_Null,
@@ -207,7 +196,7 @@ namespace Kitpymes.Core.Shared.Tests
             );
 
             Assert.IsTrue(HasErrors);
-            Assert.IsTrue(Count == 55);
+            Assert.IsTrue(Count == 41);
         }
 
         [TestMethod]
@@ -246,9 +235,9 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         [TestMethod]
-        public void IsRegex_Passing_InvalidArguments_Returns_HasErrorsAndCount()
+        public void IsRegexMatch_Passing_InvalidArguments_Returns_HasErrorsAndCount()
         {
-            var (HasErrors, Count) = Util.Check.IsRegex
+            var (HasErrors, Count) = Util.Check.IsRegexMatch
             (
                 Util.Regexp.ForEmail,
                 FakeTypes.ReferenceTypes.ClassTypes.String_New(), 
@@ -319,6 +308,20 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(Count == 4);
         }
 
+        #region IsName
+
+        [TestMethod]
+        public void IsName_Passing_ValidArguments_Returns_HasErrorsAndCount()
+        {
+            var (HasErrors, Count) = Util.Check.IsName
+            (
+                 "España", "Españá", "Españà", "Españä", "Españâ", "Esp añâ"
+            );
+
+            Assert.IsFalse(HasErrors);
+            Assert.IsTrue(Count == 0);
+        }
+
         [TestMethod]
         public void IsName_Passing_InvalidArguments_Returns_HasErrorsAndCount()
         {
@@ -334,14 +337,13 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(Count == 4);
         }
 
-        [TestMethod]
-        public void IsPassword_Passing_InvalidArguments_Returns_HasErrorsAndCount()
-        {
-            var min = FakeTypes.ValueTypes.SimpleTypes.Int_Max;
+        #endregion IsName
 
-            var (HasErrors, Count) = Util.Check.IsPassword
+        [TestMethod]
+        public void IsSubdomain_Passing_InvalidArguments_Returns_HasErrorsAndCount()
+        {
+            var (HasErrors, Count) = Util.Check.IsSubdomain
             (
-                min,
                 FakeTypes.ReferenceTypes.ClassTypes.String_New(),
                 FakeTypes.ReferenceTypes.ClassTypes.String_Empty,
                 FakeTypes.ReferenceTypes.ClassTypes.String_Null,
@@ -353,9 +355,24 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         [TestMethod]
-        public void IsSubdomain_Passing_InvalidArguments_Returns_HasErrorsAndCount()
+        public void IsDomain_Passing_InvalidArguments_Returns_HasErrorsAndCount()
         {
-            var (HasErrors, Count) = Util.Check.IsSubdomain
+            var (HasErrors, Count) = Util.Check.IsDomain
+            (
+                FakeTypes.ReferenceTypes.ClassTypes.String_New(),
+                FakeTypes.ReferenceTypes.ClassTypes.String_Empty,
+                FakeTypes.ReferenceTypes.ClassTypes.String_Null,
+                FakeTypes.ReferenceTypes.ClassTypes.String_Default
+            );
+
+            Assert.IsTrue(HasErrors);
+            Assert.IsTrue(Count == 4);
+        }
+
+        [TestMethod]
+        public void IsHostname_Passing_InvalidArguments_Returns_HasErrorsAndCount()
+        {
+            var (HasErrors, Count) = Util.Check.IsHostname
             (
                 FakeTypes.ReferenceTypes.ClassTypes.String_New(),
                 FakeTypes.ReferenceTypes.ClassTypes.String_Empty,

@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>true | false | value: string or null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out string? value)
         {
-            value = httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).ToHeader(key);
+            value = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).ToHeader(key);
 
             if (string.IsNullOrWhiteSpace(value))
             {
@@ -54,7 +54,7 @@ namespace Kitpymes.Core.Shared
         {
             string? result = null;
 
-            if (httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).Headers.TryGetValue(key, out var values))
+            if (httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).Headers.TryGetValue(key, out var values))
             {
                 result = string.Join(", ", values.Select(x => x));
             }
@@ -68,7 +68,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
         /// <returns>Devuelve la URL de la solicitud HTTP | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static string ToPath(this HttpRequest httpRequest)
-        => $"{httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).Scheme}://{httpRequest?.Host.Value}{httpRequest?.Path.Value}{httpRequest?.QueryString.Value}";
+        => $"{httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).Scheme}://{httpRequest?.Host.Value}{httpRequest?.Path.Value}{httpRequest?.QueryString.Value}";
 
         /// <summary>
         /// Obtiene el hostname o subdomain de una entrada HTTP.
@@ -76,7 +76,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
         /// <returns>string | null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static string? ToSubdomain(this HttpRequest httpRequest)
-        => httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).Host.Host?.Split('.')[0].Trim();
+        => httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).Host.Host?.Split('.')[0].Trim();
 
         /// <summary>
         /// Obtiene el ContentType de una entrada HTTP.
@@ -86,7 +86,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>true | false | value: string or null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
         public static bool ToTryContentType(this HttpRequest httpRequest, [MaybeNullWhen(false)] out string? value)
         {
-            value = httpRequest.ToThrowIfNullOrEmpty(nameof(httpRequest)).ContentType;
+            value = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).ContentType;
 
             if (string.IsNullOrWhiteSpace(value))
             {
