@@ -127,6 +127,62 @@ public static class CheckExtensions
     [return: NotNull]
     public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>([NotNull] this IEnumerable<TSource> source, string paramName) {}
 
+    public static bool ToIsGreater(this object? source, long max) {}
+
+    [return: NotNull]
+    public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName) {}
+
+    public static bool ToIsLess(this object? source, long min) {}
+
+    [return: NotNull]
+    public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName) {}
+
+    public static bool ToIsEqual(this object? source, object? compare) {}
+
+    [return: NotNull]
+    public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare) {}
+
+    public static bool ToIsRange(this object? source, long min, long max) {}
+
+    [return: NotNull]
+    public static TSource ToIsRangeWithMessageThrow<TSource>(this TSource source, long min, long max, string message) {}
+
+    [return: NotNull]
+    public static TSource ToIsRangeThrow<TSource>(this TSource source, long min, long max, string paramName) {}
+
+    public static bool ToIsRegexMatch(this string? source, string regex) {}
+
+    [return: NotNull]
+    public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message) {}
+
+    [return: NotNull]
+    public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName) {}
+
+    public static bool ToIsName(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsNameWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsNameThrow(this string? source, string paramName) {}
+
+    public static bool ToIsEmail(this string? source) {}
+
+    [return: NotNull]
+    public static string ToIsEmailWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsEmailThrow(this string? source, string paramName) {}
+
     public static bool ToIsDirectory([NotNullWhen(false)] this string? input) {}
 
     [return: NotNull]
@@ -150,14 +206,6 @@ public static class CheckExtensions
 
     [return: NotNull]
     public static string ToIsFileExtensionThrow(this string? source, string paramName) {}
-
-    public static bool ToIsEmail(this string? source) {}
-
-    [return: NotNull]
-    public static string ToIsEmailWithMessageThrow(this string? source, string message) {}
-
-    [return: NotNull]
-    public static string ToIsEmailThrow(this string? source, string paramName) {}
 
     public static bool ToIsSubdomain(this string? source) {}
 
@@ -183,45 +231,45 @@ public static class CheckExtensions
     [return: NotNull]
     public static string ToIsHostnameThrow(this string? source, string paramName) {}
 
-    public static bool ToIsRegexMatch(this string? source, string regex) {}
+    public static bool ToIsDigit(this string? source) {}
 
     [return: NotNull]
-    public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message) {}
+    public static string ToIsDigitWithMessageThrow(this string? source, string message) {}
 
     [return: NotNull]
-    public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName) {}
+    public static string ToIsDigitThrow(this string? source, string paramName) {}
 
-    public static bool ToIsLess(this object? source, long min) {}
-
-    [return: NotNull]
-    public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message) {}
+    public static bool ToIsUniqueChars(this string? source) {}
 
     [return: NotNull]
-    public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName) {}
-
-    public static bool ToIsGreater(this object? source, long max) {}
+    public static string ToIsUniqueCharsWithMessageThrow(this string? source, string message) {}
 
     [return: NotNull]
-    public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message) {}
+    public static string ToIsUniqueCharsThrow(this string? source, string paramName) {}
+
+    public static bool ToIsEspecialChars(this string? source) {}
 
     [return: NotNull]
-    public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName) {}
-
-    public static bool ToIsName(this string? source) {}
+    public static string ToIsEspecialCharsWithMessageThrow(this string? source, string message) {}
 
     [return: NotNull]
-    public static string ToIsNameWithMessageThrow(this string? source, string message) {}
+    public static string ToIsEspecialCharsThrow(this string? source, string paramName) {}
+
+    public static bool ToIsLowercase(this string? source) {}
 
     [return: NotNull]
-    public static string ToIsNameThrow(this string? source, string paramName) {}
-
-    public static bool ToIsEqual(this object? source, object? compare) {}
+    public static string ToIsLowercaseWithMessageThrow(this string? source, string message) {}
 
     [return: NotNull]
-    public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message) {}
+    public static string ToIsLowercaseThrow(this string? source, string paramName) {}
+
+    public static bool ToIsUppercase(this string? source) {}
 
     [return: NotNull]
-    public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare) {}
+    public static string ToIsUppercaseWithMessageThrow(this string? source, string message) {}
+
+    [return: NotNull]
+    public static string ToIsUppercaseThrow(this string? source, string paramName) {}
 
     [return: NotNull]
     public static TSource ToIsThrow<TSource>(this TSource source, Func<bool> predicate, string message) {}
@@ -533,39 +581,49 @@ public static class TypeExtensions
 ```cs
 public static class Check
 {
+    public static (bool HasErrors, int Count) IsNullOrEmpty(params object?[] values) {}
+
     public static (bool HasErrors, int Count) IsNullOrAny(params IEnumerable?[] values) {}
-
-    public static (bool HasErrors, int Count) IsCustom(params Func<bool>[] values) {}
-
-    public static (bool HasErrors, int Count) IsEqual(object? value, params object?[] valuesCompare) {}
 
     public static (bool HasErrors, int Count) IsGreater(long max, params object?[] values) {}
 
     public static (bool HasErrors, int Count) IsLess(long min, params object?[] values) {}
 
-    public static (bool HasErrors, int Count) IsNullOrEmpty(params object?[] values) {}
+    public static (bool HasErrors, int Count) IsEqual(object? value, params object?[] valuesCompare) {}
 
     public static (bool HasErrors, int Count) IsRange(long min, long max, params object?[] values) {}
 
-    public static (bool HasErrors, int Count) IsRegex(string regex, params string?[] values) {}
+    public static (bool HasErrors, int Count) IsRegexMatch(string regex, params string?[] values) {}
 
-    public static (bool HasErrors, int Count) IsDirectory(params string?[] values) {}
-
-    public static (bool HasErrors, int Count) IsEmail(params string?[] values) {}
-
-    public static (bool HasErrors, int Count) IsFileExtension(params string?[] values) {}
-
-    public static (bool HasErrors, int Count) IsFile(params string?[] values) {}
+    public static (bool HasErrors, int Count) IsCustom(params Func<bool>[] values) {}
 
     public static (bool HasErrors, int Count) IsName(params string?[] values) {}
 
-    public static (bool HasErrors, int Count) IsPassword(long min, params string?[] values) {}
+    public static (bool HasErrors, int Count) IsEmail(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsDirectory(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsFile(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsFileExtension(params string?[] values) {}
 
     public static (bool HasErrors, int Count) IsSubdomain(params string?[] values) {}
 
     public static (bool HasErrors, int Count) IsDomain(params string?[] values) {}
 
     public static (bool HasErrors, int Count) IsHostname(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsDigit(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsUniqueChars(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsEspecialChars(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsLowercase(params string?[] values) {}
+
+    public static (bool HasErrors, int Count) IsUppercase(params string?[] values) {}
+
+    public static void Throw(string message) {}
 }
 ```
 
@@ -592,7 +650,7 @@ public static class Regexp
 
     public const string ForSubdomain = @"^[a-zA-Z0-9_-.]*$";
 
-    public const string ForDomain = @"^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)[A-Za-z]{2,6}";
+    public const string ForDomain = @"(?=^.{1,254}$)(^(?:(?!\d+\.|-)[a-zA-Z0-9_\-]{1,63}(?<!-)\.?)+(?:[a-zA-Z]{2,})$)";
 
     public const string ForHostname = @"^(([a-zA-Z0-9]|[a-zA-Z0-9][a-zA-Z0-9\-]*[a-zA-Z0-9])\.)*([A-Za-z0-9]|[A-Za-z0-9][A-Za-z0-9\-]*[A-Za-z0-9])$";
 }
@@ -642,6 +700,18 @@ public static class Messages
     public static string NullOrAny(string paramName) => $"{paramName} is null or not values";
 
     public static string NotFound(string valueOrParamName) => $"{valueOrParamName} is not found";
+
+    public static string InvalidFormat(string valueOrParamName) => $"{valueOrParamName} has invalid format";
+
+    public static string NotEquals(string paramName, string paramNameCompare) => $"{paramName} and {paramNameCompare} not equals";
+
+    public static string AlreadyExists(string valueOrParamName) => $"{valueOrParamName} already exists";
+
+    public static string Less(string paramName, long min) => $"{paramName} must be greater than {min}";
+
+    public static string Greater(string paramName, long max) => $"{paramName} must be less than {max}";
+
+    public static string Range(string paramName, long min, long max) => $"{paramName} must be in the range {min} to {max}";
 }
 ```
 

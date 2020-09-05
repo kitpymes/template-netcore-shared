@@ -9,6 +9,7 @@ namespace Kitpymes.Core.Shared.Util
 {
     using System;
     using System.Collections;
+    using System.Collections.Generic;
     using System.Linq;
 
     /*
@@ -32,9 +33,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsNullOrEmpty(params object?[] values)
         {
-            var errorsIsNullOrEmpty = values.Where(value => value is null || (value is string && string.IsNullOrWhiteSpace(value.ToString())));
+            var errors = values.Where(value => value is null || (value is string && string.IsNullOrWhiteSpace(value.ToString())));
 
-            return (errorsIsNullOrEmpty.Any(), errorsIsNullOrEmpty.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -44,7 +45,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsNullOrAny(params IEnumerable?[] values)
         {
-            var errorsIsAny = values.Where(value =>
+            var errors = values.Where(value =>
             {
                 if (IsNullOrEmpty(value).HasErrors)
                 {
@@ -62,7 +63,7 @@ namespace Kitpymes.Core.Shared.Util
                 }
             });
 
-            return (errorsIsAny.Any(), errorsIsAny.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -73,7 +74,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsGreater(long max, params object?[] values)
         {
-            var errorsIsGreater = values.Where(value =>
+            var errors = values.Where(value =>
             {
                 if (IsNullOrEmpty(value).HasErrors)
                 {
@@ -105,7 +106,7 @@ namespace Kitpymes.Core.Shared.Util
                 }
             });
 
-            return (errorsIsGreater.Any(), errorsIsGreater.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -116,7 +117,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsLess(long min, params object?[] values)
         {
-            var errorsIsLess = values.Where(value =>
+            var errors = values.Where(value =>
             {
                 if (IsNullOrEmpty(value).HasErrors)
                 {
@@ -148,7 +149,7 @@ namespace Kitpymes.Core.Shared.Util
                 }
             });
 
-            return (errorsIsLess.Any(), errorsIsLess.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -159,9 +160,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsEqual(object? value, params object?[] valuesCompare)
         {
-            var errorsIsEqual = valuesCompare.Where(valueCompare => IsNullOrEmpty(valueCompare).HasErrors || !Equals(value, valueCompare));
+            var errors = valuesCompare.Where(valueCompare => IsNullOrEmpty(valueCompare).HasErrors || !Equals(value, valueCompare));
 
-            return (errorsIsEqual.Any(), errorsIsEqual.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -173,12 +174,12 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsRange(long min, long max, params object?[] values)
         {
-            var errorsIsRange = values.Where(value =>
+            var errors = values.Where(value =>
                 IsNullOrEmpty(value).HasErrors ||
                 IsLess(min, value).HasErrors ||
                 IsGreater(max, value).HasErrors);
 
-            return (errorsIsRange.Any(), errorsIsRange.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -189,9 +190,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsRegexMatch(string regex, params string?[] values)
         {
-            var errorsIsRegex = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.Text.RegularExpressions.Regex.IsMatch(value, regex));
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.Text.RegularExpressions.Regex.IsMatch(value, regex));
 
-            return (errorsIsRegex.Any(), errorsIsRegex.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -201,11 +202,11 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsCustom(params Func<bool>[] values)
         {
-            var errorsIsCustom = values
+            var errors = values
                 .Select(s => s.Invoke())
                 .Where(w => w);
 
-            return (errorsIsCustom.Any(), errorsIsCustom.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -215,9 +216,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsName(params string?[] values)
         {
-            var errorsIsName = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForName, value).HasErrors);
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForName, value).HasErrors);
 
-            return (errorsIsName.Any(), errorsIsName.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -227,7 +228,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsEmail(params string?[] values)
         {
-            var errorsIsEmail = values.Where(value =>
+            var errors = values.Where(value =>
             {
                 if (IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForEmail, value).HasErrors)
                 {
@@ -246,7 +247,7 @@ namespace Kitpymes.Core.Shared.Util
                 }
             });
 
-            return (errorsIsEmail.Any(), errorsIsEmail.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -256,9 +257,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsDirectory(params string?[] values)
         {
-            var errorsIsDirectory = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.IO.Directory.Exists(value));
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.IO.Directory.Exists(value));
 
-            return (errorsIsDirectory.Any(), errorsIsDirectory.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -268,9 +269,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsFile(params string?[] values)
         {
-            var errorsIsFile = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.IO.File.Exists(value));
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.IO.File.Exists(value));
 
-            return (errorsIsFile.Any(), errorsIsFile.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -280,9 +281,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsFileExtension(params string?[] values)
         {
-            var errorsIsExtension = values.Where(value => IsNullOrEmpty(System.IO.Path.GetExtension(value)).HasErrors);
+            var errors = values.Where(value => IsNullOrEmpty(System.IO.Path.GetExtension(value)).HasErrors);
 
-            return (errorsIsExtension.Any(), errorsIsExtension.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -292,9 +293,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsSubdomain(params string?[] values)
         {
-            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForSubdomain, value).HasErrors);
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForSubdomain, value).HasErrors);
 
-            return (errorsIsSubdomain.Any(), errorsIsSubdomain.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -304,9 +305,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsDomain(params string?[] values)
         {
-            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForDomain, value).HasErrors);
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForDomain, value).HasErrors);
 
-            return (errorsIsSubdomain.Any(), errorsIsSubdomain.Count());
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>
@@ -316,9 +317,74 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsHostname(params string?[] values)
         {
-            var errorsIsSubdomain = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForHostname, value).HasErrors);
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForHostname, value).HasErrors);
 
-            return (errorsIsSubdomain.Any(), errorsIsSubdomain.Count());
+            return (errors.Any(), errors.Count());
+        }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados son digitos decimales.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsDigit(params string?[] values)
+        {
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(char.IsDigit));
+
+            return (errors.Any(), errors.Count());
+        }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados contienen caracteres únicos, no repetidos.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsUniqueChars(params string?[] values)
+        {
+            var errors = values.Where(value =>
+            {
+                var set = new HashSet<char>();
+
+                return IsNullOrEmpty(value).HasErrors || value.Any(x => !set.Add(x));
+            });
+
+            return (errors.Any(), errors.Count());
+        }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados contienen algún caracter especial.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsEspecialChars(params string?[] values)
+        {
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(x => !char.IsLetterOrDigit(x)));
+
+            return (errors.Any(), errors.Count());
+        }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados contienen algún caracter en minúscula.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsLowercase(params string?[] values)
+        {
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(char.IsLower));
+
+            return (errors.Any(), errors.Count());
+        }
+
+        /// <summary>
+        /// Comprueba si los valores ingresados contienen algún caracter en mayúscula.
+        /// </summary>
+        /// <param name="values">Valores a validar.</param>
+        /// <returns>(bool HasErrors, int Count).</returns>
+        public static (bool HasErrors, int Count) IsUppercase(params string?[] values)
+        {
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(char.IsUpper));
+
+            return (errors.Any(), errors.Count());
         }
 
         /// <summary>

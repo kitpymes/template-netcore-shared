@@ -94,6 +94,255 @@ namespace Kitpymes.Core.Shared
 
         #endregion IsNullOrAny
 
+        #region IsGreater
+
+        /// <summary>
+        /// Verifica si un valor es mayor que el valor máximo.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsGreater(this object? source, long max)
+        => Util.Check.IsGreater(max, source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor es mayor que el valor máximo.
+        /// </summary>
+        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message)
+        => source.ToIsThrow(() => source.ToIsGreater(max), message);
+
+        /// <summary>
+        /// Verifica si un valor es mayor que el valor máximo.
+        /// </summary>
+        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName)
+        => source.ToIsGreaterWithMessageThrow(max, Util.Messages.Greater(paramName, max));
+
+        #endregion IsGreater
+
+        #region IsLess
+
+        /// <summary>
+        /// Verifica si un valor es menor que el valor mínimo.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsLess(this object? source, long min)
+        => Util.Check.IsLess(min, source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor es menor que el valor mínimo.
+        /// </summary>
+        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message)
+        => source.ToIsThrow(() => source.ToIsLess(min), message);
+
+        /// <summary>
+        /// Verifica si un valor es menor que el valor mínimo.
+        /// </summary>
+        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName)
+        => source.ToIsLessWithMessageThrow(min, Util.Messages.Less(paramName, min));
+
+        #endregion IsLess
+
+        #region IsEqual
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="compare">El valor a comparar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsEqual(this object? source, object? compare)
+        => !Util.Check.IsEqual(source, compare).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="compare">El valor a comparar.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        [return: NotNull]
+        public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message)
+        => source.ToIsThrow(() => !source.ToIsEqual(compare), message);
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="compare">El valor a comparar.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <param name="paramNameCompare">Nombre del parámetro a comparar.</param>
+        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        [return: NotNull]
+        public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare)
+        => source.ToIsEqualWithMessageThrow(compare, Util.Messages.NotEquals(paramName, paramNameCompare));
+
+        #endregion IsEqual
+
+        #region IsRange
+
+        /// <summary>
+        /// Verifica si un valor se encuentra entre un rango.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsRange(this object? source, long min, long max)
+        => Util.Check.IsRange(min, max, source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor se encuentra entre un rango.
+        /// </summary>
+        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static TSource ToIsRangeWithMessageThrow<TSource>(this TSource source, long min, long max, string message)
+        => source.ToIsThrow(() => source.ToIsRange(min, max), message);
+
+        /// <summary>
+        /// Verifica si un valor se encuentra entre un rango.
+        /// </summary>
+        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static TSource ToIsRangeThrow<TSource>(this TSource source, long min, long max, string paramName)
+        => source.ToIsRangeWithMessageThrow(min, max, Util.Messages.Range(paramName, min, max));
+
+        #endregion IsRange
+
+        #region IsRegexMatch
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="regex">Expresión regular.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsRegexMatch(this string? source, string regex)
+        => !Util.Check.IsRegexMatch(regex, source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="regex">Expresión regular.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message)
+        => source.ToIsThrow(() => !source.ToIsRegexMatch(regex), message);
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="regex">Expresión regular.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName)
+        => source.ToIsRegexMatchWithMessageThrow(regex, Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+
+        #endregion IsRegexMatch
+
+        #region IsName
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsName(this string? source)
+        => !Util.Check.IsName(source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsNameWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsName(), message);
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        [return: NotNull]
+        public static string ToIsNameThrow(this string? source, string paramName)
+        => source.ToIsNameWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+
+        #endregion IsName
+
+        #region IsEmail
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsEmail(this string? source)
+        => !Util.Check.IsEmail(source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsEmailWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsEmail(), message);
+
+        /// <summary>
+        /// Verifica si un valor es nulo o vacío.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsEmailThrow(this string? source, string paramName)
+        => source.ToIsEmailWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+
+        #endregion IsEmail
+
         #region IsDirectory
 
         /// <summary>
@@ -189,38 +438,6 @@ namespace Kitpymes.Core.Shared
         => source.ToIsFileExtensionWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
         #endregion IsFileExtension
-
-        #region IsEmail
-
-        /// <summary>
-        /// Verifica si un valor es nulo o vacío.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <returns>true | false.</returns>
-        public static bool ToIsEmail(this string? source)
-        => !Util.Check.IsEmail(source).HasErrors;
-
-        /// <summary>
-        /// Verifica si un valor es nulo o vacío.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="message">Mensaje de la validación.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static string ToIsEmailWithMessageThrow(this string? source, string message)
-        => source.ToIsThrow(() => !source.ToIsEmail(), message);
-
-        /// <summary>
-        /// Verifica si un valor es nulo o vacío.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="paramName">Nombre del parámetro.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static string ToIsEmailThrow(this string? source, string paramName)
-        => source.ToIsEmailWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
-
-        #endregion IsEmail
 
         #region IsSubdomain
 
@@ -318,182 +535,165 @@ namespace Kitpymes.Core.Shared
 
         #endregion IsHostname
 
-        #region IsRegexMatch
+        #region IsDigit
 
         /// <summary>
-        /// Verifica si un valor es nulo o vacío.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="regex">Expresión regular.</param>
-        /// <returns>true | false.</returns>
-        public static bool ToIsRegexMatch(this string? source, string regex)
-        => !Util.Check.IsRegexMatch(regex, source).HasErrors;
-
-        /// <summary>
-        /// Verifica si un valor es nulo o vacío.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="regex">Expresión regular.</param>
-        /// <param name="message">Mensaje de la validación.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message)
-        => source.ToIsThrow(() => !source.ToIsRegexMatch(regex), message);
-
-        /// <summary>
-        /// Verifica si un valor es nulo o vacío.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="regex">Expresión regular.</param>
-        /// <param name="paramName">Nombre del parámetro.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName)
-        => source.ToIsRegexMatchWithMessageThrow(regex, Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
-
-        #endregion IsRegexMatch
-
-        #region IsLess
-
-        /// <summary>
-        /// Verifica si un valor es menor que el valor mínimo.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="min">El valor mínimo.</param>
-        /// <returns>true | false.</returns>
-        public static bool ToIsLess(this object? source, long min)
-        => Util.Check.IsLess(min, source).HasErrors;
-
-        /// <summary>
-        /// Verifica si un valor es menor que el valor mínimo.
-        /// </summary>
-        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="min">El valor mínimo.</param>
-        /// <param name="message">Mensaje de la validación.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message)
-        => source.ToIsThrow(() => source.ToIsLess(min), message);
-
-        /// <summary>
-        /// Verifica si un valor es menor que el valor mínimo.
-        /// </summary>
-        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="min">El valor mínimo.</param>
-        /// <param name="paramName">Nombre del parámetro.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName)
-        => source.ToIsLessWithMessageThrow(min, Util.Messages.Less(paramName, min));
-
-        #endregion IsLess
-
-        #region IsGreater
-
-        /// <summary>
-        /// Verifica si un valor es mayor que el valor máximo.
-        /// </summary>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="max">El valor máximo.</param>
-        /// <returns>true | false.</returns>
-        public static bool ToIsGreater(this object? source, long max)
-        => Util.Check.IsGreater(max, source).HasErrors;
-
-        /// <summary>
-        /// Verifica si un valor es mayor que el valor máximo.
-        /// </summary>
-        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="max">El valor máximo.</param>
-        /// <param name="message">Mensaje de la validación.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message)
-        => source.ToIsThrow(() => source.ToIsGreater(max), message);
-
-        /// <summary>
-        /// Verifica si un valor es mayor que el valor máximo.
-        /// </summary>
-        /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
-        /// <param name="source">El valor a verificar.</param>
-        /// <param name="max">El valor máximo.</param>
-        /// <param name="paramName">Nombre del parámetro.</param>
-        /// <returns>TSource | ApplicationException.</returns>
-        [return: NotNull]
-        public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName)
-        => source.ToIsGreaterWithMessageThrow(max, Util.Messages.Greater(paramName, max));
-
-        #endregion IsGreater
-
-        #region IsName
-
-        /// <summary>
-        /// Verifica si un valor es nulo o vacío.
+        /// Verifica si un valor contiene algún digito decimal.
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsName(this string? source)
-        => !Util.Check.IsName(source).HasErrors;
+        public static bool ToIsDigit(this string? source)
+        => !Util.Check.IsDigit(source).HasErrors;
 
         /// <summary>
-        /// Verifica si un valor es nulo o vacío.
+        /// Verifica si un valor contiene algún digito decimal.
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <param name="message">Mensaje de la validación.</param>
         /// <returns>TSource | ApplicationException.</returns>
         [return: NotNull]
-        public static string ToIsNameWithMessageThrow(this string? source, string message)
-        => source.ToIsThrow(() => !source.ToIsName(), message);
+        public static string ToIsDigitWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsDigit(), message);
 
         /// <summary>
-        /// Verifica si un valor es nulo o vacío.
+        /// Verifica si un valor contiene algún digito decimal.
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <param name="paramName">Nombre del parámetro.</param>
         /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
         [return: NotNull]
-        public static string ToIsNameThrow(this string? source, string paramName)
-        => source.ToIsNameWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+        public static string ToIsDigitThrow(this string? source, string paramName)
+        => source.ToIsDigitWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
-        #endregion IsName
+        #endregion IsDigit
 
-        #region IsEqual
+        #region IsUniqueChars
 
         /// <summary>
-        /// Verifica si un valor es nulo o vacío.
+        /// Verifica si un valor contiene caracteres repetidos.
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
-        /// <param name="compare">El valor a comparar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsEqual(this object? source, object? compare)
-        => !Util.Check.IsEqual(source, compare).HasErrors;
+        public static bool ToIsUniqueChars(this string? source)
+        => !Util.Check.IsUniqueChars(source).HasErrors;
 
         /// <summary>
-        /// Verifica si un valor es nulo o vacío.
+        /// Verifica si un valor contiene caracteres repetidos.
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
-        /// <param name="compare">El valor a comparar.</param>
         /// <param name="message">Mensaje de la validación.</param>
-        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        /// <returns>TSource | ApplicationException.</returns>
         [return: NotNull]
-        public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message)
-        => source.ToIsThrow(() => !source.ToIsEqual(compare), message);
+        public static string ToIsUniqueCharsWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsUniqueChars(), message);
 
         /// <summary>
-        /// Verifica si un valor es nulo o vacío.
+        /// Verifica si un valor contiene caracteres repetidos.
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
-        /// <param name="compare">El valor a comparar.</param>
         /// <param name="paramName">Nombre del parámetro.</param>
-        /// <param name="paramNameCompare">Nombre del parámetro a comparar.</param>
         /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
         [return: NotNull]
-        public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare)
-        => source.ToIsEqualWithMessageThrow(compare, Util.Messages.NotEquals(paramName, paramNameCompare));
+        public static string ToIsUniqueCharsThrow(this string? source, string paramName)
+        => source.ToIsUniqueCharsWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
 
-        #endregion IsEqual
+        #endregion IsUniqueChars
+
+        #region IsEspecialChars
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter especial.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsEspecialChars(this string? source)
+        => !Util.Check.IsEspecialChars(source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter especial.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsEspecialCharsWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsEspecialChars(), message);
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter especial.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        [return: NotNull]
+        public static string ToIsEspecialCharsThrow(this string? source, string paramName)
+        => source.ToIsEspecialCharsWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+
+        #endregion IsEspecialChars
+
+        #region IsLowercase
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter en minúscula.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsLowercase(this string? source)
+        => !Util.Check.IsLowercase(source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter en minúscula.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsLowercaseWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsLowercase(), message);
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter en minúscula.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        [return: NotNull]
+        public static string ToIsLowercaseThrow(this string? source, string paramName)
+        => source.ToIsLowercaseWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+
+        #endregion IsLowercase
+
+        #region IsUppercase
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter en mayúscula.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <returns>true | false.</returns>
+        public static bool ToIsUppercase(this string? source)
+        => !Util.Check.IsUppercase(source).HasErrors;
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter en mayúscula.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="message">Mensaje de la validación.</param>
+        /// <returns>TSource | ApplicationException.</returns>
+        [return: NotNull]
+        public static string ToIsUppercaseWithMessageThrow(this string? source, string message)
+        => source.ToIsThrow(() => !source.ToIsUppercase(), message);
+
+        /// <summary>
+        /// Verifica si un valor contiene algún caracter en mayúscula.
+        /// </summary>
+        /// <param name="source">El valor a verificar.</param>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <returns>TSource | ApplicationException: "{paramName} has invalid format".</returns>
+        [return: NotNull]
+        public static string ToIsUppercaseThrow(this string? source, string paramName)
+        => source.ToIsUppercaseWithMessageThrow(Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(source) ? paramName : source));
+
+        #endregion IsUppercase
 
         /// <summary>
         /// Valida si una o varias condiciones son verdaderas.

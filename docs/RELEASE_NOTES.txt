@@ -1,3 +1,6 @@
+# v.1.0.7
+- Se agregan nuevas validaciones.
+
 # v.1.0.6
 - Se agregan nuevas extensiones y utilidades.
 

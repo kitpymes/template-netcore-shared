@@ -74,7 +74,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Expresión regular para un domain.
         /// </summary>
-        public const string ForDomain = @"^((?!-)[A-Za-z0-9-]{1,63}(?<!-)\\.)[A-Za-z]{2,6}";
+        public const string ForDomain = @"(?=^.{1,254}$)(^(?:(?!\d+\.|-)[a-zA-Z0-9_\-]{1,63}(?<!-)\.?)+(?:[a-zA-Z]{2,})$)";
 
         /// <summary>
         /// Expresión regular para un hostname.

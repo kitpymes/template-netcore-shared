@@ -79,5 +79,14 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="max">El valor máximo.</param>
         /// <returns>"{paramName} is null or not values".</returns>
         public static string Greater(string paramName, long max) => $"{paramName} must be less than {max}";
+
+        /// <summary>
+        /// Devuelve "{paramName} must be in the range {min} to {max}".
+        /// </summary>
+        /// <param name="paramName">Nombre del parámetro.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <returns>"{paramName} must be in the range {min} to {max}".</returns>
+        public static string Range(string paramName, long min, long max) => $"{paramName} must be in the range {min} to {max}";
     }
 }
