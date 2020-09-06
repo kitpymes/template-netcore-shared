@@ -1,9 +1,8 @@
-﻿using Kitpymes.Core.Shared.Tests;
-using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class HttpContextExtensionsTests

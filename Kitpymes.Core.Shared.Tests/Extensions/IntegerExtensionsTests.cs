@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Globalization;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class IntegerExtensionsTests

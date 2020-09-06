@@ -1,6 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class EnumExtensionsTests

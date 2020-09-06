@@ -1,7 +1,6 @@
-using Kitpymes.Core.Shared.Tests;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace Kitpymes.Core.Shared.Utilities.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class CheckTests

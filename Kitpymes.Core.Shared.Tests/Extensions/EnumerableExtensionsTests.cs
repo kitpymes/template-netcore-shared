@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class EnumerableExtensionsTests

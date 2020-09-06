@@ -1,4 +1,3 @@
-using Kitpymes.Core.Shared.Tests;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +7,7 @@ using System;
 using System.IO;
 using System.Reflection;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
 	public class ConfigurationBuilderExtensionsTests

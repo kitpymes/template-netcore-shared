@@ -6,7 +6,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class StringExtensionsTests
@@ -76,10 +76,29 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         #region ToNormalize
 
         [DataTestMethod]
+        [DataRow(" ", "")]
         [DataRow("àáäâãøçħ", "aaaaaoch")]
         [DataRow(" àáäâ ãøçħ ", "aaaa aoch")]
         [DataRow("*¨^_:-?¿;", "")]
         [DataRow(" * ¨ ^ _ : - ? ¿ ; ", "")]
+        [DataRow("àáäâã", "aaaaa")]
+        [DataRow("ÀÁÄÂÃ", "AAAAA")]
+        [DataRow("ç", "c")]
+        [DataRow("Ç", "C")]
+        [DataRow("èéëê", "eeee")]
+        [DataRow("ÈÉËÊ", "EEEE")]
+        [DataRow("ìíïî", "iiii")]
+        [DataRow("Malmö", "Malmo")]
+        [DataRow("Münçhen", "Munchen")]
+        [DataRow("Åge", "Age")]
+        [DataRow("Strømsgodset", "Stromsgodset")]
+        [DataRow("Kulħadd", "Kulhadd")]
+        [DataRow("héllo", "hello")]
+        [DataRow("Autobús", "Autobus")]
+        [DataRow("i’ LL", "i LL")]
+        [DataRow("Mañana", "Manana")]
+        [DataRow("The End", "The End")]
+        [DataRow("ñ Ñ", "n N")]
         public void ToNormalize_Passing_ValidValue_Returns_NormalizedValue(string value, string valueExpected)
         {
             var valueActual = value.ToNormalize();
@@ -158,7 +177,11 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         #region ToFirstLetter
 
         [DataTestMethod]
-        [DataRow("aaaaaa", "Aaaaaa")]
+        [DataRow("aeiou", "Aeiou")]
+        [DataRow("aEIOU", "AEIOU")]
+        [DataRow("aeioU", "AeioU")]
+        [DataRow("AEIOU", "AEIOU")]
+        [DataRow("Aeiou", "Aeiou")]
         public void ToFirstLetterUpper_Passing_ValidValue_Returns_StringWithFirstLetterUpper(string value, string valueExpected)
         {
             var valueActual = value.ToFirstLetterUpper();
@@ -167,7 +190,11 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         }
 
         [DataTestMethod]
-        [DataRow("AAAAAA", "aAAAAA")]
+        [DataRow("aeiou", "aeiou")]
+        [DataRow("aEIOU", "aEIOU")]
+        [DataRow("aeioU", "aeioU")]
+        [DataRow("AEIOU", "aEIOU")]
+        [DataRow("Aeiou", "aeiou")]
         public void ToFirstLetterLower_Passing_ValidValue_Returns_StringWithFirstLetterLower(string value, string valueExpected)
         {
             var valueActual = value.ToFirstLetterLower();
@@ -180,7 +207,12 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         #region ToEmailMask
 
         [DataTestMethod]
-        [DataRow("miemail@gmail.com", "m*****l@gmail.com")]
+        [DataRow("qaz@gmail.com", "q*z@gmail.com")]
+        [DataRow("qazwsx@gmail.com", "q****x@gmail.com")]
+        [DataRow("qazwsxedc@gmail.com", "q*******c@gmail.com")]
+        [DataRow("qaz@gmailgmail.com", "q*z@gmailgmail.com")]
+        [DataRow("qazwsx@gmailgmail.com", "q****x@gmailgmail.com")]
+        [DataRow("qazwsxedc@gmailgmail.com", "q*******c@gmailgmail.com")]
         public void ToEmailMaskUserName_Passing_ValidEmail_Returns_EmailWithMask(string value, string valueExpected)
         {
             var valueActual = value.ToEmailMaskUserName();
@@ -189,7 +221,12 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         }
 
         [DataTestMethod]
-        [DataRow("miemail@gmail.com", "m*****l@g***l.com")]
+        [DataRow("qaz@gmail.com", "q*z@g***l.com")]
+        [DataRow("qazwsx@gmail.com", "q****x@g***l.com")]
+        [DataRow("qazwsxedc@gmail.com", "q*******c@g***l.com")]
+        [DataRow("qaz@gmailgmail.com", "q*z@g********l.com")]
+        [DataRow("qazwsx@gmailgmail.com", "q****x@g********l.com")]
+        [DataRow("qazwsxedc@gmailgmail.com", "q*******c@g********l.com")]
         public void ToEmailMaskUserNameAndDomain_Passing_ValidEmail_Returns_EmailWithMask(string value, string valueExpected)
         {
             var valueActual = value.ToEmailMaskUserNameAndDomain();
@@ -198,7 +235,12 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         }
 
         [DataTestMethod]
-        [DataRow("miemail@gmail.com", "m*****l@g***l.c*m")]
+        [DataRow("qaz@gmail.com", "q*z@g***l.c*m")]
+        [DataRow("qazwsx@gmail.com", "q****x@g***l.c*m")]
+        [DataRow("qazwsxedc@gmail.com", "q*******c@g***l.c*m")]
+        [DataRow("qaz@gmailgmail.com", "q*z@g********l.c*m")]
+        [DataRow("qazwsx@gmailgmail.com", "q****x@g********l.c*m")]
+        [DataRow("qazwsxedc@gmailgmail.com", "q*******c@g********l.c*m")]
         public void ToEmailMaskUserNameAndDomainAndExtension_Passing_ValidEmail_Returns_EmailWithMask(string value, string valueExpected)
         {
             var valueActual = value.ToEmailMaskUserNameAndDomainAndExtension();
@@ -207,9 +249,17 @@ namespace Kitpymes.Core.Shared.Extensions.Tests
         }
 
         [DataTestMethod]
-        [DataRow("miemail@gmail.com", "m-----l@g---l.c-m", @"(?<=(?:^|@)[^.]*)\B.\B|(?<=[\w]{1})[\w-\+%]*(?=[\w]{1})", '-')]
-        public void ToEmailMask_Passing_ValidEmail_Returns_EmailWithMask(string value, string valueExpected, string pattern, char replace)
+        [DataRow("qaz@gmail.com", "q-z@g----.com")]
+        [DataRow("qazwsx@gmail.com", "q----x@g----.com")]
+        [DataRow("qazwsxedc@gmail.com", "q-------c@g----.com")]
+        [DataRow("qaz@gmailgmail.com", "q-z@g---------.com")]
+        [DataRow("qazwsx@gmailgmail.com", "q----x@g---------.com")]
+        [DataRow("qazwsxedc@gmailgmail.com", "q-------c@g---------.com")]
+        public void ToEmailMask_Passing_ValidEmail_Returns_EmailWithMask(string value, string valueExpected)
         {
+            char replace = '-';
+            var pattern = @"(?<=[\w]{1})[\w-\._\+%\\]*(?=[\w]{1}@)|(?<=@[\w]{1})[\w-_\+%]*(?=\.)";
+
             var valueActual = value.ToEmailMask(pattern, replace);
 
             Assert.AreEqual(valueExpected, valueActual);

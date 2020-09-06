@@ -9,7 +9,7 @@ using System.Linq;
 using System.IO;
 using Kitpymes.Core.Shared.Tests;
 
-namespace Kitpymes.Core.Shared.Extensions.Tests
+namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class HttpResponseExtensionsTests
