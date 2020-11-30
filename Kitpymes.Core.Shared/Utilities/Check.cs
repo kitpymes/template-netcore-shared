@@ -190,7 +190,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsRegexMatch(string regex, params string?[] values)
         {
-            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.Text.RegularExpressions.Regex.IsMatch(value, regex));
+            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.Text.RegularExpressions.Regex.IsMatch(value, regex, options: System.Text.RegularExpressions.RegexOptions.CultureInvariant));
 
             return (errors.Any(), errors.Count());
         }
