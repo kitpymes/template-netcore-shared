@@ -84,22 +84,5 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         #endregion SHA512
-
-        #region Password
-
-        [DataTestMethod]
-        [DataRow("Password")]
-        [DataRow(nameof(HashTests))]
-        [DataRow("sdlfkjldsfksdfñl·%$·&$/U&/)(&()?=)¿?^P*^PÑL,.,.lñ´ñ+98098'098098")]
-        public void CreateAndVerifyPassword_Passing_Valid_Arguments_Returns_IsValid(string plainPassword)
-        {
-            var hashPassword = Util.Hash.CreatePassword(plainPassword);
-
-            var isValid = Util.Hash.VerifyPassword(hashPassword, plainPassword);
-
-            Assert.IsTrue(isValid);
-        }
-
-        #endregion Password
     }
 }

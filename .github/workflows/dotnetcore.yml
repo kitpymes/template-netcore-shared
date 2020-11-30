@@ -23,5 +23,5 @@ jobs:
     - name: Build 
       run: dotnet build Solution.sln --configuration Release
      
-#    - name: Tests
-#      run: dotnet test --configuration Release --no-build
+   - name: Tests
+     run: dotnet test --configuration Release --no-build --framework netcoreapp3.0

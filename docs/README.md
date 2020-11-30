@@ -685,10 +685,6 @@ public static class Hash
     public static string CreateSHA512(string text) { }
 
     public static bool VerifySHA512(string text, string hash) { }
-
-    public static string CreatePassword(string plainPassword) { }
-
-    public static bool VerifyPassword(string hashedPassword, string plainPassword) { }
 }
 ```
 
@@ -712,6 +708,35 @@ public static class Messages
     public static string Greater(string paramName, long max) => $"{paramName} must be less than {max}";
 
     public static string Range(string paramName, long min, long max) => $"{paramName} must be in the range {min} to {max}";
+}
+```
+
+```cs
+public class Result
+{
+    public Result(bool success) {}
+	
+    protected Result() { }
+
+    public bool Success { get; }
+
+    public virtual string ToJson() {}
+
+
+    public static IResult Ok() {}
+
+    public static IResultMessage Ok(string message) {}
+
+    public static IResultData<T> Ok<T>(T data) where T : class {}
+
+
+    public static IResult Error() {}
+
+    public static IResultMessage Error(string message, string? details = null) {}
+
+	public static IResultMessage Error(Exception exception, object? details = null) {}
+
+    public static IResultError Error(IDictionary<string, string> messages, object? details = null) {}
 }
 ```
 
