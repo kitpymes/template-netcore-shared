@@ -7,6 +7,8 @@
 
 namespace Kitpymes.Core.Shared.Util
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using System.Threading.Tasks;
     using Kitpymes.Core.Shared;
 
@@ -30,11 +32,28 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="success">Indica si el proceso fue correcto.</param>
         /// <param name="data">Objeto con datos.</param>
-        public ResultData(bool success, T data)
-            : base(success) => Data = data;
+        /// <param name="errors">Lista de errors.</param>
+        public ResultData(
+            bool success,
+            T? data,
+            IEnumerable<string>? errors = null)
+            : base(success)
+        {
+            Data = data;
+
+            if (errors != null && errors.Any())
+            {
+                Errors ??= new List<string>();
+
+                Errors = errors;
+            }
+        }
 
         /// <inheritdoc/>
-        public T Data { get; }
+        public IEnumerable<string>? Errors { get; }
+
+        /// <inheritdoc/>
+        public T? Data { get; }
 
         /// <summary>
         /// Convierte el resultado en asincrono.

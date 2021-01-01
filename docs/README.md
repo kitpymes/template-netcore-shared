@@ -736,7 +736,9 @@ public class Result
 
 	public static IResultMessage Error(Exception exception, object? details = null) {}
 
-    public static IResultError Error(IDictionary<string, string> messages, object? details = null) {}
+    public static IResultData<T> Error<T>(IEnumerable<string> errors) where T : class {}
+
+    public static IResultError Error(IDictionary<string, string> errors, object? details = null) {}
 }
 ```
 

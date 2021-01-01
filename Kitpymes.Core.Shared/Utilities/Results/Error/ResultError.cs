@@ -29,31 +29,24 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="ResultError"/>.
         /// </summary>
-        /// <param name="messages">Lista de errores.</param>
-        /// <param name="details">Detalle del error.</param>
-        public ResultError(
-            IDictionary<string, string> messages,
-            object? details = null)
+        /// <param name="errors">Lista de errores.</param>
+        public ResultError(IDictionary<string, string> errors)
             : base(false)
         {
-            Details = details;
-
-            if (messages.Any())
+            if (errors?.Count > 0)
             {
-                Messages = messages;
+                Errors ??= new Dictionary<string, string>();
 
-                Count = messages?.Count;
+                Errors = errors;
+                Count = errors.Count;
             }
         }
-
-        /// <inheritdoc/>
-        public object? Details { get; }
 
         /// <inheritdoc/>
         public int? Count { get; }
 
         /// <inheritdoc/>
-        public IDictionary<string, string> Messages { get; } = new Dictionary<string, string>();
+        public IDictionary<string, string>? Errors { get; }
 
         /// <summary>
         /// Convierte el resultado en asincrono.

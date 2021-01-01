@@ -15,11 +15,6 @@ namespace Kitpymes.Core.Shared.Util
     public interface IResultError : IResult
     {
         /// <summary>
-        /// Obtiene el detalles del error.
-        /// </summary>
-        object? Details { get; }
-
-        /// <summary>
         /// Obtiene la cantidad de errores.
         /// </summary>
         int? Count { get; }
@@ -27,6 +22,6 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Obtiene la lista de errores.
         /// </summary>
-        IDictionary<string, string>? Messages { get; }
+        IDictionary<string, string>? Errors { get; }
     }
 }

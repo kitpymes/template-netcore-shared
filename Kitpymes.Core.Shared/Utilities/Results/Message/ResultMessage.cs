@@ -34,7 +34,6 @@ namespace Kitpymes.Core.Shared.Util
             : base(success)
         {
             Message = message;
-
             Details = details;
         }
 

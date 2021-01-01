@@ -7,6 +7,8 @@
 
 namespace Kitpymes.Core.Shared.Util
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Devuelve un objeto con datos.
     /// </summary>
@@ -18,5 +20,10 @@ namespace Kitpymes.Core.Shared.Util
         /// Obtiene un objeto con datos.
         /// </summary>
         T? Data { get; }
+
+        /// <summary>
+        /// Obtiene la lista de errores.
+        /// </summary>
+        IEnumerable<string>? Errors { get; }
     }
 }

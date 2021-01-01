@@ -52,7 +52,8 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="message">Mensaje.</param>
         /// <returns>IResultMessage.</returns>
-        public static IResultMessage Ok(string message) => new ResultMessage(true, message);
+        public static IResultMessage Ok(string message)
+        => new ResultMessage(true, message);
 
         /// <summary>
         /// Indica que el proceso se ejecutó con éxito.
@@ -94,11 +95,19 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Indica que el proceso no se ejecutó con éxito.
         /// </summary>
-        /// <param name="messages">Lista de errores.</param>
-        /// <param name="details">Detalles del error.</param>
+        /// <param name="errors">Lista de errores.</param>
+        /// <returns>IResultData{T}.</returns>
+        public static IResultData<T> Error<T>(IEnumerable<string> errors)
+            where T : class
+        => new ResultData<T>(false, null, errors);
+
+        /// <summary>
+        /// Indica que el proceso no se ejecutó con éxito.
+        /// </summary>
+        /// <param name="errors">Lista de errores.</param>
         /// <returns>IResultError.</returns>
-        public static IResultError Error(IDictionary<string, string> messages, object? details = null)
-        => new ResultError(messages, details);
+        public static IResultError Error(IDictionary<string, string> errors)
+        => new ResultError(errors);
 
         #endregion Error
 

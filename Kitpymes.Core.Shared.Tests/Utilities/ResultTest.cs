@@ -8,79 +8,52 @@ namespace Kitpymes.Core.Shared.Tests
     [TestClass]
     public class ResultTest
     {
-        #region ResultOk
+        #region Ok
 
         [TestMethod]
-        public void ResultOk()
+        public void Ok_Result()
         {
             var actual = Util.Result.Ok();
 
-            Assert.AreEqual(true, actual.Success);
+            Assert.IsTrue(actual.Success);
         }
 
         [TestMethod]
-        public void ResultOkWithMessage()
+        public void Ok_ResultMessage_WithMessage()
         {
             string message = Guid.NewGuid().ToString();
 
             var actual = Util.Result.Ok(message);
 
-            Assert.AreEqual(true, actual.Success);
+            Assert.IsTrue(actual.Success);
             Assert.AreEqual(actual.Message, message);
         }
 
         [TestMethod]
-        public void ResultDataOkWihValue()
+        public void Ok_ResultData_WithData()
         {
             object data = Guid.NewGuid().ToString();
 
             var actual = Util.Result.Ok(data);
 
-            Assert.AreEqual(true, actual.Success);
+            Assert.IsTrue(actual.Success);
             Assert.AreEqual(data, actual.Data);
         }
 
-        #endregion ResultOk
+        #endregion Ok
 
-        #region ResultError
+        #region Error
 
         [TestMethod]
-        public void ResultError()
+        public void Error_Result()
         { 
             var actual = Util.Result.Error();
 
-            Assert.AreEqual(false, actual.Success);
+            Assert.IsFalse(actual.Success);
         }
 
         [TestMethod]
-        public void ResultErrorWithMessage()
-        {
-            var message = Guid.NewGuid().ToString();
-
-            var actual = Util.Result.Error(message);
-            var actualJson = actual.ToJson();
-
-            Assert.AreEqual(false, actual.Success);
-            Assert.AreEqual(actual.Message, message);
-            Assert.IsTrue(actualJson.Contains(message, StringComparison.CurrentCulture));
-        }
-
-        [TestMethod]
-        public void ResultErrorWithException()
-        {
-            var message = Guid.NewGuid().ToString();
-            var exception = new Exception(message);
-
-            var actual = Util.Result.Error(exception);
-            var actualJson = actual.ToJson();
-
-            Assert.AreEqual(false, actual.Success);
-            Assert.AreEqual(actual.Message, exception.ToFullMessage());
-            Assert.IsTrue(actualJson.Contains(message, StringComparison.CurrentCulture));
-        }
-
-        [TestMethod]
-        public void ResultErrorWithMessageWithDetails()
+        public void Error_ResultMessage_WithMessage_WithDetails()
         {
             string message = Guid.NewGuid().ToString();
 
@@ -95,7 +68,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             var actualJson = actual.ToJson();
 
-            Assert.AreEqual(false, actual.Success);
+            Assert.IsFalse(actual.Success);
             Assert.AreEqual(actual.Message, message);
             Assert.AreEqual(actual.Details, details);
             Assert.IsTrue(actualJson.Contains(message, StringComparison.CurrentCulture));
@@ -103,28 +76,10 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         [TestMethod]
-        public void ResultErrorWithValidationError()
+        public void Error_ResultMessage_WithException_WithDetails()
         {
-            var messages = new Dictionary<string, string> {
-                { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
-            };
-
-            var actual = Util.Result.Error(messages);
-            var actualJson = actual.ToJson();
-
-            Assert.AreEqual(false, actual.Success);
-            Assert.IsTrue(actual.Count > 0);
-            Assert.AreEqual(messages.First(), actual.Messages.First());
-            Assert.IsTrue(actualJson.Contains(messages.ToSerialize(), StringComparison.CurrentCulture));
-        }
-
-        [TestMethod]
-        public void ResultErrorWithValidationErrorWithDetails()
-        {
-            var messages = new Dictionary<string, string> {
-                { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
-            };
-
+            var message = Guid.NewGuid().ToString();
+            var exception = new Exception(message);
             object details = new
             {
                 Code = new Random().Next(),
@@ -132,14 +87,44 @@ namespace Kitpymes.Core.Shared.Tests
                 Otro = Guid.NewGuid().ToString(),
             };
 
-            var actual = Util.Result.Error(messages, details);
+            var actual = Util.Result.Error(exception, details);
+            var actualJson = actual.ToJson();
 
-            Assert.AreEqual(false, actual.Success);
-            Assert.IsTrue(actual.Count > 0);
-            Assert.AreEqual(messages.First(), actual.Messages.First());
-            Assert.IsTrue(actual.Details == details);
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.Details, details);
+            Assert.IsTrue(actualJson.Contains(message, StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(details.ToSerialize(), StringComparison.CurrentCulture));
         }
 
-        #endregion ResultError
+        [TestMethod]
+        public void Error_ResultError_WithErrors()
+        {
+            var errors = new Dictionary<string, string> {
+                { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
+            };
+
+            var actual = Util.Result.Error(errors);
+            var actualJson = actual.ToJson();
+
+            Assert.IsFalse(actual.Success);
+            Assert.IsTrue(actual.Count > 0);
+            CollectionAssert.AreEqual(errors, actual.Errors.ToList());
+            Assert.IsTrue(actualJson.Contains(errors.ToSerialize(), StringComparison.CurrentCulture));
+        }
+
+        [TestMethod]
+        public void Error_ResultData_WithErrors()
+        {
+            var errors = new List<string> {
+                { Guid.NewGuid().ToString() }, { Guid.NewGuid().ToString() }
+            };
+
+            var actual = Util.Result.Error<object>(errors);
+
+            Assert.IsFalse(actual.Success);
+            CollectionAssert.AreEqual(errors, actual.Errors.ToList());
+        }
+
+        #endregion Error
     }
 }

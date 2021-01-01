@@ -1,5 +1,8 @@
+# v.1.0.9
+- Se actualizan las utilidades "Result" para devolver resultados.
+
 # v.1.0.8
-- Se agregan utilidades para devolver resultados.
+- Se agregan las utilidades de "Result" para devolver resultados.
 
 # v.1.0.7
 - Se agregan nuevas validaciones.
