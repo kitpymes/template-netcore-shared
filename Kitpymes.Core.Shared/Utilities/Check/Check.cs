@@ -388,9 +388,21 @@ namespace Kitpymes.Core.Shared.Util
         }
 
         /// <summary>
+        /// Lanza un ApplicationException.
+        /// </summary>
+        /// <param name="error">Error.</param>
+        public static void Throw(string error) => throw new ApplicationException(error);
+
+        /// <summary>
         /// Lanza una ApplicationException.
         /// </summary>
-        /// <param name="message">Mensaje.</param>
-        public static void Throw(string message) => throw new ApplicationException(message);
+        /// <param name="errors">Lista de errores.</param>
+        public static void Throw(IEnumerable<string> errors)
+        {
+            if (errors?.Count() > 0)
+            {
+                Throw(errors.ToString(", "));
+            }
+        }
     }
 }

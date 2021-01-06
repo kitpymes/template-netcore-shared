@@ -1,130 +1,410 @@
+using Kitpymes.Core.Shared.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 
 namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class ResultTest
     {
-        #region Ok
+        #region ResultOK
 
         [TestMethod]
-        public void Ok_Result()
+        public void ResultOK()
         {
-            var actual = Util.Result.Ok();
+            var actual = Result.Ok();
 
             Assert.IsTrue(actual.Success);
+            Assert.AreEqual(actual.Title, Result.DefaultTitleOk);
+            Assert.AreEqual(actual.StatusCode, Result.DefaultStatusCodeOk.ToValue());
         }
 
         [TestMethod]
-        public void Ok_ResultMessage_WithMessage()
+        public void ResultOk_WithMessage()
         {
-            string message = Guid.NewGuid().ToString();
+            var messageExpected = Guid.NewGuid().ToString();
 
-            var actual = Util.Result.Ok(message);
+            var actual = Result.Ok(messageExpected);
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.Message, message);
+            Assert.AreEqual(actual.Message, messageExpected);
+        }
+
+        #endregion ResultOK
+
+        #region ResultOKData
+
+        [TestMethod]
+        public void ResultOkData()
+        {
+            var dataExpected = new FakeUser { Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
+
+            var actual = Result<FakeUser>.Ok(dataExpected);
+            var actualToJson = actual.ToJson();
+
+            Assert.IsTrue(actual.Success);
+
+            Assert.AreEqual(actual.Data, dataExpected);
+            Assert.IsTrue(actualToJson.Contains(dataExpected.ToSerialize(), StringComparison.CurrentCulture));
         }
 
         [TestMethod]
-        public void Ok_ResultData_WithData()
+        public void ResultOkData_WithMessage()
         {
-            object data = Guid.NewGuid().ToString();
+            var dataExpected = new FakeUser { Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
+            var messageExpected = Guid.NewGuid().ToString();
 
-            var actual = Util.Result.Ok(data);
+            var actual = Result<FakeUser>.Ok(dataExpected, messageExpected);
+            var actualToJson = actual.ToJson();
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(data, actual.Data);
+
+            Assert.AreEqual(actual.Message, messageExpected);
+            Assert.IsTrue(actualToJson.Contains(messageExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Data, dataExpected);
+            Assert.IsTrue(actualToJson.Contains(dataExpected.ToSerialize(), StringComparison.CurrentCulture));
         }
 
-        #endregion Ok
+        #endregion ResultOKData
 
-        #region Error
+        #region ResultError
 
         [TestMethod]
-        public void Error_Result()
-        { 
-            var actual = Util.Result.Error();
+        public void ResultError()
+        {
+            var actual = Result.Error();
 
             Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.Title, Result.DefaultTitleError);
+            Assert.AreEqual(actual.StatusCode, Result.DefaultStatusCodeError.ToValue());
         }
 
         [TestMethod]
-        public void Error_ResultMessage_WithMessage_WithDetails()
+        public void ResultError_WithMessage_WithDetails()
         {
-            string message = Guid.NewGuid().ToString();
-
-            object details = new
+            var messageExpected = Guid.NewGuid().ToString();
+            object detailsExpected = new
             {
                 Code = new Random().Next(),
                 Link = Guid.NewGuid().ToString(),
                 Otro = Guid.NewGuid().ToString(),
             };
 
-            var actual = Util.Result.Error(message, details);
-
-            var actualJson = actual.ToJson();
+            var actual = Result.Error(messageExpected, detailsExpected);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.Message, message);
-            Assert.AreEqual(actual.Details, details);
-            Assert.IsTrue(actualJson.Contains(message, StringComparison.CurrentCulture));
-            Assert.IsTrue(actualJson.Contains(details.ToSerialize(), StringComparison.CurrentCulture));
+            Assert.AreEqual(actual.Message, messageExpected);
+            Assert.AreEqual(actual.Details, detailsExpected);
         }
 
         [TestMethod]
-        public void Error_ResultMessage_WithException_WithDetails()
+        public void ResultError_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithModelErrors()
         {
-            var message = Guid.NewGuid().ToString();
-            var exception = new Exception(message);
-            object details = new
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+            var titleExpected = Guid.NewGuid().ToString();
+            var messageExpected = Guid.NewGuid().ToString();
+            var statusCodeExpected = HttpStatusCode.BadRequest;
+            var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
+            object detailsExpected = new
             {
                 Code = new Random().Next(),
                 Link = Guid.NewGuid().ToString(),
                 Otro = Guid.NewGuid().ToString(),
             };
 
-            var actual = Util.Result.Error(exception, details);
-            var actualJson = actual.ToJson();
+            var errors = new List<(string fieldName, string message)>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(classField), classFieldMessageExpected));
+            }
+
+            Result? actual = null;
+
+            if (errors.Any())
+            {
+                actual = Result.Error(options => options
+                        .WithTitle(titleExpected)
+                        .WithStatusCode(statusCodeExpected)
+                        .WithMessages(messageExpected)
+                        .WithDetails(detailsExpected)
+                        .WithExceptionType(exceptionTypeExpected)
+                        .WithErrors(errors));
+            }
+
+            var actualJson = actual!.ToJson();
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.Details, details);
-            Assert.IsTrue(actualJson.Contains(message, StringComparison.CurrentCulture));
-            Assert.IsTrue(actualJson.Contains(details.ToSerialize(), StringComparison.CurrentCulture));
+
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
+
+            Assert.IsTrue(actualJson.Contains(Messages.NullOrEmpty(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(Messages.InvalidFormat(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(classFieldMessageExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Title, titleExpected);
+            Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
+            Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Message, messageExpected);
+            Assert.IsTrue(actualJson.Contains(messageExpected.ToString(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Details, detailsExpected);
+            Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
+            Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
         }
 
         [TestMethod]
-        public void Error_ResultError_WithErrors()
+        public void ResultError_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithErrors()
         {
-            var errors = new Dictionary<string, string> {
-                { Guid.NewGuid().ToString(), Guid.NewGuid().ToString() }
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+            var titleExpected = Guid.NewGuid().ToString();
+            var statusCodeExpected = HttpStatusCode.BadRequest;
+            var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
+            object detailsExpected = new
+            {
+                Code = new Random().Next(),
+                Link = Guid.NewGuid().ToString(),
+                Otro = Guid.NewGuid().ToString(),
             };
 
-            var actual = Util.Result.Error(errors);
-            var actualJson = actual.ToJson();
+            var messagesExpected = new List<string>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                messagesExpected.Add(Messages.NullOrEmpty(nameof(stringField)));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                messagesExpected.Add(Messages.InvalidFormat(nameof(stringField)));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                messagesExpected.Add(classFieldMessageExpected);
+            }
+
+            Result? actual = null;
+
+            if (messagesExpected.Any())
+            {
+                actual = Result.Error(options => options
+                    .WithTitle(titleExpected)
+                    .WithStatusCode(statusCodeExpected)
+                    .WithDetails(detailsExpected)
+                    .WithExceptionType(exceptionTypeExpected)
+                    .WithMessages(messagesExpected));
+            }
+
+            var actualJson = actual!.ToJson();
 
             Assert.IsFalse(actual.Success);
-            Assert.IsTrue(actual.Count > 0);
-            CollectionAssert.AreEqual(errors, actual.Errors.ToList());
-            Assert.IsTrue(actualJson.Contains(errors.ToSerialize(), StringComparison.CurrentCulture));
+
+            Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(classFieldMessageExpected));
+
+            Assert.IsTrue(actualJson.Contains(Messages.NullOrEmpty(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(Messages.InvalidFormat(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(classFieldMessageExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Title, titleExpected);
+            Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
+            Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Message, messagesExpected.ToString(", "));
+            Assert.IsTrue(actualJson.Contains(messagesExpected.First(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Details, detailsExpected);
+            Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
+            Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
+        }
+
+        #endregion ResultError
+
+        #region ResultErrorData
+
+        [TestMethod]
+        public void ResultErrorData_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithModelErrors()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+            var titleExpected = Guid.NewGuid().ToString();
+            var messageExpected = Guid.NewGuid().ToString();
+            var statusCodeExpected = HttpStatusCode.BadRequest;
+            var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
+            object detailsExpected = new
+            {
+                Code = new Random().Next(),
+                Link = Guid.NewGuid().ToString(),
+                Otro = Guid.NewGuid().ToString(),
+            };
+
+            var errors = new List<(string fieldName, string message)>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(classField), classFieldMessageExpected));
+            }
+
+            Result? actual = null;
+
+            if (errors.Any())
+            {
+                actual = Result<FakeUser>.Error(options => options
+                    .WithTitle(titleExpected)
+                    .WithStatusCode(statusCodeExpected)
+                    .WithMessages(messageExpected)
+                    .WithDetails(detailsExpected)
+                    .WithExceptionType(exceptionTypeExpected)
+                    .WithErrors(errors));
+            }
+
+            var actualJson = actual!.ToJson();
+
+            Assert.IsFalse(actual.Success);
+
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
+
+            Assert.IsTrue(actualJson.Contains(Messages.NullOrEmpty(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(Messages.InvalidFormat(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(classFieldMessageExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Title, titleExpected);
+            Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
+            Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Message, messageExpected);
+            Assert.IsTrue(actualJson.Contains(messageExpected.ToString(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Details, detailsExpected);
+            Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
+            Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
         }
 
         [TestMethod]
-        public void Error_ResultData_WithErrors()
+        public void ResultErrorData_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithErrors()
         {
-            var errors = new List<string> {
-                { Guid.NewGuid().ToString() }, { Guid.NewGuid().ToString() }
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+            var titleExpected = Guid.NewGuid().ToString();
+            var statusCodeExpected = HttpStatusCode.BadRequest;
+            var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
+            object detailsExpected = new
+            {
+                Code = new Random().Next(),
+                Link = Guid.NewGuid().ToString(),
+                Otro = Guid.NewGuid().ToString(),
             };
 
-            var actual = Util.Result.Error<object>(errors);
+            var messagesExpected = new List<string>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                messagesExpected.Add(Messages.NullOrEmpty(nameof(stringField)));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                messagesExpected.Add(Messages.InvalidFormat(nameof(stringField)));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                messagesExpected.Add(classFieldMessageExpected);
+            }
+
+            Result? actual = null;
+
+            if (messagesExpected.Any())
+            {
+                actual = Result<FakeUser>.Error(options => options                 
+                    .WithTitle(titleExpected)
+                    .WithStatusCode(statusCodeExpected)
+                    .WithDetails(detailsExpected)
+                    .WithExceptionType(exceptionTypeExpected)
+                    .WithMessages(messagesExpected));
+            }
+
+            var actualJson = actual!.ToJson();
 
             Assert.IsFalse(actual.Success);
-            CollectionAssert.AreEqual(errors, actual.Errors.ToList());
+
+            Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(classFieldMessageExpected));
+
+            Assert.IsTrue(actualJson.Contains(Messages.NullOrEmpty(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(Messages.InvalidFormat(nameof(stringField)), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualJson.Contains(classFieldMessageExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Title, titleExpected);
+            Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
+            Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Message, messagesExpected.ToString(", "));
+            Assert.IsTrue(actualJson.Contains(messagesExpected.First(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.Details, detailsExpected);
+            Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
+
+            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
+            Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
         }
 
-        #endregion Error
+        #endregion ResultErrorData
     }
 }

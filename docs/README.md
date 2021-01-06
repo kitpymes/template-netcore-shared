@@ -623,7 +623,9 @@ public static class Check
 
     public static (bool HasErrors, int Count) IsUppercase(params string?[] values) {}
 
-    public static void Throw(string message) {}
+    public static void Throw(string error) {}
+
+    public static void Throw(IEnumerable<string> errors) {}
 }
 ```
 
@@ -712,33 +714,55 @@ public static class Messages
 ```
 
 ```cs
+public class ErrorOptions
+{
+    public ErrorOptions WithTitle(string title) {}
+
+    public ErrorOptions WithStatusCode(HttpStatusCode statusCode) {}
+
+    public ErrorOptions WithDetails(object details) {}
+
+    public ErrorOptions WithExceptionType(string exception = DefaultException) {}
+
+    public ErrorOptions WithMessages(string message) {}
+
+    public ErrorOptions WithMessages(IEnumerable<string> messages) {}
+
+    public ErrorOptions WithErrors(string fieldName, string message) {}
+
+    public ErrorOptions WithErrors(IEnumerable<(string fieldName, string message)> errors) {}
+}
+```
+
+```cs
 public class Result
 {
-    public Result(bool success) {}
-	
-    protected Result() { }
+    protected Result(bool success, int statusCode, string title, string? message = null) {}
 
-    public bool Success { get; }
+    public bool Success { get; protected set; }
+
+    public int? StatusCode { get; protected set; }
+
+    public string? Title { get; protected set; }
+
+    public string? Message { get; protected set; }
+
+    public string? TraceId { get; protected set; }
+
+    public string? ExceptionType { get; protected set; }
+
+    public object? Details { get; protected set; }
+
+    public IDictionary<string, IList<string>>? Errors { get; protected set; }
+
+	
+    public static Result Ok(string? message = null) { }
+
+    public static Result Error(string? message = null, object? details = null) {}
+
+    public static Result Error(Action<ErrorOptions> options) {}
 
     public virtual string ToJson() {}
-
-
-    public static IResult Ok() {}
-
-    public static IResultMessage Ok(string message) {}
-
-    public static IResultData<T> Ok<T>(T data) where T : class {}
-
-
-    public static IResult Error() {}
-
-    public static IResultMessage Error(string message, string? details = null) {}
-
-	public static IResultMessage Error(Exception exception, object? details = null) {}
-
-    public static IResultData<T> Error<T>(IEnumerable<string> errors) where T : class {}
-
-    public static IResultError Error(IDictionary<string, string> errors, object? details = null) {}
 }
 ```
 

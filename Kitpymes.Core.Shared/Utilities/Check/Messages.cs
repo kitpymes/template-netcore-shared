@@ -9,12 +9,12 @@ namespace Kitpymes.Core.Shared.Util
 {
     /*
         Clase de utilidades
-        Contiene los mensajes
+        Contiene mensajes de validaciones
     */
 
     /// <summary>
     /// Clase de utilidades <c>Messages</c>.
-    /// Contiene los mensajes.
+    /// Contiene mensajes de validaciones.
     /// </summary>
     /// <remarks>
     /// <para>En esta clase se pueden agregar todas las utilidades necesarias para los mensajes.</para>

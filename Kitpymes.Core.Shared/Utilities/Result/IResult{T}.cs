@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-// <copyright file="IResultData.cs" company="Kitpymes">
+// <copyright file="IResult{T}.cs" company="Kitpymes">
 // Copyright (c) Kitpymes. All rights reserved.
 // Licensed under the MIT license. See LICENSE file in the project docs folder for full license information.
 // </copyright>
@@ -7,23 +7,14 @@
 
 namespace Kitpymes.Core.Shared.Util
 {
-    using System.Collections.Generic;
-
     /// <summary>
-    /// Devuelve un objeto con datos.
+    /// Resultado.
     /// </summary>
-    /// <typeparam name="T">Tipo de objeto.</typeparam>
-    public interface IResultData<out T> : IResult
-        where T : class
+    public interface IResult<out T> : IResult
     {
         /// <summary>
         /// Obtiene un objeto con datos.
         /// </summary>
-        T? Data { get; }
-
-        /// <summary>
-        /// Obtiene la lista de errores.
-        /// </summary>
-        IEnumerable<string>? Errors { get; }
+        T Data { get; }
     }
 }
