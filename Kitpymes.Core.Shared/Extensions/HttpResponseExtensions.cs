@@ -50,9 +50,12 @@ namespace Kitpymes.Core.Shared
 
             validHttpResponse.ContentType = contentType;
 
-            foreach (var (key, values) in headers)
+            if (headers?.Length > 0)
             {
-                validHttpResponse.Headers.AppendList(key, values);
+                foreach (var (key, values) in headers)
+                {
+                    validHttpResponse.Headers.AppendList(key, values);
+                }
             }
 
             await httpResponse.WriteAsync(message).ConfigureAwait(false);

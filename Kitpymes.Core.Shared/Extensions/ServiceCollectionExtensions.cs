@@ -9,6 +9,7 @@ namespace Kitpymes.Core.Shared
 {
     using System;
     using System.Collections.Generic;
+    using System.Linq;
     using System.Reflection;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -87,8 +88,22 @@ namespace Kitpymes.Core.Shared
             Assembly[] assemblies,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            services.ToIsNullOrEmptyThrow(nameof(services));
-            assemblies.ToIsNullOrAnyThrow(nameof(assemblies));
+            var errors = new List<string>();
+
+            if (services.ToIsNullOrEmpty())
+            {
+                errors.Add(Util.Messages.NullOrEmpty(nameof(services)));
+            }
+
+            if (assemblies.ToIsNullOrAny())
+            {
+                errors.Add(Util.Messages.NullOrAny(nameof(assemblies)));
+            }
+
+            if (errors.Any())
+            {
+                Util.Check.Throw(errors);
+            }
 
             services.Scan(scan => scan
                 .FromAssemblies(assemblies)
@@ -117,16 +132,45 @@ namespace Kitpymes.Core.Shared
             string directoryPath,
             params (string jsonFileName, bool optional, bool reloadOnChange)[] files)
         {
-            services.ToIsNullOrEmptyThrow(nameof(services));
-            directoryPath.ToIsDirectoryThrow(nameof(directoryPath));
+            var errors = new List<string>();
 
-            var configurationBuilder = new ConfigurationBuilder()
-                .SetBasePath(directoryPath)
-                .ToJsonFiles(directoryPath, files)
-                .AddEnvironmentVariables()
-                .Build();
+            if (services.ToIsNullOrEmpty())
+            {
+                errors.Add(Util.Messages.NullOrEmpty(nameof(services)));
+            }
 
-            services.ToConfiguration(configurationBuilder);
+            if (directoryPath.ToIsNullOrEmpty())
+            {
+                errors.Add(Util.Messages.NullOrEmpty(nameof(directoryPath)));
+            }
+            else
+            {
+                if (!directoryPath.ToIsDirectory())
+                {
+                    errors.Add(Util.Messages.NotFound(directoryPath));
+                }
+            }
+
+            if (files.ToIsNullOrAny())
+            {
+                errors.Add(Util.Messages.NullOrAny(nameof(files)));
+            }
+
+            if (errors.Any())
+            {
+                Util.Check.Throw(errors);
+            }
+
+            if (files != null)
+            {
+                var configurationBuilder = new ConfigurationBuilder()
+                  .SetBasePath(directoryPath)
+                  .ToJsonFiles(directoryPath, files)
+                  .AddEnvironmentVariables()
+                  .Build();
+
+                services.ToConfiguration(configurationBuilder);
+            }
 
             return services;
         }
@@ -141,6 +185,23 @@ namespace Kitpymes.Core.Shared
             this IServiceCollection services,
             params (string key, string? value)[] configuration)
         {
+            var errors = new List<string>();
+
+            if (services.ToIsNullOrEmpty())
+            {
+                errors.Add(Util.Messages.NullOrEmpty(nameof(services)));
+            }
+
+            if (configuration.ToIsNullOrAny())
+            {
+                errors.Add(Util.Messages.NullOrAny(nameof(configuration)));
+            }
+
+            if (errors.Any())
+            {
+                Util.Check.Throw(errors);
+            }
+
             var list = new Dictionary<string, string?>();
 
             foreach (var (key, value) in configuration)
@@ -152,7 +213,7 @@ namespace Kitpymes.Core.Shared
                 .AddInMemoryCollection(list)
                 .Build();
 
-            services.ToIsNullOrEmptyThrow(nameof(services)).ToConfiguration(configurationBuilder);
+            services.ToConfiguration(configurationBuilder);
 
             return services;
         }
@@ -254,7 +315,7 @@ namespace Kitpymes.Core.Shared
             {
                 var filePath = $"{directoryPath}/{jsonFileName}.json";
 
-                filePath.ToIsFileThrow(nameof(jsonFileName));
+                filePath.ToIsFileThrow(nameof(filePath));
 
                 builder.AddJsonFile(filePath, optional, reloadOnChange);
             }

@@ -173,7 +173,7 @@ namespace Kitpymes.Core.Shared.Tests
         {
             string? directoryPath = string.Empty;
             var jsonFileName = "FakeAppSettings";
-            var expectedMessage = Util.Messages.NotFound(nameof(directoryPath));
+            var expectedMessage = Util.Messages.NullOrEmpty(nameof(directoryPath));
 
             var services = new ServiceCollection();
             var exceptionActual = Assert.ThrowsException<ApplicationException>

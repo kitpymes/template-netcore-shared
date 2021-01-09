@@ -77,19 +77,34 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="T">El tipo de valor de la claim.</typeparam>
         /// <param name="claimsPrincipal">Una implementación System.Security.Principal.IPrincipal que admite múltiples identidades basadas en notificaciones.</param>
         /// <param name="authenticationType">Tipo de autenticación.</param>
-        /// <param name="values">La lista de claims.</param>
-        public static void ToAdd<T>(this ClaimsPrincipal claimsPrincipal, string authenticationType, params (string claimType, T value)[] values)
+        /// <param name="claims">La lista de claims.</param>
+        public static void ToAdd<T>(this ClaimsPrincipal claimsPrincipal, string authenticationType, params (string claimType, T value)[] claims)
         {
-            claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal));
+            var errors = new List<string>();
 
-            var claims = new List<Claim>();
-
-            foreach (var (claimType, value) in values)
+            if (claimsPrincipal.ToIsNullOrEmpty())
             {
-                claims.Add(new Claim(claimType, value.ToSerialize()));
+                errors.Add(Util.Messages.NullOrEmpty(nameof(claimsPrincipal)));
             }
 
-            claimsPrincipal.ToAdd(authenticationType, claims);
+            if (claims.ToIsNullOrAny())
+            {
+                errors.Add(Util.Messages.NullOrEmpty(nameof(claims)));
+            }
+
+            if (errors.Any())
+            {
+                Util.Check.Throw(errors);
+            }
+
+            var claimsList = new List<Claim>();
+
+            foreach (var (claimType, value) in claims)
+            {
+                claimsList.Add(new Claim(claimType, value.ToSerialize()));
+            }
+
+            claimsPrincipal.ToAdd(authenticationType, claimsList);
         }
 
         /// <summary>

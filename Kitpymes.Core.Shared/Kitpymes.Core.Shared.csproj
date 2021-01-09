@@ -5,9 +5,9 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="AgileObjects.AgileMapper" Version="1.7.1" />
+    <PackageReference Include="AgileObjects.AgileMapper" Version="1.7.2" />
     <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.2.0" />
-    <PackageReference Include="Scrutor" Version="3.2.1" />
+    <PackageReference Include="Scrutor" Version="3.3.0" />
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 

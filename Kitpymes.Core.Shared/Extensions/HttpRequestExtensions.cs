@@ -36,12 +36,7 @@ namespace Kitpymes.Core.Shared
         {
             value = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).ToHeader(key);
 
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return false;
-            }
-
-            return true;
+            return !value.ToIsNullOrEmpty();
         }
 
         /// <summary>
@@ -82,18 +77,13 @@ namespace Kitpymes.Core.Shared
         /// Obtiene el ContentType de una entrada HTTP.
         /// </summary>
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
-        /// <param name="value">Valor a devolver.</param>
+        /// <param name="contentType">Valor a devolver.</param>
         /// <returns>true | false | value: string or null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
-        public static bool ToTryContentType(this HttpRequest httpRequest, [MaybeNullWhen(false)] out string? value)
+        public static bool ToTryContentType(this HttpRequest httpRequest, [MaybeNullWhen(false)] out string? contentType)
         {
-            value = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).ContentType;
+            contentType = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).ContentType;
 
-            if (string.IsNullOrWhiteSpace(value))
-            {
-                return false;
-            }
-
-            return true;
+            return !contentType.ToIsNullOrEmpty();
         }
     }
 }

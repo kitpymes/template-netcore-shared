@@ -42,16 +42,16 @@ namespace Kitpymes.Core.Shared
         /// <param name="input">Cadena a remplazar.</param>
         /// <param name="removes">Caracteres que se quieren remover.</param>
         /// <returns>La cadena con los caracteres removidos.</returns>
-        public static string ToRemove(this string input, params string[] removes)
+        public static string? ToRemove(this string? input, params string[] removes)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            if (input.ToIsNullOrEmpty() || removes.ToIsNullOrAny())
             {
-                return string.Empty;
+                return input;
             }
 
             foreach (var remove in removes)
             {
-                input = input.Replace(remove, string.Empty, StringComparison.CurrentCulture);
+                input = input?.Replace(remove, string.Empty, StringComparison.CurrentCulture);
             }
 
             return input;
@@ -71,12 +71,12 @@ namespace Kitpymes.Core.Shared
         /// <returns>La cadena con el valor reemplazado.</returns>
         public static string? ToReplace(this string? input, string replace, int start, int count)
         {
-            if (string.IsNullOrWhiteSpace(input) || string.IsNullOrWhiteSpace(replace))
+            if (input.ToIsNullOrEmpty() || replace.ToIsNullOrEmpty())
             {
                 return input;
             }
 
-            if (start + count > input.Length)
+            if (start + count > input?.Length)
             {
                 start = 0;
                 count = input.Length;
@@ -86,7 +86,7 @@ namespace Kitpymes.Core.Shared
 
             for (int i = start; i < length; i++)
             {
-                input = input.Remove(i, 1).Insert(i, replace);
+                input = input?.Remove(i, 1).Insert(i, replace);
             }
 
             return new string(input);
@@ -100,7 +100,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>La cadena sin caracteres especiales.</returns>
         public static string? ToReplaceSpecialChars(this string? input, params string[] ignoreSpecialChars)
         {
-            if (string.IsNullOrWhiteSpace(input))
+            if (input.ToIsNullOrEmpty())
             {
                 return input;
             }
@@ -126,14 +126,17 @@ namespace Kitpymes.Core.Shared
 
             var pattern = "[^0-9a-zA-Z ";
 
-            foreach (string c in ignoreSpecialChars)
+            if (ignoreSpecialChars?.Length > 0)
             {
-                pattern += c;
+                foreach (string c in ignoreSpecialChars)
+                {
+                    pattern += c;
+                }
             }
 
             pattern += "]+?";
 
-            input = dictionary.Keys.Aggregate(input, (x, y) => dictionary[y].Aggregate(x, (z, c) => z.Replace(c, y)));
+            input = dictionary.Keys.Aggregate(input, (x, y) => dictionary[y].Aggregate(x, (z, c) => z?.Replace(c, y)));
 
             return new Regex(pattern).Replace(input, string.Empty);
         }
@@ -163,7 +166,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>Enum de tipo {TEnum}.</returns>
         public static TEnum ToEnum<TEnum>(this string? input, TEnum defaultValue = default)
             where TEnum : struct, Enum
-            => string.IsNullOrWhiteSpace(input) || !Enum.TryParse(input, false, out TEnum result) ? defaultValue : result;
+            => input.ToIsNullOrEmpty() || !Enum.TryParse(input, false, out TEnum result) ? defaultValue : result;
 
         /// <summary>
         /// Convierte un entero de tipo {TEnum} en un enum.

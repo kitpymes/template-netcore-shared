@@ -1,5 +1,5 @@
 # v.1.1.0
-- Se actualizan las utilidades "Result" para devolver resultados.
+- Se actualizan utilidades y extensiones del proyecto.
 
 # v.1.0.9
 - Se actualizan las utilidades "Result" para devolver resultados.

@@ -113,168 +113,127 @@ public static class CheckExtensions
 {
     public static bool ToIsNullOrEmpty(this object? source) {}
 
-    [return: NotNull]
     public static TSource ToIsNullOrEmptyWithMessageThrow<TSource>(this TSource source, string message) {}
 
-    [return: NotNull]
     public static TSource ToIsNullOrEmptyThrow<TSource>(this TSource source, string paramName) {}
 
-    public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource>? input) {}
+    public static bool ToIsNullOrAny<TSource>(this IEnumerable<TSource>? input) {}
 
-    [return: NotNull]
-    public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>([NotNull] this IEnumerable<TSource> source, string message) {}
+    public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>(his IEnumerable<TSource> source, string message) {}
 
-    [return: NotNull]
-    public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>([NotNull] this IEnumerable<TSource> source, string paramName) {}
+    public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>(this IEnumerable<TSource> source, string paramName) {}
 
     public static bool ToIsGreater(this object? source, long max) {}
 
-    [return: NotNull]
     public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message) {}
 
-    [return: NotNull]
     public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName) {}
 
     public static bool ToIsLess(this object? source, long min) {}
 
-    [return: NotNull]
     public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message) {}
 
-    [return: NotNull]
     public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName) {}
 
     public static bool ToIsEqual(this object? source, object? compare) {}
 
-    [return: NotNull]
     public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message) {}
 
-    [return: NotNull]
     public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare) {}
 
     public static bool ToIsRange(this object? source, long min, long max) {}
 
-    [return: NotNull]
     public static TSource ToIsRangeWithMessageThrow<TSource>(this TSource source, long min, long max, string message) {}
 
-    [return: NotNull]
     public static TSource ToIsRangeThrow<TSource>(this TSource source, long min, long max, string paramName) {}
 
     public static bool ToIsRegexMatch(this string? source, string regex) {}
 
-    [return: NotNull]
     public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message) {}
 
-    [return: NotNull]
     public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName) {}
 
     public static bool ToIsName(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsNameWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsNameThrow(this string? source, string paramName) {}
 
     public static bool ToIsEmail(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsEmailWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsEmailThrow(this string? source, string paramName) {}
 
-    public static bool ToIsDirectory([NotNullWhen(false)] this string? input) {}
+    public static bool ToIsDirectory(this string? input) {}
 
-    [return: NotNull]
     public static string? ToIsDirectoryWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string? ToIsDirectoryThrow(this string? source, string paramName) {}
 
-    public static bool ToIsFile([NotNullWhen(false)] this string? input) {}
+    public static bool ToIsFile(this string? input) {}
 
-    [return: NotNull]
     public static string ToIsFileWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsFileThrow(this string? source, string paramName) {}
 
-    public static bool ToIsFileExtension([NotNullWhen(false)] this string? input) {}
+    public static bool ToIsFileExtension(this string? input) {}
 
-    [return: NotNull]
     public static string ToIsFileExtensionWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsFileExtensionThrow(this string? source, string paramName) {}
 
     public static bool ToIsSubdomain(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsSubdomainWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsSubdomainThrow(this string? source, string paramName) {}
 
     public static bool ToIsDomain(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsDomainWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsDomainThrow(this string? source, string paramName) {}
 
     public static bool ToIsHostname(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsHostnameWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsHostnameThrow(this string? source, string paramName) {}
 
     public static bool ToIsDigit(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsDigitWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsDigitThrow(this string? source, string paramName) {}
 
     public static bool ToIsUniqueChars(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsUniqueCharsWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsUniqueCharsThrow(this string? source, string paramName) {}
 
     public static bool ToIsEspecialChars(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsEspecialCharsWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsEspecialCharsThrow(this string? source, string paramName) {}
 
     public static bool ToIsLowercase(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsLowercaseWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsLowercaseThrow(this string? source, string paramName) {}
 
     public static bool ToIsUppercase(this string? source) {}
 
-    [return: NotNull]
     public static string ToIsUppercaseWithMessageThrow(this string? source, string message) {}
 
-    [return: NotNull]
     public static string ToIsUppercaseThrow(this string? source, string paramName) {}
 
-    [return: NotNull]
     public static TSource ToIsThrow<TSource>(this TSource source, Func<bool> predicate, string message) {}
 
-    public static bool ToIsErrors<TSource>([NotNullWhen(false)] this TSource source, Func<bool> predicate) {}
+    public static bool ToIsErrors<TSource>(this TSource source, Func<bool> predicate) {}
 }
 ```
 
@@ -714,6 +673,36 @@ public static class Messages
 ```
 
 ```cs
+public interface IResult
+{
+    bool Success { get; }
+
+    int? StatusCode { get; }
+
+    string? Title { get; }
+
+    string? Message { get; }
+
+    object? Details { get; }
+
+    string? TraceId { get; }
+
+    string? ExceptionType { get; }
+
+    public IDictionary<string, IList<string>>? Errors { get; }
+
+    string ToJson();
+}
+```
+
+```cs
+public interface IResult{T} : IResult
+{
+    T Data { get; }
+}
+```
+
+```cs
 public class ErrorOptions
 {
     public ErrorOptions WithTitle(string title) {}
@@ -735,7 +724,7 @@ public class ErrorOptions
 ```
 
 ```cs
-public class Result
+public class Result : IResult
 {
     protected Result(bool success, int statusCode, string title, string? message = null) {}
 
@@ -763,6 +752,25 @@ public class Result
     public static Result Error(Action<ErrorOptions> options) {}
 
     public virtual string ToJson() {}
+}
+```
+
+```cs
+public class Result<T> : Result, IResult<T>
+{
+    protected Result(bool success, int statusCode, string title, string? message = null) {}
+
+    ppublic T Data { get; private set; }
+
+    public static new Result<T> Ok(string? message = null) {}
+
+    public static Result<T> Ok(T data, string? message = null) {}
+
+    public static new Result<T> Error(string? message = null, object? details = null) {}
+
+    public static new Result<T> Error(Action<ErrorOptions> options) {}
+
+    public override string ToJson() {}
 }
 ```
 

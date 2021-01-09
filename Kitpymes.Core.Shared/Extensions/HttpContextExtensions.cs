@@ -30,20 +30,13 @@ namespace Kitpymes.Core.Shared
         /// Obtiene la IP de la solicitud HTTP.
         /// </summary>
         /// <param name="httpContext">Encapsula toda la información específica de HTTP sobre una solicitud HTTP individual.</param>
-        /// <param name="value">Valor a devolver.</param>
+        /// <param name="ip">Valor de la ip a devolver.</param>
         /// <returns>string | null | ApplicationException: si el parámetro httpContext es nulo.</returns>
-        public static bool ToTryIPv6(this HttpContext httpContext, [MaybeNullWhen(false)] out string? value)
+        public static bool ToTryIPv6(this HttpContext httpContext, [MaybeNullWhen(false)] out string? ip)
         {
-            var ip = httpContext.ToIsNullOrEmptyThrow(nameof(httpContext)).ToIPv6();
+            ip = httpContext.ToIsNullOrEmptyThrow(nameof(httpContext)).ToIPv6();
 
-            if (string.IsNullOrWhiteSpace(ip))
-            {
-                value = null;
-                return false;
-            }
-
-            value = ip;
-            return true;
+            return !ip.ToIsNullOrEmpty();
         }
 
         /// <summary>
@@ -71,19 +64,22 @@ namespace Kitpymes.Core.Shared
                 sb.Append($"| IP: {ip} ");
             }
 
-            if (validHttpContext.Request.ToTryHeader("User-Agent", out var userAgents))
-            {
-                sb.Append($"| UserAgent: {userAgents} ");
-            }
-
-            if (validHttpContext.Request.ToTryContentType(out var contentType))
-            {
-                sb.Append($"| ContentType: {contentType} ");
-            }
-
             sb.Append($"| User: {validHttpContext.User.ToUserName() ?? Environment.UserName ?? "Anonymous"}");
 
-            sb.Append($"| {validHttpContext.Request.Method}: {validHttpContext.Request.ToPath()} ");
+            if (!validHttpContext.Request.ToIsNullOrEmpty())
+            {
+                if (validHttpContext.Request.ToTryHeader("User-Agent", out var userAgents))
+                {
+                    sb.Append($"| UserAgent: {userAgents} ");
+                }
+
+                if (validHttpContext.Request.ToTryContentType(out var contentType))
+                {
+                    sb.Append($"| ContentType: {contentType} ");
+                }
+
+                sb.Append($"| {validHttpContext.Request.Method}: {validHttpContext.Request.ToPath()} ");
+            }
 
             if (!optionalData.ToIsNullOrEmpty())
             {

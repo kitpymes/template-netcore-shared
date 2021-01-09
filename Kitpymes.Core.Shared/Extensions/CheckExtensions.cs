@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrEmpty(this object? source)
+        public static bool ToIsNullOrEmpty([NotNullWhen(true)] this object? source)
         => Util.Check.IsNullOrEmpty(source).HasErrors;
 
         /// <summary>
@@ -65,10 +65,10 @@ namespace Kitpymes.Core.Shared
         /// Verifica si una colección es nula o no contiene valores.
         /// </summary>
         /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
-        /// <param name="input">El valor a verificar.</param>
+        /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrAny<TSource>([NotNullWhen(false)] this IEnumerable<TSource>? input)
-        => Util.Check.IsNullOrAny(input).HasErrors;
+        public static bool ToIsNullOrAny<TSource>([NotNullWhen(true)] this IEnumerable<TSource> source)
+        => Util.Check.IsNullOrAny(source).HasErrors;
 
         /// <summary>
         /// Verifica si una colección es nula o no contiene valores.
@@ -78,7 +78,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="message">Mensaje de la validación.</param>
         /// <returns>IEnumerable{TSource} | ApplicationException.</returns>
         [return: NotNull]
-        public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>([NotNull] this IEnumerable<TSource> source, string message)
+        public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>(this IEnumerable<TSource> source, string message)
         => source.ToIsThrow(() => source.ToIsNullOrAny(), message);
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>IEnumerable{TSource} | ApplicationException.</returns>
         [return: NotNull]
-        public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>([NotNull] this IEnumerable<TSource> source, string paramName)
+        public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>(this IEnumerable<TSource> source, string paramName)
         => source.ToIsNullOrAnyWithMessageThrow(Util.Messages.NullOrAny(paramName));
 
         #endregion IsNullOrAny
@@ -102,7 +102,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="max">El valor máximo.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsGreater(this object? source, long max)
+        public static bool ToIsGreater([NotNullWhen(true)] this object? source, long max)
         => Util.Check.IsGreater(max, source).HasErrors;
 
         /// <summary>
@@ -139,7 +139,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="min">El valor mínimo.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsLess(this object? source, long min)
+        public static bool ToIsLess([NotNullWhen(true)] this object? source, long min)
         => Util.Check.IsLess(min, source).HasErrors;
 
         /// <summary>
@@ -176,7 +176,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="compare">El valor a comparar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsEqual(this object? source, object? compare)
+        public static bool ToIsEqual([NotNullWhen(true)] this object? source, object? compare)
         => !Util.Check.IsEqual(source, compare).HasErrors;
 
         /// <summary>
@@ -213,7 +213,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="min">El valor mínimo.</param>
         /// <param name="max">El valor máximo.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsRange(this object? source, long min, long max)
+        public static bool ToIsRange([NotNullWhen(true)] this object? source, long min, long max)
         => Util.Check.IsRange(min, max, source).HasErrors;
 
         /// <summary>
@@ -252,7 +252,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">El valor a verificar.</param>
         /// <param name="regex">Expresión regular.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsRegexMatch(this string? source, string regex)
+        public static bool ToIsRegexMatch([NotNullWhen(true)] this string? source, string regex)
         => !Util.Check.IsRegexMatch(regex, source).HasErrors;
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsName(this string? source)
+        public static bool ToIsName([NotNullWhen(true)] this string? source)
         => !Util.Check.IsName(source).HasErrors;
 
         /// <summary>
@@ -318,7 +318,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsEmail(this string? source)
+        public static bool ToIsEmail([NotNullWhen(true)] this string? source)
         => !Util.Check.IsEmail(source).HasErrors;
 
         /// <summary>
@@ -350,7 +350,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="input">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsDirectory([NotNullWhen(false)] this string? input)
+        public static bool ToIsDirectory([NotNullWhen(true)] this string? input)
         => !Util.Check.IsDirectory(input).HasErrors;
 
         /// <summary>
@@ -382,7 +382,8 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="input">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsFile([NotNullWhen(false)] this string? input)
+        [return: NotNull]
+        public static bool ToIsFile([NotNullWhen(true)] this string? input)
         => !Util.Check.IsFile(input).HasErrors;
 
         /// <summary>
@@ -414,7 +415,8 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="input">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsFileExtension([NotNullWhen(false)] this string? input)
+        [return: NotNull]
+        public static bool ToIsFileExtension([NotNullWhen(true)] this string? input)
         => !Util.Check.IsFileExtension(input).HasErrors;
 
         /// <summary>
@@ -446,7 +448,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsSubdomain(this string? source)
+        public static bool ToIsSubdomain([NotNullWhen(true)] this string? source)
         => !Util.Check.IsSubdomain(source).HasErrors;
 
         /// <summary>
@@ -478,7 +480,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsDomain(this string? source)
+        public static bool ToIsDomain([NotNullWhen(true)] this string? source)
         => !Util.Check.IsDomain(source).HasErrors;
 
         /// <summary>
@@ -510,7 +512,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsHostname(this string? source)
+        public static bool ToIsHostname([NotNullWhen(true)] this string? source)
         => !Util.Check.IsHostname(source).HasErrors;
 
         /// <summary>
@@ -542,7 +544,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsDigit(this string? source)
+        public static bool ToIsDigit([NotNullWhen(true)] this string? source)
         => !Util.Check.IsDigit(source).HasErrors;
 
         /// <summary>
@@ -574,7 +576,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsUniqueChars(this string? source)
+        public static bool ToIsUniqueChars([NotNullWhen(true)] this string? source)
         => !Util.Check.IsUniqueChars(source).HasErrors;
 
         /// <summary>
@@ -606,7 +608,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsEspecialChars(this string? source)
+        public static bool ToIsEspecialChars([NotNullWhen(true)] this string? source)
         => !Util.Check.IsEspecialChars(source).HasErrors;
 
         /// <summary>
@@ -638,7 +640,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsLowercase(this string? source)
+        public static bool ToIsLowercase([NotNullWhen(true)] this string? source)
         => !Util.Check.IsLowercase(source).HasErrors;
 
         /// <summary>
@@ -670,7 +672,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsUppercase(this string? source)
+        public static bool ToIsUppercase([NotNullWhen(true)] this string? source)
         => !Util.Check.IsUppercase(source).HasErrors;
 
         /// <summary>
