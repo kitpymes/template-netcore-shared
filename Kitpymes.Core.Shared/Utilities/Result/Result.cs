@@ -84,7 +84,7 @@ namespace Kitpymes.Core.Shared.Util
 
         /// <inheritdoc/>
 #pragma warning disable CA2227 // Las propiedades de colección deben ser de solo lectura
-        public IDictionary<string, IList<string>>? Errors { get; protected set; }
+        public IDictionary<string, IEnumerable<string>>? Errors { get; protected set; }
 #pragma warning restore CA2227 // Las propiedades de colección deben ser de solo lectura
 
         /// <summary>

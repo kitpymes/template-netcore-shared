@@ -102,14 +102,13 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         [TestMethod]
-        public void ResultError_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithModelErrors()
+        public void ResultError_WithTitle_WithStatusCode_WithDetails_WithExceptionType_WithMessages_WithErrors()
         {
             var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
             var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
 
             var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
             var titleExpected = Guid.NewGuid().ToString();
-            var messageExpected = Guid.NewGuid().ToString();
             var statusCodeExpected = HttpStatusCode.BadRequest;
             var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
             object detailsExpected = new
@@ -136,6 +135,8 @@ namespace Kitpymes.Core.Shared.Tests
                 errors.Add((nameof(classField), classFieldMessageExpected));
             }
 
+            var messages = new List<string>(errors.Select(x => x.message));
+
             Result? actual = null;
 
             if (errors.Any())
@@ -143,9 +144,9 @@ namespace Kitpymes.Core.Shared.Tests
                 actual = Result.Error(options => options
                         .WithTitle(titleExpected)
                         .WithStatusCode(statusCodeExpected)
-                        .WithMessages(messageExpected)
                         .WithDetails(detailsExpected)
                         .WithExceptionType(exceptionTypeExpected)
+                        .WithMessages(messages)
                         .WithErrors(errors));
             }
 
@@ -156,76 +157,6 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
-
-            Assert.IsTrue(actualJson.Contains(Messages.NullOrEmpty(nameof(stringField)), StringComparison.CurrentCulture));
-            Assert.IsTrue(actualJson.Contains(Messages.InvalidFormat(nameof(stringField)), StringComparison.CurrentCulture));
-            Assert.IsTrue(actualJson.Contains(classFieldMessageExpected, StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Title, titleExpected);
-            Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
-            Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Message, messageExpected);
-            Assert.IsTrue(actualJson.Contains(messageExpected.ToString(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Details, detailsExpected);
-            Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
-            Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
-        }
-
-        [TestMethod]
-        public void ResultError_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithErrors()
-        {
-            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
-            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
-
-            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
-            var titleExpected = Guid.NewGuid().ToString();
-            var statusCodeExpected = HttpStatusCode.BadRequest;
-            var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
-            object detailsExpected = new
-            {
-                Code = new Random().Next(),
-                Link = Guid.NewGuid().ToString(),
-                Otro = Guid.NewGuid().ToString(),
-            };
-
-            var messagesExpected = new List<string>();
-
-            if (stringField.ToIsNullOrEmpty())
-            {
-                messagesExpected.Add(Messages.NullOrEmpty(nameof(stringField)));
-            }
-
-            if (!stringField.ToIsEmail())
-            {
-                messagesExpected.Add(Messages.InvalidFormat(nameof(stringField)));
-            }
-
-            if (classField.ToIsNullOrEmpty())
-            {
-                messagesExpected.Add(classFieldMessageExpected);
-            }
-
-            Result? actual = null;
-
-            if (messagesExpected.Any())
-            {
-                actual = Result.Error(options => options
-                    .WithTitle(titleExpected)
-                    .WithStatusCode(statusCodeExpected)
-                    .WithDetails(detailsExpected)
-                    .WithExceptionType(exceptionTypeExpected)
-                    .WithMessages(messagesExpected));
-            }
-
-            var actualJson = actual!.ToJson();
-
-            Assert.IsFalse(actual.Success);
 
             Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
@@ -240,9 +171,6 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
             Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Message, messagesExpected.ToString(", "));
-            Assert.IsTrue(actualJson.Contains(messagesExpected.First(), StringComparison.CurrentCulture));
 
             Assert.AreEqual(actual.Details, detailsExpected);
             Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
@@ -256,14 +184,13 @@ namespace Kitpymes.Core.Shared.Tests
         #region ResultErrorData
 
         [TestMethod]
-        public void ResultErrorData_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithModelErrors()
+        public void ResultErrorData_WithTitle_WithStatusCode_WithDetails_WithExceptionType_WithMessages_WithErrors()
         {
             var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
             var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
 
             var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
             var titleExpected = Guid.NewGuid().ToString();
-            var messageExpected = Guid.NewGuid().ToString();
             var statusCodeExpected = HttpStatusCode.BadRequest;
             var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
             object detailsExpected = new
@@ -290,6 +217,8 @@ namespace Kitpymes.Core.Shared.Tests
                 errors.Add((nameof(classField), classFieldMessageExpected));
             }
 
+            var messages = new List<string>(errors.Select(x => x.message));
+
             Result? actual = null;
 
             if (errors.Any())
@@ -297,9 +226,9 @@ namespace Kitpymes.Core.Shared.Tests
                 actual = Result<FakeUser>.Error(options => options
                     .WithTitle(titleExpected)
                     .WithStatusCode(statusCodeExpected)
-                    .WithMessages(messageExpected)
                     .WithDetails(detailsExpected)
                     .WithExceptionType(exceptionTypeExpected)
+                    .WithMessages(messages)
                     .WithErrors(errors));
             }
 
@@ -310,76 +239,6 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
-
-            Assert.IsTrue(actualJson.Contains(Messages.NullOrEmpty(nameof(stringField)), StringComparison.CurrentCulture));
-            Assert.IsTrue(actualJson.Contains(Messages.InvalidFormat(nameof(stringField)), StringComparison.CurrentCulture));
-            Assert.IsTrue(actualJson.Contains(classFieldMessageExpected, StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Title, titleExpected);
-            Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
-            Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Message, messageExpected);
-            Assert.IsTrue(actualJson.Contains(messageExpected.ToString(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Details, detailsExpected);
-            Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
-            Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
-        }
-
-        [TestMethod]
-        public void ResultErrorData_WithTitle_WithStatusCode_WithMessage_WithDetails_WithExceptionType_WithErrors()
-        {
-            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
-            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
-
-            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
-            var titleExpected = Guid.NewGuid().ToString();
-            var statusCodeExpected = HttpStatusCode.BadRequest;
-            var exceptionTypeExpected = nameof(ArrayTypeMismatchException);
-            object detailsExpected = new
-            {
-                Code = new Random().Next(),
-                Link = Guid.NewGuid().ToString(),
-                Otro = Guid.NewGuid().ToString(),
-            };
-
-            var messagesExpected = new List<string>();
-
-            if (stringField.ToIsNullOrEmpty())
-            {
-                messagesExpected.Add(Messages.NullOrEmpty(nameof(stringField)));
-            }
-
-            if (!stringField.ToIsEmail())
-            {
-                messagesExpected.Add(Messages.InvalidFormat(nameof(stringField)));
-            }
-
-            if (classField.ToIsNullOrEmpty())
-            {
-                messagesExpected.Add(classFieldMessageExpected);
-            }
-
-            Result? actual = null;
-
-            if (messagesExpected.Any())
-            {
-                actual = Result<FakeUser>.Error(options => options                 
-                    .WithTitle(titleExpected)
-                    .WithStatusCode(statusCodeExpected)
-                    .WithDetails(detailsExpected)
-                    .WithExceptionType(exceptionTypeExpected)
-                    .WithMessages(messagesExpected));
-            }
-
-            var actualJson = actual!.ToJson();
-
-            Assert.IsFalse(actual.Success);
 
             Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
@@ -394,9 +253,6 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
             Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Message, messagesExpected.ToString(", "));
-            Assert.IsTrue(actualJson.Contains(messagesExpected.First(), StringComparison.CurrentCulture));
 
             Assert.AreEqual(actual.Details, detailsExpected);
             Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));

@@ -8,6 +8,7 @@
 namespace Kitpymes.Core.Shared
 {
     using System.Collections.Generic;
+    using System.Linq;
 
     /*
        Clase de extensión ResultExtensions
@@ -30,7 +31,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="fieldName">Nombre del campo.</param>
         /// <param name="message">Mensaje de error.</param>
         /// <returns>(bool Exists, string? Message).</returns>
-        public static bool Contains(this IDictionary<string, IList<string>>? errors, string fieldName, string message)
+        public static bool Contains(this IDictionary<string, IEnumerable<string>>? errors, string fieldName, string message)
         {
             return errors != null && errors[fieldName] != null && errors[fieldName].Contains(message);
         }

@@ -138,7 +138,7 @@ namespace Kitpymes.Core.Shared.Util
         {
             if (!string.IsNullOrWhiteSpace(message))
             {
-                ErrorSettings.ModelErrors ??= new Dictionary<string, IList<string>>();
+                ErrorSettings.ModelErrors ??= new Dictionary<string, IEnumerable<string>>();
 
                 if (!ErrorSettings.ModelErrors.ContainsKey(fieldName))
                 {
@@ -146,7 +146,7 @@ namespace Kitpymes.Core.Shared.Util
                 }
                 else
                 {
-                    ErrorSettings.ModelErrors[fieldName].Add(message);
+                    ((IList<string>)ErrorSettings.ModelErrors[fieldName]).Add(message);
                 }
             }
 
@@ -166,6 +166,21 @@ namespace Kitpymes.Core.Shared.Util
                 {
                     WithErrors(fieldName, message);
                 }
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Agrega uno o varios errores del modelo al resultado.
+        /// </summary>
+        /// <param name="errors">Lista de errores.</param>
+        /// <returns>ErrorOptions.</returns>
+        public ErrorOptions WithErrors(IDictionary<string, IEnumerable<string>>? errors)
+        {
+            if (errors?.Count > 0)
+            {
+                ErrorSettings.ModelErrors = errors;
             }
 
             return this;
