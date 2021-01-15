@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="action">Opciones de configuración.</param>
         /// <returns>El objeto serializado.</returns>
         public static string ToSerialize<T>(this T value, Action<JsonSerializerOptions>? action = null)
-        => JsonSerializer.Serialize(value, action.ToConfigureOrDefault());
+        => JsonSerializer.Serialize(value, typeof(T), action.ToConfigureOrDefault());
 
         /// <summary>
         /// Deserializa un objeto.

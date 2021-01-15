@@ -8,6 +8,7 @@
 namespace Kitpymes.Core.Shared
 {
     using System;
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Text;
     using Microsoft.AspNetCore.Http;
@@ -53,7 +54,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpContext">Encapsula toda la información específica de HTTP sobre una solicitud HTTP individual.</param>
         /// <param name="optionalData">Datos opcionales.</param>
         /// <returns>Los detalles de una solicitud HTTP.</returns>
-        public static string ToDetails(this HttpContext httpContext, string? optionalData = null)
+        public static string ToDetails(this HttpContext httpContext, IList<(string key, string value)>? optionalData = null)
         {
             var validHttpContext = httpContext.ToIsNullOrEmptyThrow(nameof(httpContext));
 
@@ -61,29 +62,32 @@ namespace Kitpymes.Core.Shared
 
             if (validHttpContext.ToTryIPv6(out var ip))
             {
-                sb.Append($"| IP: {ip} ");
+                sb.Append($"IP: {ip} |");
             }
 
-            sb.Append($"| User: {validHttpContext.User.ToUserName() ?? Environment.UserName ?? "Anonymous"}");
+            sb.Append($" User: {validHttpContext.User.ToUserName() ?? Environment.UserName ?? "Anonymous"} |");
 
             if (!validHttpContext.Request.ToIsNullOrEmpty())
             {
                 if (validHttpContext.Request.ToTryHeader("User-Agent", out var userAgents))
                 {
-                    sb.Append($"| UserAgent: {userAgents} ");
+                    sb.Append($" UserAgent: {userAgents} |");
                 }
 
                 if (validHttpContext.Request.ToTryContentType(out var contentType))
                 {
-                    sb.Append($"| ContentType: {contentType} ");
+                    sb.Append($" ContentType: {contentType} |");
                 }
 
-                sb.Append($"| {validHttpContext.Request.Method}: {validHttpContext.Request.ToPath()} ");
+                sb.Append($" {validHttpContext.Request.Method}: {validHttpContext.Request.ToPath()} |");
             }
 
             if (!optionalData.ToIsNullOrEmpty())
             {
-                sb.Append($"| Data: {optionalData}");
+                foreach (var (key, value) in optionalData)
+                {
+                    sb.Append($" {key}: {value} |");
+                }
             }
 
             return sb.ToString();

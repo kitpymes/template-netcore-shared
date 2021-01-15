@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrEmpty([NotNullWhen(true)] this object? source)
+        public static bool ToIsNullOrEmpty([NotNullWhen(false)] this object? source)
         => Util.Check.IsNullOrEmpty(source).HasErrors;
 
         /// <summary>

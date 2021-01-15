@@ -1,3 +1,6 @@
+# v.1.1.2
+- Se realizan mejoras en "Result" y en varias extensiones.
+
 # v.1.1.1
 - Se actualizan las utilidades "Result" para devolver resultados.
 

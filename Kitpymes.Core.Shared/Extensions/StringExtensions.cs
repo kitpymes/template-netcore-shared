@@ -136,7 +136,7 @@ namespace Kitpymes.Core.Shared
 
             pattern += "]+?";
 
-            input = dictionary.Keys.Aggregate(input, (x, y) => dictionary[y].Aggregate(x, (z, c) => z?.Replace(c, y)));
+            input = dictionary.Keys.Aggregate(input, (x, y) => dictionary[y].Aggregate(x, (z, c) => z.Replace(c, y)));
 
             return new Regex(pattern).Replace(input, string.Empty);
         }

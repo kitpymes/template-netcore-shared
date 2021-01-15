@@ -50,7 +50,7 @@ namespace Kitpymes.Core.Shared
 
             var sb = new StringBuilder();
 
-            sb.Append($"| Error: {validException.ToMessage()} ");
+            sb.Append($"Error: {validException.ToMessage()} |");
 
             var stackFrame = new StackTrace(validException, true)?.GetFrame(0);
 
@@ -58,14 +58,14 @@ namespace Kitpymes.Core.Shared
 
             if (!string.IsNullOrWhiteSpace(declaringType?.FullName))
             {
-                sb.Append($"| File: {declaringType.FullName} ");
+                sb.Append($" File: {declaringType.FullName} |");
             }
 
             var fileLineNumber = stackFrame?.GetFileLineNumber();
 
             if (fileLineNumber.HasValue)
             {
-                sb.Append($"| Line: {fileLineNumber.Value} ");
+                sb.Append($" Line: {fileLineNumber.Value}");
             }
 
             return sb.ToString();

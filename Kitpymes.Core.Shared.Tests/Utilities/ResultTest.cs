@@ -40,7 +40,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ResultOkData()
         {
-            var dataExpected = new FakeUser { Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
+            var dataExpected = new FakeUser { Age = 13, Permissions = new[] { "read", "create" },  Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
 
             var actual = Result<FakeUser>.Ok(dataExpected);
             var actualToJson = actual.ToJson();
@@ -54,7 +54,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ResultOkData_WithMessage()
         {
-            var dataExpected = new FakeUser { Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
+            var dataExpected = new FakeUser { Age = 13, Permissions = new[] { "read", "create" }, Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
             var messageExpected = Guid.NewGuid().ToString();
 
             var actual = Result<FakeUser>.Ok(dataExpected, messageExpected);

@@ -108,6 +108,6 @@ namespace Kitpymes.Core.Shared.Util
         }
 
         /// <inheritdoc/>
-        public override string ToJson() => this.ToSerialize();
+        public override string ToJson() => this.ToSerialize(x => x.IgnoreNullValues = true);
     }
 }
