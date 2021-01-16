@@ -27,39 +27,25 @@ namespace Kitpymes.Core.Shared.Util
     public class Result : IResult
     {
         /// <summary>
-        /// Título por defecto cuando se devuelve uno o varios errores.
-        /// </summary>
-        public const string DefaultTitleOk = "The process ran successfully.";
-
-        /// <summary>
-        /// Título por defecto cuando el proceso se realizo con exito.
-        /// </summary>
-        public const string DefaultTitleError = "One or more validations errors ocurred.";
-
-        /// <summary>
-        /// Código de estado HTTP por defecto cuando el proceso se ejecuto sin errores.
-        /// </summary>
-        public const HttpStatusCode DefaultStatusCodeOk = HttpStatusCode.OK;
-
-        /// <summary>
-        /// Código de estado HTTP por defecto cuando el proceso se ejecuto con errores.
-        /// </summary>
-        public const HttpStatusCode DefaultStatusCodeError = HttpStatusCode.BadRequest;
-
-        /// <summary>
         /// Inicializa una nueva instancia de la clase <see cref="Result"/>.
         /// </summary>
         /// <param name="success">Si el proceso se ejecuto correctamente.</param>
         /// <param name="statusCode">Código del estado de la solicitud HTTP.</param>
         /// <param name="title">Título del resultado.</param>
         /// <param name="message">Mensaje del resultado.</param>
-        protected Result(bool success, int statusCode, string title, string? message = null)
+        protected Result(bool success, HttpStatusCode statusCode, string title, string message)
+            : this(success)
         {
-             Success = success;
-             StatusCode = statusCode;
+             StatusCode = statusCode.ToValue();
              Title = title;
              Message = message;
         }
+
+        /// <summary>
+        /// Inicializa una nueva instancia de la clase <see cref="Result"/>.
+        /// </summary>
+        /// <param name="success">Si el proceso se ejecuto correctamente.</param>
+        protected Result(bool success) => Success = success;
 
         /// <inheritdoc/>
         public bool Success { get; protected set; }
@@ -71,45 +57,107 @@ namespace Kitpymes.Core.Shared.Util
         public string? Title { get; protected set; }
 
         /// <inheritdoc/>
-        public string? Message { get; protected set; }
-
-        /// <inheritdoc/>
         public string? TraceId { get; protected set; }
 
         /// <inheritdoc/>
         public string? ExceptionType { get; protected set; }
 
         /// <inheritdoc/>
-        public object? Details { get; protected set; }
+        public string? Message { get; set; }
+
+        /// <inheritdoc/>
+        public object? Details { get; set; }
 
         /// <inheritdoc/>
 #pragma warning disable CA2227 // Las propiedades de colección deben ser de solo lectura
-        public IDictionary<string, IEnumerable<string>>? Errors { get; protected set; }
+        public IDictionary<string, IList<string>>? Errors { get; protected set; }
 #pragma warning restore CA2227 // Las propiedades de colección deben ser de solo lectura
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
         /// </summary>
-        /// <param name="message">Agrega un mensaje al resultado.</param>
         /// <returns>Result.</returns>
-        public static Result Ok(string? message = null)
+        public static Result Ok()
+        => new Result(true, HttpStatusCode.OK, Resources.MsgProcessRanSuccessfully, Resources.MsgProcessRanSuccessfully);
+
+        /// <summary>
+        /// Devuelve un resultado de error cuando ocurre un error de autorización.
+        /// <para><strong>Unauthorized:</strong> 401.</para>
+        /// </summary>
+        /// <returns>Result.</returns>
+        public static Result Unauthorized()
+        => new Result(false, HttpStatusCode.Unauthorized, Resources.MsgErrorsTitle, Resources.MsgUnauthorizedAccess);
+
+        /// <summary>
+        /// Devuelve un resultado de error cuando ocurre un error no controlado.
+        /// <para><strong>InternalServerError:</strong> 500.</para>
+        /// </summary>
+        /// <returns>Result.</returns>
+        public static Result InternalServerError()
+        => new Result(false, HttpStatusCode.InternalServerError, Resources.MsgErrorsTitle, Resources.MsgFriendlyUnexpectedError);
+
+        /// <summary>
+        /// Devuelve un resultado de error de validación.
+        /// <para><strong>BadRequest:</strong> 400.</para>
+        /// </summary>
+        /// <param name="errors">Agrega los errores de validación al resultado.</param>
+        /// <returns>Result.</returns>
+        public static Result BadRequest(IDictionary<string, IList<string>> errors)
+        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle)
         {
-            return new Result(true, DefaultStatusCodeOk.ToValue(), DefaultTitleOk, message);
+            Errors = errors,
+        };
+
+        /// <summary>
+        /// Devuelve un resultado de error de validación.
+        /// <para><strong>BadRequest:</strong> 400.</para>
+        /// </summary>
+        /// <param name="errors">Agrega los errores de validación al resultado.</param>
+        /// <returns>Result.</returns>
+        public static Result BadRequest(IList<(string fieldName, string message)> errors)
+        {
+            var result = new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle);
+
+            if (errors != null)
+            {
+                result.Errors ??= new Dictionary<string, IList<string>>();
+
+                foreach (var (fieldName, message) in errors)
+                {
+                    if (!string.IsNullOrWhiteSpace(fieldName) && !string.IsNullOrWhiteSpace(message))
+                    {
+                        if (!result.Errors.ContainsKey(fieldName))
+                        {
+                            result.Errors.Add(fieldName, new List<string> { message });
+                        }
+                        else
+                        {
+                            result.Errors[fieldName].Add(message);
+                        }
+                    }
+                }
+            }
+
+            return result;
         }
 
         /// <summary>
-        /// Devuelve un resultado de error con los campos obligatorios.
+        /// Devuelve un resultado de error de validación.
+        /// <para><strong>BadRequest:</strong> 400.</para>
         /// </summary>
-        /// <param name="message">Mensaje del resultado.</param>
-        /// <param name="details">Detalle del resultado.</param>
+        /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static Result Error(string? message = null, object? details = null)
-        {
-            return new Result(false, DefaultStatusCodeError.ToValue(), DefaultTitleError, message)
-            {
-                Details = details,
-            };
-        }
+        public static Result BadRequest(IList<string> messages)
+        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, messages.ToString(", "));
+
+        /// <summary>
+        /// Devuelve un resultado de error de validación.
+        /// <para><strong>BadRequest:</strong> 400.</para>
+        /// </summary>
+        /// <param name="message">Agrega un mensaje de validación al resultado.</param>
+        /// <returns>Result.</returns>
+        public static Result BadRequest(string message)
+        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, message);
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -120,13 +168,15 @@ namespace Kitpymes.Core.Shared.Util
         {
             var config = options.ToConfigureOrDefault().ErrorSettings;
 
-            return new Result(false, config.StatusCode ?? DefaultStatusCodeError.ToValue(), config.Title ?? DefaultTitleError, config.Message)
+            return new Result(false)
             {
+                StatusCode = config.StatusCode,
+                Title = config.Title,
                 TraceId = Guid.NewGuid().ToString("N", System.Globalization.CultureInfo.CurrentCulture),
                 Details = config.Details,
                 ExceptionType = config.Exception,
                 Message = config.Messages?.Count > 0 ? config.Messages.ToString(", ") : null,
-                Errors = config.ModelErrors,
+                Errors = config.Errors,
             };
         }
 

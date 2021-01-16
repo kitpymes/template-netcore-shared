@@ -11,4 +11,24 @@
     <PackageReference Include="Serilog.AspNetCore" Version="3.4.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Utilities\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Utilities\Resources.es.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <CustomToolNamespace>Kitpymes.Core.Shared.Util</CustomToolNamespace>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Utilities\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>Kitpymes.Core.Shared.Util</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

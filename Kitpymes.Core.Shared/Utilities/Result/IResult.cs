@@ -52,7 +52,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Obtiene la lista de errores de un modelo.
         /// </summary>
-        public IDictionary<string, IEnumerable<string>>? Errors { get; }
+        public IDictionary<string, IList<string>>? Errors { get; }
 
         /// <summary>
         /// Serializa un objeto.

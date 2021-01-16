@@ -18,19 +18,31 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.Ok();
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.Title, Result.DefaultTitleOk);
-            Assert.AreEqual(actual.StatusCode, Result.DefaultStatusCodeOk.ToValue());
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
         }
 
         [TestMethod]
-        public void ResultOk_WithMessage()
+        public void ResultOk_WithMessage_WithDetails()
         {
             var messageExpected = Guid.NewGuid().ToString();
+            var detailsExpected = new
+            {
+                Code = new Random().Next(),
+                Link = Guid.NewGuid().ToString(),
+                Otro = Guid.NewGuid().ToString(),
+            };
 
-            var actual = Result.Ok(messageExpected);
+            var actual = Result.Ok();
+            actual.Message = messageExpected;
+            actual.Details = detailsExpected;
 
             Assert.IsTrue(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Message, messageExpected);
+            Assert.AreEqual(actual.Details, detailsExpected);
         }
 
         #endregion ResultOK
@@ -40,66 +52,324 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ResultOkData()
         {
-            var dataExpected = new FakeUser { Age = 13, Permissions = new[] { "read", "create" },  Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
+            var actual = Result<FakeUser>.Ok();
+
+            Assert.IsTrue(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
+        }
+
+        [TestMethod]
+        public void ResultOkData_WithData()
+        {
+            var dataExpected = new FakeUser { Age = 13, Permissions = new[] { "read", "create" }, Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
 
             var actual = Result<FakeUser>.Ok(dataExpected);
             var actualToJson = actual.ToJson();
 
             Assert.IsTrue(actual.Success);
-
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Data, dataExpected);
+
             Assert.IsTrue(actualToJson.Contains(dataExpected.ToSerialize(), StringComparison.CurrentCulture));
         }
 
         [TestMethod]
-        public void ResultOkData_WithMessage()
+        public void ResultOkData_WithData_WithMessage_WithDetails()
         {
             var dataExpected = new FakeUser { Age = 13, Permissions = new[] { "read", "create" }, Email = Guid.NewGuid().ToString(), Name = Guid.NewGuid().ToString() };
             var messageExpected = Guid.NewGuid().ToString();
-
-            var actual = Result<FakeUser>.Ok(dataExpected, messageExpected);
-            var actualToJson = actual.ToJson();
-
-            Assert.IsTrue(actual.Success);
-
-            Assert.AreEqual(actual.Message, messageExpected);
-            Assert.IsTrue(actualToJson.Contains(messageExpected, StringComparison.CurrentCulture));
-
-            Assert.AreEqual(actual.Data, dataExpected);
-            Assert.IsTrue(actualToJson.Contains(dataExpected.ToSerialize(), StringComparison.CurrentCulture));
-        }
-
-        #endregion ResultOKData
-
-        #region ResultError
-
-        [TestMethod]
-        public void ResultError()
-        {
-            var actual = Result.Error();
-
-            Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.Title, Result.DefaultTitleError);
-            Assert.AreEqual(actual.StatusCode, Result.DefaultStatusCodeError.ToValue());
-        }
-
-        [TestMethod]
-        public void ResultError_WithMessage_WithDetails()
-        {
-            var messageExpected = Guid.NewGuid().ToString();
-            object detailsExpected = new
+            var detailsExpected = new
             {
                 Code = new Random().Next(),
                 Link = Guid.NewGuid().ToString(),
                 Otro = Guid.NewGuid().ToString(),
             };
 
-            var actual = Result.Error(messageExpected, detailsExpected);
+            var actual = Result<FakeUser>.Ok(dataExpected);
+            actual.Message = messageExpected;
+            actual.Details = detailsExpected;
 
-            Assert.IsFalse(actual.Success);
+            var actualToJson = actual.ToJson();
+
+            Assert.IsTrue(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Message, messageExpected);
             Assert.AreEqual(actual.Details, detailsExpected);
+            Assert.AreEqual(actual.Data, dataExpected);
+
+            Assert.IsTrue(actualToJson.Contains(messageExpected, StringComparison.CurrentCulture));
+            Assert.IsTrue(actualToJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
+            Assert.IsTrue(actualToJson.Contains(dataExpected.ToSerialize(), StringComparison.CurrentCulture));
         }
+
+        #endregion ResultOKData
+
+        #region ResultHttpStatus
+
+        [TestMethod]
+        public void ResultUnauthorized()
+        {
+            var actual = Result.Unauthorized();
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.Unauthorized.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgUnauthorizedAccess);
+        }
+
+        [TestMethod]
+        public void ResultInternalServerError()
+        {
+            var actual = Result.InternalServerError();
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.InternalServerError.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgFriendlyUnexpectedError);
+        }
+
+        [TestMethod]
+        public void ResultBadRequest_WithErrors_KeyValue()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+
+            var errors = new List<(string fieldName, string message)>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(classField), classFieldMessageExpected));
+            }
+
+            var actual = Result.BadRequest(errors);
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
+        }
+
+        [TestMethod]
+        public void ResultBadRequest_WithErrors_Dictionary()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+
+            var errors = new Dictionary<string, IList<string>>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                errors.Add(nameof(stringField), new List<string> { Messages.NullOrEmpty(nameof(stringField)) });
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                errors[nameof(stringField)].Add(Messages.InvalidFormat(nameof(stringField)));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                errors.Add(nameof(classField), new List<string> { classFieldMessageExpected });
+            }
+
+            var actual = Result.BadRequest(errors);
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
+        }
+
+        [TestMethod]
+        public void ResultBadRequest_WithErrors_Value()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+
+            var messages = new List<string>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                messages.Add(Messages.NullOrEmpty(nameof(stringField)));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                messages.Add(Messages.InvalidFormat(nameof(stringField)));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                messages.Add(classFieldMessageExpected);
+            }
+
+            var actual = Result.BadRequest(messages);
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(classFieldMessageExpected));
+        }
+
+        #endregion ResultHttpStatus
+
+        #region ResultHttpStatusData
+
+        [TestMethod]
+        public void ResultDataUnauthorized()
+        {
+            var actual = Result<FakeUser>.Unauthorized();
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.Unauthorized.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgUnauthorizedAccess);
+        }
+
+        [TestMethod]
+        public void ResultDataInternalServerError()
+        {
+            var actual = Result<FakeUser>.InternalServerError();
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.InternalServerError.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgFriendlyUnexpectedError);
+        }
+
+        [TestMethod]
+        public void ResultDataBadRequest_WithErrors_KeyValue()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+
+            var errors = new List<(string fieldName, string message)>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                errors.Add((nameof(classField), classFieldMessageExpected));
+            }
+
+            var actual = Result<FakeUser>.BadRequest(errors);
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
+        }
+
+        [TestMethod]
+        public void ResultDataBadRequest_WithErrors_Dictionary()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+
+            var errors = new Dictionary<string, IList<string>>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                errors.Add(nameof(stringField), new List<string> { Messages.NullOrEmpty(nameof(stringField)) });
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                errors[nameof(stringField)].Add(Messages.InvalidFormat(nameof(stringField)));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                errors.Add(nameof(classField), new List<string> { classFieldMessageExpected });
+            }
+
+            var actual = Result<FakeUser>.BadRequest(errors);
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
+        }
+
+        [TestMethod]
+        public void ResultDataBadRequest_WithErrors_Value()
+        {
+            var stringField = FakeTypes.ReferenceTypes.ClassTypes.String_Null;
+            var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
+            var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
+
+            var messages = new List<string>();
+
+            if (stringField.ToIsNullOrEmpty())
+            {
+                messages.Add(Messages.NullOrEmpty(nameof(stringField)));
+            }
+
+            if (!stringField.ToIsEmail())
+            {
+                messages.Add(Messages.InvalidFormat(nameof(stringField)));
+            }
+
+            if (classField.ToIsNullOrEmpty())
+            {
+                messages.Add(classFieldMessageExpected);
+            }
+
+            var actual = Result<FakeUser>.BadRequest(messages);
+
+            Assert.IsFalse(actual.Success);
+            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
+            Assert.IsTrue(actual.Message.Contains(classFieldMessageExpected));
+        }
+
+        #endregion ResultHttpStatusData
+
+        #region ResultError
 
         [TestMethod]
         public void ResultError_WithTitle_WithStatusCode_WithDetails_WithExceptionType_WithMessages_WithErrors()

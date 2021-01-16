@@ -1,0 +1,292 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="MsgDirectory" xml:space="preserve">
+    <value>Directory path not found</value>
+    <comment>Directory path not found</comment>
+  </data>
+  <data name="MsgDirectoryWithFieldName" xml:space="preserve">
+    <value>Field {0} not found</value>
+    <comment>Field {0} not found</comment>
+  </data>
+  <data name="MsgDirectoryWithValue" xml:space="preserve">
+    <value>Directory path {0} not found</value>
+    <comment>Directory path {0} not found</comment>
+  </data>
+  <data name="MsgDirectoryWithValueAndFieldName" xml:space="preserve">
+    <value>Directory path {0} for field {1} not found</value>
+    <comment>Directory path {0} for field {1} not found</comment>
+  </data>
+  <data name="MsgEmail" xml:space="preserve">
+    <value>Email address has an invalid format</value>
+    <comment>Email address has an invalid format</comment>
+  </data>
+  <data name="MsgEmailWithFieldName" xml:space="preserve">
+    <value>Field {0} has an invalid format</value>
+    <comment>Field {0} has an invalid format</comment>
+  </data>
+  <data name="MsgEmailWithValue" xml:space="preserve">
+    <value>Email address {0} has an invalid format</value>
+    <comment>Email address {0} has an invalid format</comment>
+  </data>
+  <data name="MsgEmailWithValueAndFieldName" xml:space="preserve">
+    <value>Email address {0} for field {1} has an invalid format</value>
+    <comment>Email address {0} for field {1} has an invalid format</comment>
+  </data>
+  <data name="MsgEqual" xml:space="preserve">
+    <value>Comparator fields do not match</value>
+    <comment>Comparator fields do not match</comment>
+  </data>
+  <data name="MsgEqualFieldName" xml:space="preserve">
+    <value>Compared {0} do not match</value>
+    <comment>Compared {0} do not match</comment>
+  </data>
+  <data name="MsgEqualFieldsName" xml:space="preserve">
+    <value>Field {0} does not match field {1}</value>
+    <comment>Field {0} does not match field {1}</comment>
+  </data>
+  <data name="MsgErrorsTitle" xml:space="preserve">
+    <value>One or more validation errors occurred.</value>
+    <comment>One or more validation errors occurred.</comment>
+  </data>
+  <data name="MsgExtension" xml:space="preserve">
+    <value>File path extension not found</value>
+    <comment>File path extension not found</comment>
+  </data>
+  <data name="MsgExtensionWithFieldName" xml:space="preserve">
+    <value>Field {0} not found</value>
+    <comment>Field {0} not found</comment>
+  </data>
+  <data name="MsgExtensionWithValue" xml:space="preserve">
+    <value>File path extension {0} not found</value>
+    <comment>File path extension {0} not found</comment>
+  </data>
+  <data name="MsgExtensionWithValueAndFieldName" xml:space="preserve">
+    <value>File path extension {0} for field {1} not found</value>
+    <comment>File path extension {0} for field {1} not found</comment>
+  </data>
+  <data name="MsgFile" xml:space="preserve">
+    <value>File path not found</value>
+    <comment>File path not found</comment>
+  </data>
+  <data name="MsgFileWithFieldName" xml:space="preserve">
+    <value>Field {0} not found</value>
+    <comment>Field {0} not found</comment>
+  </data>
+  <data name="MsgFileWithValue" xml:space="preserve">
+    <value>File path {0} not found</value>
+    <comment>File path {0} not found</comment>
+  </data>
+  <data name="MsgFileWithValueAndFieldName" xml:space="preserve">
+    <value>File path {0} for field {1} not found</value>
+    <comment>File path {0} for field {1} not found</comment>
+  </data>
+  <data name="MsgFriendlyUnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred, try the operation again or contact your system administrator</value>
+    <comment>An unexpected error occurred, try the operation again or contact your system administrator</comment>
+  </data>
+  <data name="MsgInvalidFormat" xml:space="preserve">
+    <value>Field has an invalid format</value>
+    <comment>Field has an invalid format</comment>
+  </data>
+  <data name="MsgInvalidFormatFieldName" xml:space="preserve">
+    <value>Field {0} has an invalid format</value>
+    <comment>Field {0} has an invalid format</comment>
+  </data>
+  <data name="MsgMax" xml:space="preserve">
+    <value>Field must be less than {0}</value>
+    <comment>Field must be less than {0}</comment>
+  </data>
+  <data name="MsgMaxFieldName" xml:space="preserve">
+    <value>Field {0} must be less than {1}</value>
+    <comment>Field {0} must be less than {1}</comment>
+  </data>
+  <data name="MsgMin" xml:space="preserve">
+    <value>Field must be more than {0}</value>
+    <comment>Field must be more than {0}</comment>
+  </data>
+  <data name="MsgMinFieldName" xml:space="preserve">
+    <value>Field {0} must be more than {1}</value>
+    <comment>Field {0} must be more than {1}</comment>
+  </data>
+  <data name="MsgName" xml:space="preserve">
+    <value>Name has an invalid format</value>
+    <comment>Name has an invalid format</comment>
+  </data>
+  <data name="MsgNameWithFieldName" xml:space="preserve">
+    <value>Field {0} has an invalid format</value>
+    <comment>Field {0} has an invalid format</comment>
+  </data>
+  <data name="MsgNameWithValue" xml:space="preserve">
+    <value>Name {0} has an invalid format</value>
+    <comment>Name {0} has an invalid format</comment>
+  </data>
+  <data name="MsgNameWithValueAndFieldName" xml:space="preserve">
+    <value>Name {0} for field {1} has an invalid format</value>
+    <comment>Name {0} for field {1} has an invalid format</comment>
+  </data>
+  <data name="MsgPassword" xml:space="preserve">
+    <value>Password must contain a minimum {0} characters</value>
+    <comment>Password must contain a minimum {0} characters</comment>
+  </data>
+  <data name="MsgPasswordWithFieldName" xml:space="preserve">
+    <value>Field {0} must contain a minimum {1} characters</value>
+    <comment>Field {0} must contain a minimum {1} characters</comment>
+  </data>
+  <data name="MsgProcessRanSuccessfully" xml:space="preserve">
+    <value>The process ran successfully</value>
+    <comment>The process ran successfully</comment>
+  </data>
+  <data name="MsgRange" xml:space="preserve">
+    <value>Field must contain between {0} and {1}</value>
+    <comment>Field must contain between {0} and {1}</comment>
+  </data>
+  <data name="MsgRangeFieldName" xml:space="preserve">
+    <value>Field {0} must contain between {1} and {2}</value>
+    <comment>Field {0} must contain between {1} and {2}</comment>
+  </data>
+  <data name="MsgRequired" xml:space="preserve">
+    <value>Field is a mandatory</value>
+    <comment>Field is a mandatory</comment>
+  </data>
+  <data name="MsgRequiredFieldName" xml:space="preserve">
+    <value>Field {0} is a mandatory</value>
+    <comment>Field {0} is a mandatory</comment>
+  </data>
+  <data name="MsgSubdomain" xml:space="preserve">
+    <value>Subdomain has an invalid format</value>
+    <comment>Subdomain has an invalid format</comment>
+  </data>
+  <data name="MsgSubdomainWithFieldName" xml:space="preserve">
+    <value>Field {0} has an invalid format</value>
+    <comment>Field {0} has an invalid format</comment>
+  </data>
+  <data name="MsgSubdomainWithValue" xml:space="preserve">
+    <value>Subdomain {0} has an invalid format</value>
+    <comment>Subdomain {0} has an invalid format</comment>
+  </data>
+  <data name="MsgSubdomainWithValueAndFieldName" xml:space="preserve">
+    <value>Subdomain {0} for field {1} has an invalid format</value>
+    <comment>Subdomain {0} for field {1} has an invalid format</comment>
+  </data>
+  <data name="MsgUnauthorizedAccess" xml:space="preserve">
+    <value>Unauthorized access</value>
+    <comment>Unauthorized access</comment>
+  </data>
+</root>

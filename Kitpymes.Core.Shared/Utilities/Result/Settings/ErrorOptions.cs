@@ -84,7 +84,7 @@ namespace Kitpymes.Core.Shared.Util
             return this;
         }
 
-        #region Error
+        #region Messages
 
         /// <summary>
         /// Agrega un mensaje al resultado.
@@ -111,7 +111,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="messages">Lista de mensajes de error.</param>
         /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithMessages(IEnumerable<string> messages)
+        public ErrorOptions WithMessages(IList<string> messages)
         {
             if (messages?.Count() > 0)
             {
@@ -124,47 +124,34 @@ namespace Kitpymes.Core.Shared.Util
             return this;
         }
 
-        #endregion Error
+        #endregion Messages
 
-        #region ModelError
-
-        /// <summary>
-        /// Agrega un error del modelo al resultado.
-        /// </summary>
-        /// <param name="fieldName">Nombre del campo que contiene el error.</param>
-        /// <param name="message">Mensaje de error.</param>
-        /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithErrors(string fieldName, string message)
-        {
-            if (!string.IsNullOrWhiteSpace(message))
-            {
-                ErrorSettings.ModelErrors ??= new Dictionary<string, IEnumerable<string>>();
-
-                if (!ErrorSettings.ModelErrors.ContainsKey(fieldName))
-                {
-                    ErrorSettings.ModelErrors.Add(fieldName, new List<string> { message });
-                }
-                else
-                {
-                    ((IList<string>)ErrorSettings.ModelErrors[fieldName]).Add(message);
-                }
-            }
-
-            return this;
-        }
+        #region Errors
 
         /// <summary>
         /// Agrega uno o varios errores del modelo al resultado.
         /// </summary>
         /// <param name="errors">Lista de errores.</param>
         /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithErrors(IEnumerable<(string fieldName, string message)> errors)
+        public ErrorOptions WithErrors(IList<(string fieldName, string message)> errors)
         {
             if (errors?.Count() > 0)
             {
+                ErrorSettings.Errors ??= new Dictionary<string, IList<string>>();
+
                 foreach (var (fieldName, message) in errors)
                 {
-                    WithErrors(fieldName, message);
+                    if (!string.IsNullOrWhiteSpace(fieldName) && !string.IsNullOrWhiteSpace(message))
+                    {
+                        if (!ErrorSettings.Errors.ContainsKey(fieldName))
+                        {
+                            ErrorSettings.Errors.Add(fieldName, new List<string> { message });
+                        }
+                        else
+                        {
+                            ErrorSettings.Errors[fieldName].Add(message);
+                        }
+                    }
                 }
             }
 
@@ -176,16 +163,16 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Lista de errores.</param>
         /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithErrors(IDictionary<string, IEnumerable<string>>? errors)
+        public ErrorOptions WithErrors(IDictionary<string, IList<string>>? errors)
         {
             if (errors?.Count > 0)
             {
-                ErrorSettings.ModelErrors = errors;
+                ErrorSettings.Errors = errors;
             }
 
             return this;
         }
 
-        #endregion ModelError
+        #endregion Errors
     }
 }
