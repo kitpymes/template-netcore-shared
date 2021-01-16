@@ -51,6 +51,9 @@ namespace Kitpymes.Core.Shared.Tests
             var claimTypeExpected = Guid.NewGuid().ToString();
             var claimValueExpected = Guid.NewGuid().ToString();
 
+            var headers = new Dictionary<string, IList<string>>();
+            headers.AddOrUpdate(headerKey, headerValueExpected);
+
             var httpContext = FakeHttpContext.Configure(x =>
             {
                 x.Connection.RemoteIpAddress = ipExpected;
@@ -62,7 +65,7 @@ namespace Kitpymes.Core.Shared.Tests
                     Host = new HostString(hostExpected),
                     Path = pathExpected,
                     Method = methodExpected,
-                }.AddHeader(headerKey, headerValueExpected);
+                }.AddHeader(headers);
             });
 
             var result = httpContext.ToDetails();
@@ -94,12 +97,13 @@ namespace Kitpymes.Core.Shared.Tests
             var claimTypeExpected = Guid.NewGuid().ToString();
             var claimValueExpected = Guid.NewGuid().ToString();
 
-            (string key, string value) optionalDataValueExpected = (Guid.NewGuid().ToString(), Guid.NewGuid().ToString());
-            var optionalDataExpected = new List<(string key, string value)> 
-            {
-                optionalDataValueExpected,
-                (Guid.NewGuid().ToString(), Guid.NewGuid().ToString())
-            };
+            var optionalData = new Dictionary<string, IList<string>>();
+            var keyOptionalData = Guid.NewGuid().ToString();
+            var valueOptionalData = Guid.NewGuid().ToString();
+            optionalData.AddOrUpdate(keyOptionalData, valueOptionalData);
+
+            var headers = new Dictionary<string, IList<string>>();
+            headers.AddOrUpdate(headerKey, headerValueExpected);
 
             var httpContext = FakeHttpContext.Configure(x =>
             {
@@ -112,10 +116,10 @@ namespace Kitpymes.Core.Shared.Tests
                     Host = new HostString(hostExpected),
                     Path = pathExpected,
                     Method = methodExpected,
-                }.AddHeader(headerKey, headerValueExpected);
+                }.AddHeader(headers);
             });
 
-            var result = httpContext.ToDetails(optionalDataExpected);
+            var result = httpContext.ToDetails(optionalData);
 
             if (result != null)
             {
@@ -126,8 +130,8 @@ namespace Kitpymes.Core.Shared.Tests
                 Assert.IsTrue(result.Contains(pathExpected));
                 Assert.IsTrue(result.Contains(methodExpected));
                 Assert.IsTrue(result.Contains(headerValueExpected));
-                Assert.IsTrue(result.Contains(optionalDataValueExpected.key));
-                Assert.IsTrue(result.Contains(optionalDataValueExpected.value));
+                Assert.IsTrue(result.Contains(keyOptionalData));
+                Assert.IsTrue(result.Contains(valueOptionalData));
             }
         }
     }

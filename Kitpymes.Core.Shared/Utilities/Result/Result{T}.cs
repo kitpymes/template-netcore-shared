@@ -100,10 +100,14 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="errors">Agrega los errores de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static new Result<T> BadRequest(IDictionary<string, IList<string>> errors)
-        => new Result<T>(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle)
         {
-            Errors = errors,
-        };
+            errors.ToIsNullOrAnyThrow(nameof(errors));
+
+            return new Result<T>(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle)
+            {
+                Errors = errors,
+            };
+        }
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -113,26 +117,15 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>Result.</returns>
         public static new Result<T> BadRequest(IList<(string fieldName, string message)> errors)
         {
+            errors.ToIsNullOrAnyThrow(nameof(errors));
+
             var result = new Result<T>(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle);
 
-            if (errors != null)
-            {
-                result.Errors ??= new Dictionary<string, IList<string>>();
+            result.Errors ??= new Dictionary<string, IList<string>>();
 
-                foreach (var (fieldName, message) in errors)
-                {
-                    if (!string.IsNullOrWhiteSpace(fieldName) && !string.IsNullOrWhiteSpace(message))
-                    {
-                        if (!result.Errors.ContainsKey(fieldName))
-                        {
-                            result.Errors.Add(fieldName, new List<string> { message });
-                        }
-                        else
-                        {
-                            result.Errors[fieldName].Add(message);
-                        }
-                    }
-                }
+            foreach (var (fieldName, message) in errors)
+            {
+                result.Errors.AddOrUpdate(fieldName, message);
             }
 
             return result;
@@ -145,7 +138,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static new Result<T> BadRequest(IList<string> messages)
-        => new Result<T>(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, messages.ToString(", "));
+        => new Result<T>(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -157,6 +150,11 @@ namespace Kitpymes.Core.Shared.Util
 #pragma warning restore CA1000 // No declarar miembros estáticos en tipos genéricos
         {
             var config = options.ToConfigureOrDefault().ErrorSettings;
+
+            if (config.Messages.ToIsNullOrAny() && config.Errors.ToIsNullOrAny())
+            {
+                Check.Throw($"{nameof(config.Messages)} and {nameof(config.Errors)} are null or not contains elements.");
+            }
 
             return new Result<T>(false)
             {

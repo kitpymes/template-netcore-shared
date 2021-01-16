@@ -4,6 +4,7 @@ using System;
 using System.Threading;
 using System.IO;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -44,9 +45,15 @@ namespace Kitpymes.Core.Shared.Tests
             return mock.Object;
         }
 
-        public FakeHttpRequest AddHeader(string key, params string[] values)
+        public FakeHttpRequest AddHeader(IDictionary<string, IList<string>>? headers)
         {
-            Headers.AppendList(key, values);
+            if (headers?.Count > 0)
+            {
+                foreach (var (key, values) in headers)
+                {
+                    Headers.AppendList(key, values);
+                }
+            }
 
             return this;
         }

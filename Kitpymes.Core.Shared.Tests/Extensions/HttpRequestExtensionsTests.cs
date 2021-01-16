@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
+using System.Collections.Generic;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -8,62 +9,40 @@ namespace Kitpymes.Core.Shared.Tests
     public class HttpRequestExtensionsTests
     {
         [TestMethod]
-        public void ToHeader_Passing_HttpRequest_Header_Value_Returns_Value()
-        {
-            var key = Guid.NewGuid().ToString();
-            var valueExpected = Guid.NewGuid().ToString();
-
-            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(key, valueExpected));
-
-            var valueActual = fakeHttpRequest.ToHeader(key);
-
-            Assert.AreEqual(valueExpected, valueActual);
-        }
-
-        [TestMethod]
         public void ToHeader_Passing_HttpRequest_Header_Many_Values_Returns_Values()
         {
             var key = Guid.NewGuid().ToString();
-            var value1Expected = Guid.NewGuid().ToString();
-            var value2Expected = Guid.NewGuid().ToString();
+            var aKeyValueExpected = Guid.NewGuid().ToString();
+            var aKeyRepeatValueExpected = Guid.NewGuid().ToString();
+            var headers = new Dictionary<string, IList<string>>();
+            headers.AddOrUpdate(key, aKeyValueExpected).AddOrUpdate(key, aKeyRepeatValueExpected);
 
-            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(key, value1Expected, value2Expected));
+            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(headers));
 
-            var valueActual = fakeHttpRequest.ToHeader(key);
+            var headerActual = fakeHttpRequest.ToHeader(key);
 
-            if (valueActual != null)
+            if (headerActual != null)
             {
-                Assert.IsTrue(valueActual.Contains(value1Expected));
-                Assert.IsTrue(valueActual.Contains(value2Expected));
+                Assert.IsTrue(headerActual.Contains(aKeyValueExpected));
+                Assert.IsTrue(headerActual.Contains(aKeyRepeatValueExpected));
             }
-        }
-
-        [TestMethod]
-        public void ToTryGetHeader_Passing_HttpRequest_Header_Value_Returns_Value()
-        {
-            var key = Guid.NewGuid().ToString();
-            var valueExpected = Guid.NewGuid().ToString();
-
-            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(key, valueExpected));
-
-            fakeHttpRequest.ToTryHeader(key, out var valueActual);
-
-            Assert.AreEqual(valueExpected, valueActual);
         }
 
         [TestMethod]
         public void ToTryGetHeader_Passing_HttpRequest_Header_Many_Values_Returns_Values()
         {
             var key = Guid.NewGuid().ToString();
-            var value1Expected = Guid.NewGuid().ToString();
-            var value2Expected = Guid.NewGuid().ToString();
+            var aKeyValueExpected = Guid.NewGuid().ToString();
+            var aKeyRepeatValueExpected = Guid.NewGuid().ToString();
+            var headers = new Dictionary<string, IList<string>>();
+            headers.AddOrUpdate(key, aKeyValueExpected).AddOrUpdate(key, aKeyRepeatValueExpected);
 
-            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(key, value1Expected, value2Expected));
+            var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(headers));
 
-            if (fakeHttpRequest.ToTryHeader(key, out var valueActual) && !string.IsNullOrWhiteSpace(valueActual))
+            if (fakeHttpRequest.ToTryHeader(key, out var headerActual))
             {
-                Assert.IsTrue(valueActual.Contains(value1Expected));
-                Assert.IsTrue(valueActual.Contains(value2Expected));
+                Assert.IsTrue(headerActual != null && headerActual.Contains(aKeyValueExpected));
+                Assert.IsTrue(headerActual != null && headerActual.Contains(aKeyRepeatValueExpected));
             }
         }
 

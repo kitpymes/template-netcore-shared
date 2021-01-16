@@ -7,6 +7,7 @@
 
 namespace Kitpymes.Core.Shared
 {
+    using System.Collections.Generic;
     using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using Microsoft.AspNetCore.Http;
@@ -30,13 +31,16 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
         /// <param name="key">Clave del valor del header a obtener.</param>
-        /// <param name="value">Valor del header.</param>
-        /// <returns>true | false | value: string or null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
-        public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out string? value)
+        /// <param name="values">Valores de la clave del header.</param>
+        /// <returns>List{string} | null: si la key no existe | ApplicationException: si el parámetro httpRequest es nulo o si key es nulo.</returns>
+        public static bool ToTryHeader(this HttpRequest httpRequest, string key, [MaybeNullWhen(false)] out List<string>? values)
         {
-            value = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).ToHeader(key);
+            var validHttpRequest = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest));
+            key.ToIsNullOrEmptyThrow(nameof(key));
 
-            return !value.ToIsNullOrEmpty();
+            values = validHttpRequest.ToHeader(key);
+
+            return !values.ToIsNullOrAny();
         }
 
         /// <summary>
@@ -44,17 +48,13 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <param name="httpRequest">Representa el lado entrante de una solicitud HTTP individual.</param>
         /// <param name="key">Clave del valor del header a obtener.</param>
-        /// <returns>string | null | ApplicationException: si el parámetro httpRequest es nulo.</returns>
-        public static string? ToHeader(this HttpRequest httpRequest, string key)
+        /// <returns>List{string} | null: si la key no existe | ApplicationException: si el parámetro httpRequest es nulo o si key es nulo o vacio.</returns>
+        public static List<string>? ToHeader(this HttpRequest httpRequest, string key)
         {
-            string? result = null;
+            var validHttpRequest = httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest));
+            key.ToIsNullOrEmptyThrow(nameof(key));
 
-            if (httpRequest.ToIsNullOrEmptyThrow(nameof(httpRequest)).Headers.TryGetValue(key, out var values))
-            {
-                result = string.Join(", ", values.Select(x => x));
-            }
-
-            return result;
+            return validHttpRequest.Headers.ContainsKey(key) ? validHttpRequest.Headers[key].ToList() : null;
         }
 
         /// <summary>

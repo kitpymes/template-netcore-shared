@@ -15,6 +15,11 @@ namespace Kitpymes.Core.Shared.Util
     public interface IResult
     {
         /// <summary>
+        /// Obtiene un valor que indica el id del error.
+        /// </summary>
+        string? TraceId { get; }
+
+        /// <summary>
         /// Obtiene un valor que indica si el proceso fue correcto.
         /// </summary>
         bool Success { get; }
@@ -35,14 +40,9 @@ namespace Kitpymes.Core.Shared.Util
         string? Message { get; }
 
         /// <summary>
-        /// Obtiene un detalle.
+        /// Obtiene o establece un detalle.
         /// </summary>
-        object? Details { get; }
-
-        /// <summary>
-        /// Obtiene un valor que indica el id del error.
-        /// </summary>
-        string? TraceId { get; }
+        object? Details { get; set; }
 
         /// <summary>
         /// Obtiene un valor que indica el tipo de excepción.

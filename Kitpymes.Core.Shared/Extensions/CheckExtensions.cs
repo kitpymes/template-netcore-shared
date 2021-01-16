@@ -67,7 +67,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSource">Tipo del valor a verificar.</typeparam>
         /// <param name="source">El valor a verificar.</param>
         /// <returns>true | false.</returns>
-        public static bool ToIsNullOrAny<TSource>([NotNullWhen(true)] this IEnumerable<TSource> source)
+        public static bool ToIsNullOrAny<TSource>([NotNullWhen(true)] this IEnumerable<TSource>? source)
         => Util.Check.IsNullOrAny(source).HasErrors;
 
         /// <summary>
@@ -78,7 +78,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="message">Mensaje de la validación.</param>
         /// <returns>IEnumerable{TSource} | ApplicationException.</returns>
         [return: NotNull]
-        public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>(this IEnumerable<TSource> source, string message)
+        public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>(this IEnumerable<TSource>? source, string message)
         => source.ToIsThrow(() => source.ToIsNullOrAny(), message);
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="paramName">Nombre de la variable o parámetro.</param>
         /// <returns>IEnumerable{TSource} | ApplicationException.</returns>
         [return: NotNull]
-        public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>(this IEnumerable<TSource> source, string paramName)
+        public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>(this IEnumerable<TSource>? source, string paramName)
         => source.ToIsNullOrAnyWithMessageThrow(Util.Messages.NullOrAny(paramName));
 
         #endregion IsNullOrAny

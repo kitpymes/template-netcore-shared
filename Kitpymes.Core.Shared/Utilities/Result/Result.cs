@@ -48,19 +48,19 @@ namespace Kitpymes.Core.Shared.Util
         protected Result(bool success) => Success = success;
 
         /// <inheritdoc/>
+        public string? TraceId { get; protected set; }
+
+        /// <inheritdoc/>
         public bool Success { get; protected set; }
 
         /// <inheritdoc/>
         public int? StatusCode { get; protected set; }
 
         /// <inheritdoc/>
-        public string? Title { get; protected set; }
+        public string? Title { get; set; }
 
         /// <inheritdoc/>
-        public string? TraceId { get; protected set; }
-
-        /// <inheritdoc/>
-        public string? ExceptionType { get; protected set; }
+        public string? ExceptionType { get; set; }
 
         /// <inheritdoc/>
         public string? Message { get; set; }
@@ -103,10 +103,14 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="errors">Agrega los errores de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(IDictionary<string, IList<string>> errors)
-        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle)
         {
-            Errors = errors,
-        };
+            errors.ToIsNullOrAnyThrow(nameof(errors));
+
+            return new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle)
+            {
+                Errors = errors,
+            };
+        }
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -116,26 +120,15 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>Result.</returns>
         public static Result BadRequest(IList<(string fieldName, string message)> errors)
         {
+            errors.ToIsNullOrAnyThrow(nameof(errors));
+
             var result = new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle);
 
-            if (errors != null)
-            {
-                result.Errors ??= new Dictionary<string, IList<string>>();
+            result.Errors ??= new Dictionary<string, IList<string>>();
 
-                foreach (var (fieldName, message) in errors)
-                {
-                    if (!string.IsNullOrWhiteSpace(fieldName) && !string.IsNullOrWhiteSpace(message))
-                    {
-                        if (!result.Errors.ContainsKey(fieldName))
-                        {
-                            result.Errors.Add(fieldName, new List<string> { message });
-                        }
-                        else
-                        {
-                            result.Errors[fieldName].Add(message);
-                        }
-                    }
-                }
+            foreach (var (fieldName, message) in errors)
+            {
+                result.Errors.AddOrUpdate(fieldName, message);
             }
 
             return result;
@@ -148,7 +141,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(IList<string> messages)
-        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, messages.ToString(", "));
+        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -157,7 +150,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="message">Agrega un mensaje de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(string message)
-        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, message);
+        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, message.ToIsNullOrEmptyThrow(nameof(message)));
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -167,6 +160,11 @@ namespace Kitpymes.Core.Shared.Util
         public static Result Error(Action<ErrorOptions> options)
         {
             var config = options.ToConfigureOrDefault().ErrorSettings;
+
+            if (config.Messages.ToIsNullOrAny() && config.Errors.ToIsNullOrAny())
+            {
+                Check.Throw($"{nameof(config.Messages)} and {nameof(config.Errors)} are null or not contains elements.");
+            }
 
             return new Result(false)
             {

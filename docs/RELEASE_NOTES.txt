@@ -1,5 +1,8 @@
+# v.1.1.4
+- Se realizan mejoras en "Result" y se agregan extensiones para "Dictionary".
+
 # v.1.1.3
-- Se realizan mejoras en "Result".
+- Se realizan mejoras en "Result" y se agregan los "Resources".
 
 # v.1.1.2
 - Se realizan mejoras en "Result" y en varias extensiones.

@@ -8,6 +8,7 @@ using System;
 using System.Linq;
 using System.IO;
 using Kitpymes.Core.Shared.Tests;
+using System.Collections.Generic;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -22,6 +23,8 @@ namespace Kitpymes.Core.Shared.Tests
             string key = Guid.NewGuid().ToString();
             string value1Expected = Guid.NewGuid().ToString();
             string value2Expected = Guid.NewGuid().ToString();
+            var headers = new Dictionary<string, IList<string>>();
+            headers.AddOrUpdate(key, value1Expected).AddOrUpdate(key, value2Expected);
 
             var statusCodeExpected = HttpStatusCode.Unauthorized;
             string contentTypeExpected = Guid.NewGuid().ToString();
@@ -36,7 +39,7 @@ namespace Kitpymes.Core.Shared.Tests
                         statusCodeExpected,
                         messageExpected,
                         contentTypeExpected,
-                        (key, new string[] { value1Expected, value2Expected })
+                        headers
                     );
                 });
             }
