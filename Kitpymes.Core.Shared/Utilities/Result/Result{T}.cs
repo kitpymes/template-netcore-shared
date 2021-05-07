@@ -59,7 +59,7 @@ namespace Kitpymes.Core.Shared.Util
 #pragma warning disable CA1000 // No declarar miembros estáticos en tipos genéricos
         public static new Result<T> Ok()
 #pragma warning restore CA1000 // No declarar miembros estáticos en tipos genéricos
-        => new Result<T>(true, HttpStatusCode.OK, Resources.MsgProcessRanSuccessfully, Resources.MsgProcessRanSuccessfully);
+        => new Result<T>(true, HttpStatusCode.OK, HttpStatusCode.OK.ToString(), Resources.MsgProcessRanSuccessfully);
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -70,7 +70,7 @@ namespace Kitpymes.Core.Shared.Util
         public static Result<T> Ok(T data)
 #pragma warning restore CA1000 // No declarar miembros estáticos en tipos genéricos
         {
-            return new Result<T>(true, HttpStatusCode.OK, Resources.MsgProcessRanSuccessfully, Resources.MsgProcessRanSuccessfully)
+            return new Result<T>(true, HttpStatusCode.OK, HttpStatusCode.OK.ToString(), Resources.MsgProcessRanSuccessfully)
             {
                 Data = data,
             };
