@@ -27,7 +27,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Obtiene un valor que indica el código del estado de la solicitud HTTP.
         /// </summary>
-        int? StatusCode { get; }
+        int? Status { get; }
 
         /// <summary>
         /// Obtiene un valor que indica el título del resultado.
@@ -47,7 +47,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Obtiene un valor que indica el tipo de excepción.
         /// </summary>
-        string? ExceptionType { get; }
+        string? Exception { get; }
 
         /// <summary>
         /// Obtiene la lista de errores de un modelo.

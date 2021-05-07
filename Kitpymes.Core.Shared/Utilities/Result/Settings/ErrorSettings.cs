@@ -26,7 +26,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Obtiene o establece un valor que indica el número del estado de la solicitud HTTP.
         /// </summary>
-        public int? StatusCode { get; set; }
+        public int? Status { get; set; }
 
         /// <summary>
         /// Obtiene o establece un valor que indica el título del resultado.

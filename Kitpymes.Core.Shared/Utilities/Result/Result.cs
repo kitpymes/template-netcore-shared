@@ -30,13 +30,13 @@ namespace Kitpymes.Core.Shared.Util
         /// Inicializa una nueva instancia de la clase <see cref="Result"/>.
         /// </summary>
         /// <param name="success">Si el proceso se ejecuto correctamente.</param>
-        /// <param name="statusCode">Código del estado de la solicitud HTTP.</param>
+        /// <param name="status">Código del estado de la solicitud HTTP.</param>
         /// <param name="title">Título del resultado.</param>
         /// <param name="message">Mensaje del resultado.</param>
-        protected Result(bool success, HttpStatusCode statusCode, string title, string message)
+        protected Result(bool success, HttpStatusCode status, string title, string message)
             : this(success)
         {
-             StatusCode = statusCode.ToValue();
+             Status = status.ToValue();
              Title = title;
              Message = message;
         }
@@ -54,13 +54,13 @@ namespace Kitpymes.Core.Shared.Util
         public bool Success { get; protected set; }
 
         /// <inheritdoc/>
-        public int? StatusCode { get; protected set; }
+        public int? Status { get; protected set; }
 
         /// <inheritdoc/>
         public string? Title { get; set; }
 
         /// <inheritdoc/>
-        public string? ExceptionType { get; set; }
+        public string? Exception { get; set; }
 
         /// <inheritdoc/>
         public string? Message { get; set; }
@@ -75,10 +75,11 @@ namespace Kitpymes.Core.Shared.Util
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
+        /// <para><strong>OK:</strong> 200.</para>
         /// </summary>
         /// <returns>Result.</returns>
         public static Result Ok()
-        => new Result(true, HttpStatusCode.OK, Resources.MsgProcessRanSuccessfully, Resources.MsgProcessRanSuccessfully);
+        => new Result(true, HttpStatusCode.OK, HttpStatusCode.OK.ToString(), Resources.MsgProcessRanSuccessfully);
 
         /// <summary>
         /// Devuelve un resultado de error cuando ocurre un error de autorización.
@@ -86,7 +87,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <returns>Result.</returns>
         public static Result Unauthorized()
-        => new Result(false, HttpStatusCode.Unauthorized, Resources.MsgErrorsTitle, Resources.MsgUnauthorizedAccess);
+        => new Result(false, HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(), Resources.MsgUnauthorizedAccess);
 
         /// <summary>
         /// Devuelve un resultado de error cuando ocurre un error no controlado.
@@ -94,7 +95,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <returns>Result.</returns>
         public static Result InternalServerError()
-        => new Result(false, HttpStatusCode.InternalServerError, Resources.MsgErrorsTitle, Resources.MsgFriendlyUnexpectedError);
+        => new Result(false, HttpStatusCode.InternalServerError, HttpStatusCode.InternalServerError.ToString(), Resources.MsgFriendlyUnexpectedError);
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -106,7 +107,7 @@ namespace Kitpymes.Core.Shared.Util
         {
             errors.ToIsNullOrAnyThrow(nameof(errors));
 
-            return new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle)
+            return new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError)
             {
                 Errors = errors,
             };
@@ -122,7 +123,7 @@ namespace Kitpymes.Core.Shared.Util
         {
             errors.ToIsNullOrAnyThrow(nameof(errors));
 
-            var result = new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, Resources.MsgErrorsTitle);
+            var result = new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError);
 
             result.Errors ??= new Dictionary<string, IList<string>>();
 
@@ -141,7 +142,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(IList<string> messages)
-        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
+        => new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -150,7 +151,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="message">Agrega un mensaje de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(string message)
-        => new Result(false, HttpStatusCode.BadRequest, Resources.MsgErrorsTitle, message.ToIsNullOrEmptyThrow(nameof(message)));
+        => new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), message.ToIsNullOrEmptyThrow(nameof(message)));
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -168,11 +169,11 @@ namespace Kitpymes.Core.Shared.Util
 
             return new Result(false)
             {
-                StatusCode = config.StatusCode,
+                Status = config.Status,
                 Title = config.Title,
                 TraceId = Guid.NewGuid().ToString("N", System.Globalization.CultureInfo.CurrentCulture),
                 Details = config.Details,
-                ExceptionType = config.Exception,
+                Exception = config.Exception,
                 Message = config.Messages?.Count > 0 ? config.Messages.ToString(", ") : null,
                 Errors = config.Errors,
             };

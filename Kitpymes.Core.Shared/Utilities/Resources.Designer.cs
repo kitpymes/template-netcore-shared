@@ -160,15 +160,6 @@ namespace Kitpymes.Core.Shared.Util {
         }
         
         /// <summary>
-        ///   Busca una cadena traducida similar a One or more validation errors occurred..
-        /// </summary>
-        public static string MsgErrorsTitle {
-            get {
-                return ResourceManager.GetString("MsgErrorsTitle", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Busca una cadena traducida similar a File path extension not found.
         /// </summary>
         public static string MsgExtension {
@@ -444,6 +435,15 @@ namespace Kitpymes.Core.Shared.Util {
         public static string MsgUnauthorizedAccess {
             get {
                 return ResourceManager.GetString("MsgUnauthorizedAccess", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Busca una cadena traducida similar a One or more validation errors occurred.
+        /// </summary>
+        public static string MsgValidationsError {
+            get {
+                return ResourceManager.GetString("MsgValidationsError", resourceCulture);
             }
         }
     }

@@ -677,7 +677,7 @@ public interface IResult
 {
     bool Success { get; }
 
-    int? StatusCode { get; }
+    int? Status { get; }
 
     string? Title { get; }
 
@@ -707,7 +707,7 @@ public class ErrorOptions
 {
     public ErrorOptions WithTitle(string title) {}
 
-    public ErrorOptions WithStatusCode(HttpStatusCode statusCode) {}
+    public ErrorOptions WithStatusCode(HttpStatusCode status) {}
 
     public ErrorOptions WithDetails(object details) {}
 
@@ -726,11 +726,11 @@ public class ErrorOptions
 ```cs
 public class Result : IResult
 {
-    protected Result(bool success, int statusCode, string title, string? message = null) {}
+    protected Result(bool success, int status, string title, string? message = null) {}
 
     public bool Success { get; protected set; }
 
-    public int? StatusCode { get; protected set; }
+    public int? Status { get; protected set; }
 
     public string? Title { get; protected set; }
 
@@ -758,7 +758,7 @@ public class Result : IResult
 ```cs
 public class Result<T> : Result, IResult<T>
 {
-    protected Result(bool success, int statusCode, string title, string? message = null) {}
+    protected Result(bool success, int status, string title, string? message = null) {}
 
     ppublic T Data { get; private set; }
 

@@ -51,11 +51,11 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Agrega el código de estado HTTP al resultado.
         /// </summary>
-        /// <param name="statusCode">Código de estado HTTP del error.</param>
+        /// <param name="status">Código de estado HTTP del error.</param>
         /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithStatusCode(HttpStatusCode statusCode)
+        public ErrorOptions WithStatusCode(HttpStatusCode status)
         {
-            ErrorSettings.StatusCode = statusCode.ToValue();
+            ErrorSettings.Status = status.ToValue();
 
             return this;
         }

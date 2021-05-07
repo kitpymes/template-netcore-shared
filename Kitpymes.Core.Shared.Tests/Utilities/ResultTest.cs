@@ -18,8 +18,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.Ok();
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.OK.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
         }
 
@@ -39,8 +39,8 @@ namespace Kitpymes.Core.Shared.Tests
             actual.Details = detailsExpected;
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.OK.ToString());
             Assert.AreEqual(actual.Message, messageExpected);
             Assert.AreEqual(actual.Details, detailsExpected);
         }
@@ -55,7 +55,7 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result<FakeUser>.Ok();
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
             Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
         }
@@ -69,7 +69,7 @@ namespace Kitpymes.Core.Shared.Tests
             var actualToJson = actual.ToJson();
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
             Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Data, dataExpected);
@@ -96,7 +96,7 @@ namespace Kitpymes.Core.Shared.Tests
             var actualToJson = actual.ToJson();
 
             Assert.IsTrue(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.OK.ToValue());
+            Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
             Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Message, messageExpected);
             Assert.AreEqual(actual.Details, detailsExpected);
@@ -117,8 +117,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.Unauthorized();
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.Unauthorized.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.Unauthorized.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.Unauthorized.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgUnauthorizedAccess);
         }
 
@@ -128,8 +128,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.InternalServerError();
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.InternalServerError.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.InternalServerError.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.InternalServerError.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgFriendlyUnexpectedError);
         }
 
@@ -160,9 +160,9 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.BadRequest(errors);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
-            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.BadRequest.ToString());
+            Assert.AreEqual(actual.Message, Resources.MsgValidationsError);
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
@@ -195,9 +195,9 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.BadRequest(errors);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
-            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.BadRequest.ToString());
+            Assert.AreEqual(actual.Message, Resources.MsgValidationsError);
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
@@ -230,8 +230,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result.BadRequest(messages);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.BadRequest.ToString());
             Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Message.Contains(classFieldMessageExpected));
@@ -247,8 +247,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result<FakeUser>.Unauthorized();
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.Unauthorized.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.Unauthorized.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.Unauthorized.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgUnauthorizedAccess);
         }
 
@@ -258,8 +258,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result<FakeUser>.InternalServerError();
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.InternalServerError.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.InternalServerError.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.InternalServerError.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgFriendlyUnexpectedError);
         }
 
@@ -290,9 +290,9 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result<FakeUser>.BadRequest(errors);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
-            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.BadRequest.ToString());
+            Assert.AreEqual(actual.Message, Resources.MsgValidationsError);
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
@@ -325,9 +325,9 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result<FakeUser>.BadRequest(errors);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
-            Assert.AreEqual(actual.Message, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.BadRequest.ToString());
+            Assert.AreEqual(actual.Message, Resources.MsgValidationsError);
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Errors.Contains(nameof(classField), classFieldMessageExpected));
@@ -360,8 +360,8 @@ namespace Kitpymes.Core.Shared.Tests
             var actual = Result<FakeUser>.BadRequest(messages);
 
             Assert.IsFalse(actual.Success);
-            Assert.AreEqual(actual.StatusCode, HttpStatusCode.BadRequest.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgErrorsTitle);
+            Assert.AreEqual(actual.Status, HttpStatusCode.BadRequest.ToValue());
+            Assert.AreEqual(actual.Title, HttpStatusCode.BadRequest.ToString());
             Assert.IsTrue(actual.Message!.Contains(Messages.NullOrEmpty(nameof(stringField))));
             Assert.IsTrue(actual.Message.Contains(Messages.InvalidFormat(nameof(stringField))));
             Assert.IsTrue(actual.Message.Contains(classFieldMessageExpected));
@@ -439,13 +439,13 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(actual.Title, titleExpected);
             Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
 
-            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
+            Assert.AreEqual(actual.Status, statusCodeExpected.ToValue());
             Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
 
             Assert.AreEqual(actual.Details, detailsExpected);
             Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
 
-            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
+            Assert.AreEqual(actual.Exception, exceptionTypeExpected);
             Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
         }
 
@@ -521,13 +521,13 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(actual.Title, titleExpected);
             Assert.IsTrue(actualJson.Contains(titleExpected, StringComparison.CurrentCulture));
 
-            Assert.AreEqual(actual.StatusCode, statusCodeExpected.ToValue());
+            Assert.AreEqual(actual.Status, statusCodeExpected.ToValue());
             Assert.IsTrue(actualJson.Contains(statusCodeExpected.ToValue().ToString(), StringComparison.CurrentCulture));
 
             Assert.AreEqual(actual.Details, detailsExpected);
             Assert.IsTrue(actualJson.Contains(detailsExpected.ToSerialize(), StringComparison.CurrentCulture));
 
-            Assert.AreEqual(actual.ExceptionType, exceptionTypeExpected);
+            Assert.AreEqual(actual.Exception, exceptionTypeExpected);
             Assert.IsTrue(actualJson.Contains(exceptionTypeExpected, StringComparison.CurrentCulture));
         }
 

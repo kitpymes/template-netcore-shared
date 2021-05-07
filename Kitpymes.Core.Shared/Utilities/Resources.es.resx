@@ -161,10 +161,6 @@
     <value>El campo {0} no coincide con el campo {1}</value>
     <comment>El campo {0} no coincide con el campo {1}</comment>
   </data>
-  <data name="MsgErrorsTitle" xml:space="preserve">
-    <value>Se produjeron uno o más errores de validación.</value>
-    <comment>Se produjeron uno o más errores de validación.</comment>
-  </data>
   <data name="MsgExtension" xml:space="preserve">
     <value>Extensión de ruta de archivo no encontrada</value>
     <comment>Extensión de ruta de archivo no encontrada</comment>
@@ -246,8 +242,8 @@
     <comment>La contraseña debe contener un mínimo de {0} caracteres</comment>
   </data>
   <data name="MsgPasswordWithFieldName" xml:space="preserve">
-    <value>El campo {0} debe contener un mínimo de {1} caracteres.</value>
-    <comment>El campo {0} debe contener un mínimo de {1} caracteres.</comment>
+    <value>El campo {0} debe contener un mínimo de {1} caracteres</value>
+    <comment>El campo {0} debe contener un mínimo de {1} caracteres</comment>
   </data>
   <data name="MsgProcessRanSuccessfully" xml:space="preserve">
     <value>El proceso se ejecuto correctamente</value>
@@ -282,11 +278,15 @@
     <comment>El subdominio {0} tiene un formato no válido</comment>
   </data>
   <data name="MsgSubdomainWithValueAndFieldName" xml:space="preserve">
-    <value>El subdominio {0} del campo {1} tiene un formato no válido.</value>
-    <comment>El subdominio {0} del campo {1} tiene un formato no válido.</comment>
+    <value>El subdominio {0} del campo {1} tiene un formato no válido</value>
+    <comment>El subdominio {0} del campo {1} tiene un formato no válido</comment>
   </data>
   <data name="MsgUnauthorizedAccess" xml:space="preserve">
     <value>Acceso no autorizado</value>
     <comment>Acceso no autorizado</comment>
+  </data>
+  <data name="MsgValidationsError" xml:space="preserve">
+    <value>Se produjeron uno o más errores de validación</value>
+    <comment>Se produjeron uno o más errores de validación</comment>
   </data>
 </root>

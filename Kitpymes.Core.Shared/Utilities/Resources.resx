@@ -161,10 +161,6 @@
     <value>Field {0} does not match field {1}</value>
     <comment>Field {0} does not match field {1}</comment>
   </data>
-  <data name="MsgErrorsTitle" xml:space="preserve">
-    <value>One or more validation errors occurred.</value>
-    <comment>One or more validation errors occurred.</comment>
-  </data>
   <data name="MsgExtension" xml:space="preserve">
     <value>File path extension not found</value>
     <comment>File path extension not found</comment>
@@ -288,5 +284,9 @@
   <data name="MsgUnauthorizedAccess" xml:space="preserve">
     <value>Unauthorized access</value>
     <comment>Unauthorized access</comment>
+  </data>
+  <data name="MsgValidationsError" xml:space="preserve">
+    <value>One or more validation errors occurred</value>
+    <comment>One or more validation errors occurred</comment>
   </data>
 </root>
