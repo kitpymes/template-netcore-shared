@@ -56,7 +56,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsTrue(actual.Success);
             Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Title, HttpStatusCode.OK.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
         }
 
@@ -70,7 +70,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsTrue(actual.Success);
             Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Title, HttpStatusCode.OK.ToString());
             Assert.AreEqual(actual.Message, Resources.MsgProcessRanSuccessfully);
             Assert.AreEqual(actual.Data, dataExpected);
 
@@ -97,7 +97,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsTrue(actual.Success);
             Assert.AreEqual(actual.Status, HttpStatusCode.OK.ToValue());
-            Assert.AreEqual(actual.Title, Resources.MsgProcessRanSuccessfully);
+            Assert.AreEqual(actual.Title, HttpStatusCode.OK.ToString());
             Assert.AreEqual(actual.Message, messageExpected);
             Assert.AreEqual(actual.Details, detailsExpected);
             Assert.AreEqual(actual.Data, dataExpected);
