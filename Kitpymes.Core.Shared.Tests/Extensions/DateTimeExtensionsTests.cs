@@ -47,9 +47,9 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToAge_Passing_Birthday_DateTime_Returns_Age()
         {
-            var ageExpected = 41;
+            var ageExpected = DateTime.Now.Year - 1979;
 
-            DateTime = new DateTime(1979, 02, 14);
+            DateTime = new DateTime(1979, 01, 01);
 
             var ageActual = DateTime.ToAge();
 
