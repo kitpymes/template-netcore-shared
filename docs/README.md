@@ -514,6 +514,8 @@ public static class StringExtensions
     public static string ToFormat(this string value, IFormatProvider formatProvider, params object[] args) { }
 
     public static Assembly ToAssembly(this string assembly) { }
+
+    public static string? ToRandom(this string input, int length) { }
 }
 ```
 

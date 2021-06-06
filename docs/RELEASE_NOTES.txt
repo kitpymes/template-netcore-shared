@@ -1,3 +1,6 @@
+# v.1.1.9
+- Se agrega la extensions de string ToRandom.
+
 # v.1.1.8
 - Se corrigen tests que fallaban.
 

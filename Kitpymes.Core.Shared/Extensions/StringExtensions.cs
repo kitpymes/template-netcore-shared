@@ -590,5 +590,19 @@ namespace Kitpymes.Core.Shared
         => Assembly.Load(assembly);
 
         #endregion ToAssembly
+
+        #region ToRandom
+
+        /// <summary>
+        /// Caracteres que se requieren remover.
+        /// </summary>
+        /// <param name="input">Cadena a remplazar.</param>
+        /// <param name="length">Cantidad de caracteres que se quieren obtener.</param>
+        /// <returns>string | null: si input es nulo o vacio.</returns>
+        public static string? ToRandom(this string input, int length)
+         => string.IsNullOrWhiteSpace(input) ? null : new string(Enumerable.Repeat(input, length)
+              .Select(s => s[new Random().Next(s.Length)]).ToArray());
+
+        #endregion ToRandom
     }
 }

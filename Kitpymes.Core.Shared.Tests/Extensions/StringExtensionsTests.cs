@@ -767,5 +767,45 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         #endregion ToAssembly
+
+        #region ToRandom
+
+        [TestMethod]
+        public void ToRandom_Passing_ValidValueString_Returns_String()
+        {
+            var valueExpected = 5;
+
+            var value = nameof(StringExtensionsTests);
+
+            var valueActual = value.ToRandom(5);
+
+            Assert.AreEqual(valueExpected, valueActual?.Length);
+        }
+
+        [TestMethod]
+        public void ToRandom_Passing_Invalid_Null_Value_Returns_Null()
+        {
+            string? valueExpected = null;
+
+            string? value = null;
+
+            var valueActual = value?.ToRandom(5);
+
+            Assert.AreEqual(valueExpected, valueActual);
+        }
+
+        [TestMethod]
+        public void ToRandom_Passing_Invalid_Empty_Value_Returns_Null()
+        {
+            string? valueExpected = null;
+
+            string? value = "";
+
+            var valueActual = value?.ToRandom(5);
+
+            Assert.AreEqual(valueExpected, valueActual);
+        }
+
+        #endregion ToRandom
     }
 }

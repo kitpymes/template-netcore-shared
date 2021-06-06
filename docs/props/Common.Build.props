@@ -97,19 +97,19 @@
       </PropertyGroup>
 
       <ItemGroup>
-        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.8.55" PrivateAssets="All" />
+        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.10.56" PrivateAssets="All" />
         <PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers " Version="5.0.3" IncludeAssets="Analyzers;Build" PrivateAssets="All" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" IncludeAssets="Analyzers;Build" PrivateAssets="All" />
-        <AdditionalFiles Include="$(SolutionDir)docs\analyzers\stylecop.json">
-          <Visible>false</Visible>
-        </AdditionalFiles>
+        <AdditionalFiles Include="$(SolutionDir)docs\analyzers\stylecop.json" Visible="false" />
       </ItemGroup>
     </When>
+    <!--
     <Otherwise>
       <PropertyGroup>
         <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
       </PropertyGroup>
     </Otherwise>
+     -->
   </Choose>
 
   <!-- Documentation -->
