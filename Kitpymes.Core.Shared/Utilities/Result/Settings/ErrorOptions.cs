@@ -133,11 +133,11 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Lista de errores.</param>
         /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithErrors(IList<(string fieldName, string message)> errors)
+        public ErrorOptions WithErrors(IEnumerable<(string fieldName, string message)> errors)
         {
             if (errors?.Count() > 0)
             {
-                ErrorSettings.Errors ??= new Dictionary<string, IList<string>>();
+                ErrorSettings.Errors ??= new Dictionary<string, IEnumerable<string>>();
 
                 foreach (var (fieldName, message) in errors)
                 {
@@ -149,7 +149,7 @@ namespace Kitpymes.Core.Shared.Util
                         }
                         else
                         {
-                            ErrorSettings.Errors[fieldName].Add(message);
+                            ErrorSettings.Errors[fieldName] = ErrorSettings.Errors[fieldName].Concat(new string[] { message });
                         }
                     }
                 }
@@ -163,7 +163,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Lista de errores.</param>
         /// <returns>ErrorOptions.</returns>
-        public ErrorOptions WithErrors(IDictionary<string, IList<string>>? errors)
+        public ErrorOptions WithErrors(IDictionary<string, IEnumerable<string>>? errors)
         {
             if (errors?.Count > 0)
             {

@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="key">Clave del diccionario.</param>
         /// <param name="value">Valor del diccionario.</param>
         /// <returns>IDictionary{string, IList{string}} | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio o si value es nulo o vacio.</returns>
-        public static IDictionary<string, IList<string>> AddOrUpdate(this IDictionary<string, IList<string>>? dictionary, string key, string value)
+        public static IDictionary<string, IEnumerable<string>> AddOrUpdate(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
         {
             var validDictionary = dictionary.ValidateThrow(key, value);
 
@@ -40,7 +40,7 @@ namespace Kitpymes.Core.Shared
             {
                 if (!validDictionary[key].Contains(value))
                 {
-                    validDictionary[key].Add(value);
+                    validDictionary[key] = validDictionary[key].Concat(new string[] { value });
                 }
             }
             else
@@ -58,7 +58,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="key">Clave del diccionario.</param>
         /// <param name="value">Valor del diccionario.</param>
         /// <returns>bool | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio o si value es nulo o vacio.</returns>
-        public static bool Contains(this IDictionary<string, IList<string>>? dictionary, string key, string value)
+        public static bool Contains(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
         {
             var validDictionary = dictionary.ValidateThrow(key, value);
 
@@ -71,7 +71,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="dictionary">Lista de diccionario.</param>
         /// <param name="key">Clave del diccionario.</param>
         /// <returns>IList{string} | null: si la key no existe o no contiene valores | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio.</returns>
-        public static IList<string>? GetValues(this IDictionary<string, IList<string>>? dictionary, string key)
+        public static IEnumerable<string>? GetValues(this IDictionary<string, IEnumerable<string>>? dictionary, string key)
         {
             var validDictionary = dictionary.ValidateThrow(key);
 
@@ -79,7 +79,7 @@ namespace Kitpymes.Core.Shared
         }
 
         [return: NotNull]
-        private static IDictionary<string, IList<string>> ValidateThrow(this IDictionary<string, IList<string>>? dictionary, string key)
+        private static IDictionary<string, IEnumerable<string>> ValidateThrow(this IDictionary<string, IEnumerable<string>>? dictionary, string key)
         {
             var errors = new List<string>();
 
@@ -102,7 +102,7 @@ namespace Kitpymes.Core.Shared
         }
 
         [return: NotNull]
-        private static IDictionary<string, IList<string>> ValidateThrow(this IDictionary<string, IList<string>>? dictionary, string key, string value)
+        private static IDictionary<string, IEnumerable<string>> ValidateThrow(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
         {
             dictionary.ValidateThrow(key);
 

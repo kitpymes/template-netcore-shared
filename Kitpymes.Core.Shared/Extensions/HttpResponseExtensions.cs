@@ -8,6 +8,7 @@
 namespace Kitpymes.Core.Shared
 {
     using System.Collections.Generic;
+    using System.Linq;
     using System.Net;
     using System.Net.Mime;
     using System.Threading.Tasks;
@@ -41,7 +42,7 @@ namespace Kitpymes.Core.Shared
             HttpStatusCode status,
             string message,
             string contentType = MediaTypeNames.Application.Json,
-            IDictionary<string, IList<string>>? headers = null)
+            IDictionary<string, IEnumerable<string>>? headers = null)
         {
             var validHttpResponse = httpResponse.ToIsNullOrEmptyThrow(nameof(httpResponse));
 
@@ -55,7 +56,7 @@ namespace Kitpymes.Core.Shared
             {
                 foreach (var (key, values) in headers)
                 {
-                    validHttpResponse.Headers.AppendList(key, values);
+                    validHttpResponse.Headers.AppendList(key, values.ToList());
                 }
             }
 

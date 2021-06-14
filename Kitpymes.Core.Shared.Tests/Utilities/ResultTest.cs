@@ -175,7 +175,7 @@ namespace Kitpymes.Core.Shared.Tests
             var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
             var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
 
-            var errors = new Dictionary<string, IList<string>>();
+            var errors = new Dictionary<string, IEnumerable<string>>();
 
             if (stringField.ToIsNullOrEmpty())
             {
@@ -184,7 +184,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             if (!stringField.ToIsEmail())
             {
-                errors[nameof(stringField)].Add(Messages.InvalidFormat(nameof(stringField)));
+                errors[nameof(stringField)] = errors[nameof(stringField)].Concat(new string[] { Messages.InvalidFormat(nameof(stringField)) });
             }
 
             if (classField.ToIsNullOrEmpty())
@@ -305,7 +305,7 @@ namespace Kitpymes.Core.Shared.Tests
             var classField = FakeTypes.ReferenceTypes.ClassTypes.Class_Null;
             var classFieldMessageExpected = Messages.NullOrEmpty(nameof(classField));
 
-            var errors = new Dictionary<string, IList<string>>();
+            var errors = new Dictionary<string, IEnumerable<string>>();
 
             if (stringField.ToIsNullOrEmpty())
             {
@@ -314,7 +314,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             if (!stringField.ToIsEmail())
             {
-                errors[nameof(stringField)].Add(Messages.InvalidFormat(nameof(stringField)));
+                errors[nameof(stringField)] = errors[nameof(stringField)].Concat(new string[] { Messages.InvalidFormat(nameof(stringField)) });
             }
 
             if (classField.ToIsNullOrEmpty())

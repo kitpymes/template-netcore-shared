@@ -1,3 +1,6 @@
+# v.1.2.0
+- Se realizan mejoras en "Result" y en varias extensiones.
+
 # v.1.1.9
 - Se agrega la extensions de string ToRandom.
 

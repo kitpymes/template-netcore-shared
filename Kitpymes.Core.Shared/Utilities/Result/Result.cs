@@ -70,7 +70,7 @@ namespace Kitpymes.Core.Shared.Util
 
         /// <inheritdoc/>
 #pragma warning disable CA2227 // Las propiedades de colección deben ser de solo lectura
-        public IDictionary<string, IList<string>>? Errors { get; protected set; }
+        public IDictionary<string, IEnumerable<string>>? Errors { get; protected set; }
 #pragma warning restore CA2227 // Las propiedades de colección deben ser de solo lectura
 
         /// <summary>
@@ -103,7 +103,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Agrega los errores de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static Result BadRequest(IDictionary<string, IList<string>> errors)
+        public static Result BadRequest(IDictionary<string, IEnumerable<string>> errors)
         {
             errors.ToIsNullOrAnyThrow(nameof(errors));
 
@@ -119,13 +119,13 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Agrega los errores de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static Result BadRequest(IList<(string fieldName, string message)> errors)
+        public static Result BadRequest(IEnumerable<(string fieldName, string message)> errors)
         {
             errors.ToIsNullOrAnyThrow(nameof(errors));
 
             var result = new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError);
 
-            result.Errors ??= new Dictionary<string, IList<string>>();
+            result.Errors ??= new Dictionary<string, IEnumerable<string>>();
 
             foreach (var (fieldName, message) in errors)
             {
@@ -141,7 +141,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static Result BadRequest(IList<string> messages)
+        public static Result BadRequest(IEnumerable<string> messages)
         => new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
 
         /// <summary>

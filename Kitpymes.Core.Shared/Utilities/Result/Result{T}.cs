@@ -98,7 +98,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Agrega los errores de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static new Result<T> BadRequest(IDictionary<string, IList<string>> errors)
+        public static new Result<T> BadRequest(IDictionary<string, IEnumerable<string>> errors)
         {
             errors.ToIsNullOrAnyThrow(nameof(errors));
 
@@ -114,13 +114,13 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="errors">Agrega los errores de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static new Result<T> BadRequest(IList<(string fieldName, string message)> errors)
+        public static new Result<T> BadRequest(IEnumerable<(string fieldName, string message)> errors)
         {
             errors.ToIsNullOrAnyThrow(nameof(errors));
 
             var result = new Result<T>(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError);
 
-            result.Errors ??= new Dictionary<string, IList<string>>();
+            result.Errors ??= new Dictionary<string, IEnumerable<string>>();
 
             foreach (var (fieldName, message) in errors)
             {
@@ -136,7 +136,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
-        public static new Result<T> BadRequest(IList<string> messages)
+        public static new Result<T> BadRequest(IEnumerable<string> messages)
         => new Result<T>(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
 
         /// <summary>

@@ -14,7 +14,7 @@ namespace Kitpymes.Core.Shared.Tests
             var key = Guid.NewGuid().ToString();
             var aKeyValueExpected = Guid.NewGuid().ToString();
             var aKeyRepeatValueExpected = Guid.NewGuid().ToString();
-            var headers = new Dictionary<string, IList<string>>();
+            var headers = new Dictionary<string, IEnumerable<string>>();
             headers.AddOrUpdate(key, aKeyValueExpected).AddOrUpdate(key, aKeyRepeatValueExpected);
 
             var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(headers));
@@ -34,7 +34,7 @@ namespace Kitpymes.Core.Shared.Tests
             var key = Guid.NewGuid().ToString();
             var aKeyValueExpected = Guid.NewGuid().ToString();
             var aKeyRepeatValueExpected = Guid.NewGuid().ToString();
-            var headers = new Dictionary<string, IList<string>>();
+            var headers = new Dictionary<string, IEnumerable<string>>();
             headers.AddOrUpdate(key, aKeyValueExpected).AddOrUpdate(key, aKeyRepeatValueExpected);
 
             var fakeHttpRequest = FakeHttpRequest.Configure(x => x.AddHeader(headers));

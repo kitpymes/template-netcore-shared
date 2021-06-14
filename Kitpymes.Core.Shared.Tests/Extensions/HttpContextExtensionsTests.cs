@@ -51,7 +51,7 @@ namespace Kitpymes.Core.Shared.Tests
             var claimTypeExpected = Guid.NewGuid().ToString();
             var claimValueExpected = Guid.NewGuid().ToString();
 
-            var headers = new Dictionary<string, IList<string>>();
+            var headers = new Dictionary<string, IEnumerable<string>>();
             headers.AddOrUpdate(headerKey, headerValueExpected);
 
             var httpContext = FakeHttpContext.Configure(x =>
@@ -97,12 +97,12 @@ namespace Kitpymes.Core.Shared.Tests
             var claimTypeExpected = Guid.NewGuid().ToString();
             var claimValueExpected = Guid.NewGuid().ToString();
 
-            var optionalData = new Dictionary<string, IList<string>>();
+            var optionalData = new Dictionary<string, IEnumerable<string>>();
             var keyOptionalData = Guid.NewGuid().ToString();
             var valueOptionalData = Guid.NewGuid().ToString();
             optionalData.AddOrUpdate(keyOptionalData, valueOptionalData);
 
-            var headers = new Dictionary<string, IList<string>>();
+            var headers = new Dictionary<string, IEnumerable<string>>();
             headers.AddOrUpdate(headerKey, headerValueExpected);
 
             var httpContext = FakeHttpContext.Configure(x =>

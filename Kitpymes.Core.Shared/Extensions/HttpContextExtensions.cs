@@ -54,7 +54,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="httpContext">Encapsula toda la información específica de HTTP sobre una solicitud HTTP individual.</param>
         /// <param name="optionalData">Datos opcionales.</param>
         /// <returns>Los detalles de una solicitud HTTP.</returns>
-        public static string ToDetails(this HttpContext httpContext, IDictionary<string, IList<string>>? optionalData = null)
+        public static string ToDetails(this HttpContext httpContext, IDictionary<string, IEnumerable<string>>? optionalData = null)
         {
             var validHttpContext = httpContext.ToIsNullOrEmptyThrow(nameof(httpContext));
 

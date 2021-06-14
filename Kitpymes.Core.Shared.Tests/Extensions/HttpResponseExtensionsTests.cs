@@ -23,7 +23,7 @@ namespace Kitpymes.Core.Shared.Tests
             string key = Guid.NewGuid().ToString();
             string value1Expected = Guid.NewGuid().ToString();
             string value2Expected = Guid.NewGuid().ToString();
-            var headers = new Dictionary<string, IList<string>>();
+            var headers = new Dictionary<string, IEnumerable<string>>();
             headers.AddOrUpdate(key, value1Expected).AddOrUpdate(key, value2Expected);
 
             var statusCodeExpected = HttpStatusCode.Unauthorized;

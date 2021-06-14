@@ -1,13 +1,14 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class DictionaryExtensionsTests
     {
-        private IDictionary<string, IList<string>>? List { get; set; }
+        private IDictionary<string, IEnumerable<string>>? List { get; set; }
 
         [TestMethod]
         public void AddOrUpdate_Passing_Valid_Collection_Returns_Collection()
@@ -15,7 +16,7 @@ namespace Kitpymes.Core.Shared.Tests
             var aKeyValueExpected = Guid.NewGuid().ToString();
             var aKeyRepeatValueExpected = Guid.NewGuid().ToString();
 
-            List = new Dictionary<string, IList<string>>();
+            List = new Dictionary<string, IEnumerable<string>>();
             List
                 .AddOrUpdate("a", aKeyValueExpected)
                 .AddOrUpdate("e", Guid.NewGuid().ToString())
@@ -34,7 +35,7 @@ namespace Kitpymes.Core.Shared.Tests
             var aKeyValueExpected = Guid.NewGuid().ToString();
             var aKeyRepeatValueExpected = Guid.NewGuid().ToString();
 
-            List = new Dictionary<string, IList<string>>();
+            List = new Dictionary<string, IEnumerable<string>>();
             List
                 .AddOrUpdate("a", aKeyValueExpected)
                 .AddOrUpdate("e", Guid.NewGuid().ToString())
@@ -43,7 +44,7 @@ namespace Kitpymes.Core.Shared.Tests
                 .AddOrUpdate("u", Guid.NewGuid().ToString())
                 .AddOrUpdate("a", aKeyRepeatValueExpected);
 
-            Assert.IsTrue(List.GetValues("a")?.Count > 0);
+            Assert.IsTrue(List.GetValues("a")?.Count() > 0);
         }
     }
 }
