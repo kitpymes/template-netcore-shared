@@ -27,8 +27,11 @@ jobs:
     - name: Clean
       run: dotnet clean Solution.sln --configuration Release && dotnet nuget locals all --clear
 
-    - name: Install dependencies
+    - name: Restore
       run: dotnet restore Project.sln
+
+    - name: Add nuget
+      run: dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget.org
        
     - name: Build 
       run: dotnet build Solution.sln --configuration Release --no-restore
