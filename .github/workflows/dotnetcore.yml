@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet: [ '5.0.x' ]
+        dotnet: [ '5.0.100', '5.0.200' ]
 
     name: NET ${{ matrix.dotnet }}
 
