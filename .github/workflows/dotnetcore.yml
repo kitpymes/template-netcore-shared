@@ -8,12 +8,12 @@ jobs:
 
     strategy:
       matrix:
-        dotnet: [ '5.0.100' ]
+        dotnet: [ '5.0.x' ]
 
-    name: Build for .NET Core ${{ matrix.dotnet }}
+    name: NET ${{ matrix.dotnet }}
 
     steps:  
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
      
     - name: Setup
       uses: actions/setup-dotnet@v1
