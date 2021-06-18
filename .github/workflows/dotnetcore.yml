@@ -24,9 +24,6 @@ jobs:
       with:
         dotnet-version: ${{ matrix.dotnet }}
 
-    - name: Clean
-      run: dotnet clean Solution.sln --configuration Release && dotnet nuget locals all --clear
-
     - name: Install dependencies
       run: dotnet restore
 
