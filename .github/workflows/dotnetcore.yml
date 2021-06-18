@@ -9,20 +9,12 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
-    strategy:
-      matrix:
-        dotnet-version: '5.0.x'
-
-    name: Build for .NET Core ${{ matrix.dotnet }}
-
     steps:  
     - uses: actions/checkout@v1
      
     - name: Setup
-      uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: ${{ matrix.dotnet }}
+        dotnet-version: '5.0.x'
 
     - name: Clean
       run: dotnet clean Solution.sln --configuration Release && dotnet nuget locals all --clear
