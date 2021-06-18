@@ -12,15 +12,13 @@ jobs:
     steps:  
     - uses: actions/checkout@v1
      
-    - name: Setup
+    - name: Set up .NET Core
+      uses: actions/setup-dotnet@v1
       with:
         dotnet-version: '5.0.x'
 
-    - name: Clean
-      run: dotnet clean Solution.sln --configuration Release && dotnet nuget locals all --clear
+    - name: Add nuget.org as nuget package source
+      run: dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget.org
 
-    - name: Build 
-      run: dotnet build Solution.sln --configuration Release --no-restore
-     
-    - name: Tests
-      run: dotnet test --configuration Release --no-build --no-restore --verbosity normal
+    - name: Build with dotnet
+      run: dotnet build --configuration Release
