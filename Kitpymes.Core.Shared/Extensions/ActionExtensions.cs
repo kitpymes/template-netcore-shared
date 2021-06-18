@@ -25,21 +25,21 @@ namespace Kitpymes.Core.Shared
     public static class ActionExtensions
     {
         /// <summary>
-        /// Combina las opciones personalizadas <paramref name="action"/> de una acción con las opciones por defecto <paramref name="defaultOptions"/>.
+        /// Combina las opciones personalizadas <paramref name="action"/> de una acción con las opciones por defecto <paramref name="overrideDefaultOptions"/>.
         /// </summary>
-        /// <typeparam name="TOptions">Es de tipo class.</typeparam>
+        /// <typeparam name="TOptions">Tipo de opcion que es de tipo class.</typeparam>
         /// <param name="action">Opciones personalizadas.</param>
-        /// <param name="defaultOptions">Opcionces por defecto.</param>
-        /// <returns>Las opciones combinadas.</returns>
+        /// <param name="overrideDefaultOptions">Sobreescribimos las opcionces por defecto.</param>
+        /// <returns>TOptions | ApplicationException: si action es nulo.</returns>
         [return: NotNull]
-        public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? defaultOptions = null)
+        public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? overrideDefaultOptions = null)
             where TOptions : class, new()
         {
-            defaultOptions ??= new TOptions();
+            overrideDefaultOptions ??= new TOptions();
 
-            action?.Invoke(defaultOptions);
+            action?.Invoke(overrideDefaultOptions);
 
-            return defaultOptions;
+            return overrideDefaultOptions;
         }
     }
 }

@@ -43,11 +43,17 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         public override long? ContentLength { get; set; }
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override string? ContentType { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override IResponseCookies? Cookies { get; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override IHeaderDictionary Headers { get; } = new HeaderDictionary();
         public override int StatusCode { get; set; }
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override Stream? Body { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override bool HasStarted => throw new NotImplementedException();
         public override HttpContext HttpContext => throw new NotImplementedException();
 

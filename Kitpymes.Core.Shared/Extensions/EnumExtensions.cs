@@ -58,7 +58,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <typeparam name="TAttribute">Tipo de atributo a obtener.</typeparam>
         /// <param name="name">Nombre de la enumeración.</param>
-        /// <returns>El atributo de la enumeración | ApplicationException: si el parámetro name es nulo.</returns>
+        /// <returns>TAttribute | null | ApplicationException: si el parámetro name es nulo.</returns>
         public static TAttribute? ToAttribute<TAttribute>(this Enum name)
             where TAttribute : Attribute
         {
@@ -68,9 +68,14 @@ namespace Kitpymes.Core.Shared
 
             var memberInfo = type.GetMember(validEnum.ToString()).FirstOrDefault(m => m.DeclaringType == type);
 
-            var attribute = Attribute.GetCustomAttribute(memberInfo, typeof(TAttribute), false);
+            if (memberInfo != null)
+            {
+                var attribute = Attribute.GetCustomAttribute(memberInfo, typeof(TAttribute), false);
 
-            return attribute is TAttribute attribute1 ? attribute1 : null;
+                return attribute is TAttribute attribute1 ? attribute1 : null;
+            }
+
+            return null;
         }
     }
 }

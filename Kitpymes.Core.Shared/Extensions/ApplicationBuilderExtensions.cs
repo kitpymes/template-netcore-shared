@@ -29,8 +29,8 @@ namespace Kitpymes.Core.Shared
         /// Obtiene la configuración del ambiente de ejecución.
         /// </summary>
         /// <param name="application">Extensión de la configurarción de la solicitud de una aplicación.</param>
-        /// <returns>IWebHostEnvironment | ApplicationException: si el parámetro de tipo IApplicationBuilder es nulo | null: si no se encuentra el servicio.</returns>
-        public static IWebHostEnvironment ToEnvironment(this IApplicationBuilder application)
+        /// <returns>IWebHostEnvironment | ApplicationException: si application es nulo | null: si no se encuentra el servicio de tipo IWebHostEnvironment.</returns>
+        public static IWebHostEnvironment? ToEnvironment(this IApplicationBuilder application)
         => application.ToIsNullOrEmptyThrow(nameof(application)).ToService<IWebHostEnvironment>();
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <typeparam name="TService">Tipo de servicio a buscar.</typeparam>
         /// <param name="application">Extensión de la configurarción de la solicitud de una aplicación.</param>
-        /// <returns>true | false | ApplicationException: si el parámetro de tipo IApplicationBuilder es nulo.</returns>
+        /// <returns>true | false | ApplicationException: si application es nulo.</returns>
         public static bool ToExists<TService>(this IApplicationBuilder application)
         => application.ToIsNullOrEmptyThrow(nameof(application)).ToService<TService>() != null;
 
@@ -47,8 +47,8 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <typeparam name="TService">Tipo de servicio a buscar.</typeparam>
         /// <param name="application">Extensión de la configurarción de la solicitud de una aplicación.</param>
-        /// <returns>TService | ApplicationException: si el parámetro de tipo IApplicationBuilder es nulo | null: si no se encuentra el servicio.</returns>
-        public static TService ToService<TService>(this IApplicationBuilder application)
+        /// <returns>TService | null: si no encuentra el servicio de tipo TService | ApplicationException: si application es nulo.</returns>
+        public static TService? ToService<TService>(this IApplicationBuilder application)
         => application.ToIsNullOrEmptyThrow(nameof(application)).ApplicationServices.GetService<TService>();
     }
 }

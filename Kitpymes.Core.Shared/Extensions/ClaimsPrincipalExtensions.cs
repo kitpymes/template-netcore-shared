@@ -136,7 +136,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="claimsPrincipal">Una implementación System.Security.Principal.IPrincipal que admite múltiples identidades basadas en notificaciones.</param>
         /// <param name="claimType">El nombre del tipo de claim a buscar.</param>
         /// <returns>IEnumerable{TResult} | null | ApplicationExceptions: si el parámetro de tipo ClaimsPrincipal es nulo.</returns>
-        public static IEnumerable<TResult>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
+        public static IEnumerable<TResult?>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
         => claimsPrincipal.ToIsNullOrEmptyThrow(nameof(claimsPrincipal)).FindAll(claimType)?.Select(x => x.Value.ToDeserialize<TResult>());
     }
 }

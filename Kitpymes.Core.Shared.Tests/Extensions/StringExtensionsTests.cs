@@ -484,7 +484,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToZipCreate_Passing_ValidFiles_Returns_ZipFiles()
         {
-            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName;
             var sourceDirectoryPath = proyectDirectoryPath + "\\Fakes";
 
             var fileZipPath = sourceDirectoryPath + ".zip";
@@ -500,7 +500,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToZipCreate_Passing_ValidFilesWithCutomZipName_Returns_ZipFiles()
         {
-            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName;
             var sourceDirectoryPath = proyectDirectoryPath + "\\Fakes";
 
             var customZipName = Guid.NewGuid().ToString();
@@ -517,7 +517,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToZipExtract_Passing_ValidArchive_Returns_Files()
         {
-            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName;
+            var proyectDirectoryPath = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName;
             var folderNameToZip = "\\Fakes";
             var sourceDirectoryPath = proyectDirectoryPath + folderNameToZip;
 

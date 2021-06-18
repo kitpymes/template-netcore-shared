@@ -38,16 +38,16 @@ namespace Kitpymes.Core.Shared
         /// Obtiene los datos del ambiente de ejecución.
         /// </summary>
         /// <param name="services">Define un mecanismo para recuperar un objeto de servicio.</param>
-        /// <returns>El servicio del tipo IWebHostEnvironment o nulo.</returns>
-        public static IWebHostEnvironment ToEnvironment(this IServiceProvider services)
+        /// <returns>IWebHostEnvironment | nulo.</returns>
+        public static IWebHostEnvironment? ToEnvironment(this IServiceProvider services)
         => services.ToIsNullOrEmptyThrow(nameof(services)).GetService<IWebHostEnvironment>();
 
         /// <summary>
         /// Obtiene los datos del ambiente de ejecución.
         /// </summary>
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
-        /// <returns>El servicio del tipo IWebHostEnvironment o nulo.</returns>
-        public static IWebHostEnvironment ToEnvironment(this IServiceCollection services)
+        /// <returns>IWebHostEnvironment | nulo.</returns>
+        public static IWebHostEnvironment? ToEnvironment(this IServiceCollection services)
         => services.ToIsNullOrEmptyThrow(nameof(services)).ToService<IWebHostEnvironment>();
 
         #endregion ToEnvironment
@@ -72,8 +72,8 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <typeparam name="TService">Tipo del servicio a buscar.</typeparam>
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
-        /// <returns>El servicio o nulo.</returns>
-        public static TService ToService<TService>(this IServiceCollection services)
+        /// <returns>TService | nulo.</returns>
+        public static TService? ToService<TService>(this IServiceCollection services)
         => services.ToIsNullOrEmptyThrow(nameof(services)).BuildServiceProvider().GetService<TService>();
 
         /// <summary>
@@ -241,8 +241,8 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSettings">Tipo de clase a configurar.</typeparam>
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <param name="defaultSettings">Configuración por defecto.</param>
-        /// <returns>Una instancia del tipo TSettings.</returns>
-        public static TSettings ToSettings<TSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
+        /// <returns>TSettings | null.</returns>
+        public static TSettings? ToSettings<TSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
             where TSettings : class, new()
         => services
             .ToIsNullOrEmptyThrow(nameof(services))
@@ -256,15 +256,15 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TConfigureSettings">Tipo de clase para configuraciones custom (Usada para obtener datos de la db en el momento de inicio del sistema).</typeparam>
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <param name="defaultSettings">Configuración por defecto.</param>
-        /// <returns>Una instancia del tipo TSettings.</returns>
-        public static TSettings ToSettings<TSettings, TConfigureSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
+        /// <returns>TSettings | null.</returns>
+        public static TSettings? ToSettings<TSettings, TConfigureSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
             where TSettings : class, new()
             where TConfigureSettings : class, IConfigureOptions<TSettings>
         => services
             .ToIsNullOrEmptyThrow(nameof(services))
             .ToSettings(defaultSettings.ToConfigureOrDefault())
             .AddSingleton<IConfigureOptions<TSettings>, TConfigureSettings>()
-            .ToService<IOptions<TSettings>>().Value;
+            .ToService<IOptions<TSettings>>()?.Value;
 
         /// <summary>
         /// Configura las clases que coinciden con los archivos de configuración.
@@ -272,11 +272,11 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSettings">Tipo de clase a configurar.</typeparam>
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <param name="defaultSettings">Configuración por defecto.</param>
-        /// <returns>Una instancia del tipo TSettings.</returns>
+        /// <returns>IServiceCollection.</returns>
         public static IServiceCollection ToSettings<TSettings>(this IServiceCollection services, TSettings? defaultSettings)
             where TSettings : class, new()
         {
-            TSettings settings;
+            TSettings? settings;
 
             if (!services.ToIsNullOrEmptyThrow(nameof(services)).ToExists<TSettings>())
             {
@@ -288,11 +288,13 @@ namespace Kitpymes.Core.Shared
                 {
                     services.Configure<TSettings>(section);
 
-                    settings = services.ToService<IOptions<TSettings>>().Value;
+                    var service = services.ToService<IOptions<TSettings>>();
+
+                    settings = service?.Value;
 
                     if (defaultSettings != null)
                     {
-                        settings = settings.ToMapUpdate(defaultSettings);
+                        settings = settings?.ToMapUpdate(defaultSettings);
                     }
                 }
                 else
@@ -300,7 +302,10 @@ namespace Kitpymes.Core.Shared
                     settings = defaultSettings ?? new TSettings();
                 }
 
-                services.AddSingleton(settings);
+                if (settings != null)
+                {
+                    services.AddSingleton(settings);
+                }
             }
 
             return services;

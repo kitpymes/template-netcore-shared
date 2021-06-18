@@ -10,7 +10,7 @@ namespace Kitpymes.Core.Shared
     using System.Collections;
     using System.IO;
     using System.Linq;
-    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Xml.Serialization;
 
     /*
       Clase de extensión GenericExtensions
@@ -46,9 +46,9 @@ namespace Kitpymes.Core.Shared
         {
             using var memoryStream = new MemoryStream();
 
-            var binaryFormatter = new BinaryFormatter();
+            var serializer = new XmlSerializer(typeof(T));
 
-            binaryFormatter.Serialize(memoryStream, value);
+            serializer.Serialize(memoryStream, value);
 
             return memoryStream.ToArray();
         }
@@ -59,7 +59,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="input">Objeto a leer sus propieades.</param>
         /// <param name="includeNullOrEmptyProperty">Si es false, no incluye las propiedades cuyo valor sea nulo ni vacio.</param>
         /// <returns>IDictionary.</returns>
-        public static IDictionary ToDictionaryPropertyInfo<T>(this T input, bool includeNullOrEmptyProperty = false)
+        public static IDictionary? ToDictionaryPropertyInfo<T>(this T input, bool includeNullOrEmptyProperty = false)
             where T : class
         {
             return input.ToIsNullOrEmptyThrow(nameof(input)).GetType().GetProperties()
@@ -76,8 +76,10 @@ namespace Kitpymes.Core.Shared
                     }
 
                     return true;
-                })
+                })?
+#pragma warning disable CS8714 // El tipo no se puede usar como parámetro de tipo en el método o tipo genérico. La nulabilidad del argumento de tipo no coincide con la restricción "notnull"
                 .ToDictionary(
+#pragma warning restore CS8714 // El tipo no se puede usar como parámetro de tipo en el método o tipo genérico. La nulabilidad del argumento de tipo no coincide con la restricción "notnull"
                     property => property.Name.ToFirstLetterUpper(),
                     property => property.GetValue(input, null)?.ToString());
         }

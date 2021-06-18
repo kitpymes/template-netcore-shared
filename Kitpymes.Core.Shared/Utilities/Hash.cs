@@ -8,6 +8,7 @@
 namespace Kitpymes.Core.Shared.Util
 {
     using System;
+    using System.Diagnostics.CodeAnalysis;
     using System.Linq;
     using System.Security.Cryptography;
     using System.Text;
@@ -33,14 +34,15 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <param name="length">Cantidad de caracteres.</param>
         /// <param name="validChars">Caracteres que se usaran para crear el texto.</param>
-        /// <returns>El texto.</returns>
+        /// <returns>string | ApplicationException: si length es menor que 1 o validChars es nulo o vacio.</returns>
         public static string CreateRandom(int length = 6, string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!¡@#$%€^&*?¿_-+")
         {
+            length.ToIsLessThrow(1, nameof(length));
+            validChars.ToIsNullOrEmptyThrow(nameof(validChars));
+
             var random = new Random();
 
             char[] chars = new char[length];
-
-            validChars ??= "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!¡@#$%€^&*?¿_-+";
 
             for (int i = 0; i < length; i++)
             {
@@ -58,7 +60,8 @@ namespace Kitpymes.Core.Shared.Util
         /// Cifra un texto.
         /// </summary>
         /// <param name="text">Texto a cifrar.</param>
-        /// <returns>El texto cifrado.</returns>
+        /// <returns>string | ApplicationException: si texto es nulo o vacio.</returns>
+        [return: NotNull]
         public static string CreateSHA256(string text)
         {
             using var algorithm = SHA256.Create();
@@ -87,7 +90,8 @@ namespace Kitpymes.Core.Shared.Util
         /// Cifra un texto.
         /// </summary>
         /// <param name="text">Texto a cifrar.</param>
-        /// <returns>El texto cifrado.</returns>
+        /// <returns>string | ApplicationException: si texto es nulo o vacio.</returns>
+        [return: NotNull]
         public static string CreateSHA512(string text)
         {
             using var algorithm = SHA512.Create();
@@ -112,13 +116,14 @@ namespace Kitpymes.Core.Shared.Util
 
         #region Private
 
+        [return: NotNull]
         private static string Create(HashAlgorithm algorithm, string text)
         {
             text.ToIsNullOrEmptyThrow(nameof(text));
 
-            algorithm?.ComputeHash(Encoding.UTF8.GetBytes(text));
+            algorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
 
-            var hash = algorithm?.Hash;
+            var hash = algorithm.Hash.ToIsNullOrAnyThrow(nameof(algorithm.Hash));
 
             var result = hash.Select(x => x.ToString("x2", System.Globalization.CultureInfo.CurrentCulture));
 

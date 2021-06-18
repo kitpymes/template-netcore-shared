@@ -37,9 +37,9 @@ namespace Kitpymes.Core.Shared.Tests
 
             var userActual = userSerialize.ToDeserialize<FakeUser>(); 
             
-            Assert.AreEqual(userExpected.Age, userActual.Age);
-            Assert.AreEqual(userExpected.Email, userActual.Email);
-            Assert.AreEqual(userExpected.Name, userActual.Name);
+            Assert.AreEqual(userExpected.Age, userActual?.Age);
+            Assert.AreEqual(userExpected.Email, userActual?.Email);
+            Assert.AreEqual(userExpected.Name, userActual?.Name);
         }
     }
 }

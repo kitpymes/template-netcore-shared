@@ -59,25 +59,43 @@ namespace Kitpymes.Core.Shared.Tests
             return this;
         }
 
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override Stream? Body { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override long? ContentLength { get; set; }
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override string? ContentType { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override IRequestCookieCollection? Cookies { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override IFormCollection? Form { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override IHeaderDictionary Headers { get; } = new HeaderDictionary();
         public override HostString Host { get; set; }
         public override bool IsHttps { get; set; }
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override string? Method { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override PathString Path { get; set; }
         public override PathString PathBase { get; set; }
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override string? Protocol { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override IQueryCollection? Query { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override QueryString QueryString { get; set; }
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override string? Scheme { get; set; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
 
         public override bool HasFormContentType { get; }
 
+#pragma warning disable CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
         public override HttpContext? HttpContext { get; }
+#pragma warning restore CS8764 // La nulabilidad del tipo de valor devuelto no coincide con el miembro invalidado (posiblemente debido a los atributos de nulabilidad).
 
         public override Task<IFormCollection> ReadFormAsync(CancellationToken cancellationToken = default)
         {

@@ -1,3 +1,6 @@
+# v.1.2.1
+- Se migra de la versión netcoreapp3 a net5 y se actualizan librerías.
+
 # v.1.2.0
 - Se realizan mejoras en "Result" y en varias extensiones.
 

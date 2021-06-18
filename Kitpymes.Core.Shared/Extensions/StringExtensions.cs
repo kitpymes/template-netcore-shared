@@ -318,13 +318,15 @@ namespace Kitpymes.Core.Shared
             CompressionLevel compressionLevel = CompressionLevel.Optimal,
             bool removeSourceDirectoryPath = false)
         {
+            var validSourceDirectoryPath = sourceDirectoryPath.ToIsNullOrEmptyThrow(nameof(sourceDirectoryPath));
+
             customZipName = string.IsNullOrWhiteSpace(customZipName) ? sourceDirectoryPath?.Split("\\").Last() : customZipName;
 
-            ZipFile.CreateFromDirectory(sourceDirectoryPath, $"{destinationDirectoryPath}/{customZipName}.zip", compressionLevel, false);
+            ZipFile.CreateFromDirectory(validSourceDirectoryPath, $"{destinationDirectoryPath}/{customZipName}.zip", compressionLevel, false);
 
             if (removeSourceDirectoryPath)
             {
-                Directory.Delete(sourceDirectoryPath, true);
+                Directory.Delete(validSourceDirectoryPath, true);
             }
         }
 
@@ -338,7 +340,10 @@ namespace Kitpymes.Core.Shared
             this string? sourceFilePath,
             string? destinationDirectoryPath,
             bool overwriteFiles = false)
-        => ZipFile.ExtractToDirectory(sourceFilePath, destinationDirectoryPath, overwriteFiles);
+        => ZipFile.ExtractToDirectory(
+            sourceFilePath.ToIsNullOrEmptyThrow(nameof(sourceFilePath)),
+            destinationDirectoryPath.ToIsNullOrEmptyThrow(nameof(destinationDirectoryPath)),
+            overwriteFiles);
 
         #endregion ToZip
 

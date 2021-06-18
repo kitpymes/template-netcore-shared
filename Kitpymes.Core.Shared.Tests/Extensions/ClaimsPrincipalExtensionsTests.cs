@@ -307,15 +307,19 @@ namespace Kitpymes.Core.Shared.Tests
             var claimsPrincipalActual = fakeHttpContext.User.ToGetAll<string>(claimTypeRole);
             var threadCurrentPrincipalActual = ((ClaimsPrincipal)Thread.CurrentPrincipal).ToGetAll<string>(claimTypeRole);
 
-            Assert.IsNotNull(claimsPrincipalActual);
-            Assert.IsTrue(claimsPrincipalActual.Count() == 2);
-            Assert.IsTrue(claimsPrincipalActual.Contains(permission_add));
-            Assert.IsTrue(claimsPrincipalActual.Contains(permission_edit));
+            if (claimsPrincipalActual != null)
+            {
+                Assert.IsTrue(claimsPrincipalActual.Count() == 2);
+                Assert.IsTrue(claimsPrincipalActual.Contains(permission_add));
+                Assert.IsTrue(claimsPrincipalActual.Contains(permission_edit));
+            }
 
-            Assert.IsNotNull(threadCurrentPrincipalActual);
-            Assert.IsTrue(threadCurrentPrincipalActual.Count() == 2);
-            Assert.IsTrue(threadCurrentPrincipalActual.Contains(permission_add));
-            Assert.IsTrue(threadCurrentPrincipalActual.Contains(permission_edit));
+            if (threadCurrentPrincipalActual != null)
+            {
+                Assert.IsTrue(threadCurrentPrincipalActual.Count() == 2);
+                Assert.IsTrue(threadCurrentPrincipalActual.Contains(permission_add));
+                Assert.IsTrue(threadCurrentPrincipalActual.Contains(permission_edit));
+            }
         }
 
         [TestMethod]
@@ -337,15 +341,19 @@ namespace Kitpymes.Core.Shared.Tests
             var claimsPrincipalActual = fakeHttpContext.User.ToGetAll<int>(claimTypeRole);
             var threadCurrentPrincipalActual = ((ClaimsPrincipal)Thread.CurrentPrincipal).ToGetAll<int>(claimTypeRole);
 
-            Assert.IsNotNull(claimsPrincipalActual);
-            Assert.IsTrue(claimsPrincipalActual.Count() == 2);
-            Assert.IsTrue(claimsPrincipalActual.Contains(permissionId_add));
-            Assert.IsTrue(claimsPrincipalActual.Contains(permissionId_edit));
+            if (claimsPrincipalActual != null)
+            {
+                Assert.IsTrue(claimsPrincipalActual.Count() == 2);
+                Assert.IsTrue(claimsPrincipalActual.Contains(permissionId_add));
+                Assert.IsTrue(claimsPrincipalActual.Contains(permissionId_edit));
+            }
 
-            Assert.IsNotNull(threadCurrentPrincipalActual);
-            Assert.IsTrue(threadCurrentPrincipalActual.Count() == 2);
-            Assert.IsTrue(threadCurrentPrincipalActual.Contains(permissionId_add));
-            Assert.IsTrue(threadCurrentPrincipalActual.Contains(permissionId_edit));
+            if (threadCurrentPrincipalActual != null)
+            {
+                Assert.IsTrue(threadCurrentPrincipalActual.Count() == 2);
+                Assert.IsTrue(threadCurrentPrincipalActual.Contains(permissionId_add));
+                Assert.IsTrue(threadCurrentPrincipalActual.Contains(permissionId_edit));
+            }
         }
 
         [TestMethod]
@@ -379,22 +387,26 @@ namespace Kitpymes.Core.Shared.Tests
             var claimsPrincipalActual = fakeHttpContext.User.ToGetAll<FakeUser>(claimTypeUserData);
             var threadCurrentPrincipalActual = ((ClaimsPrincipal)Thread.CurrentPrincipal).ToGetAll<FakeUser>(claimTypeUserData);
 
-            var resultItemClaimsPrincipalActual = claimsPrincipalActual.First(x => x.Id == fakeObject.Id);
-            var resultItemThreadCurrentPrincipalActual = threadCurrentPrincipalActual.First(x => x.Id == fakeObject1.Id);
+            if (claimsPrincipalActual != null)
+            {
+                var resultItemClaimsPrincipalActual = claimsPrincipalActual.First(x => x?.Id == fakeObject.Id);
 
-            Assert.IsNotNull(claimsPrincipalActual);
-            Assert.IsTrue(claimsPrincipalActual.Count() == 2);
-            Assert.AreEqual(fakeObject.Id, resultItemClaimsPrincipalActual.Id);
-            Assert.AreEqual(fakeObject.Name, resultItemClaimsPrincipalActual.Name);
-            Assert.AreEqual(fakeObject.Age, resultItemClaimsPrincipalActual.Age);
-            CollectionAssert.AreEqual(fakeObject.Permissions, resultItemClaimsPrincipalActual.Permissions);
+                Assert.IsTrue(claimsPrincipalActual.Count() == 2);
+                Assert.AreEqual(fakeObject.Id, resultItemClaimsPrincipalActual?.Id);
+                Assert.AreEqual(fakeObject.Name, resultItemClaimsPrincipalActual?.Name);
+                Assert.AreEqual(fakeObject.Age, resultItemClaimsPrincipalActual?.Age);
+                CollectionAssert.AreEqual(fakeObject.Permissions, resultItemClaimsPrincipalActual?.Permissions);
+            }
 
-            Assert.IsNotNull(threadCurrentPrincipalActual);
-            Assert.IsTrue(threadCurrentPrincipalActual.Count() == 2);
-            Assert.AreEqual(fakeObject1.Id, resultItemThreadCurrentPrincipalActual.Id);
-            Assert.AreEqual(fakeObject1.Name, resultItemThreadCurrentPrincipalActual.Name);
-            Assert.AreEqual(fakeObject1.Age, resultItemThreadCurrentPrincipalActual.Age);
-            CollectionAssert.AreEqual(fakeObject1.Permissions, resultItemThreadCurrentPrincipalActual.Permissions);
+            if (threadCurrentPrincipalActual != null)
+            {
+                var resultItemThreadCurrentPrincipalActual = threadCurrentPrincipalActual.First(x => x?.Id == fakeObject1.Id);
+                Assert.IsTrue(threadCurrentPrincipalActual.Count() == 2);
+                Assert.AreEqual(fakeObject1.Id, resultItemThreadCurrentPrincipalActual?.Id);
+                Assert.AreEqual(fakeObject1.Name, resultItemThreadCurrentPrincipalActual?.Name);
+                Assert.AreEqual(fakeObject1.Age, resultItemThreadCurrentPrincipalActual?.Age);
+                CollectionAssert.AreEqual(fakeObject1.Permissions, resultItemThreadCurrentPrincipalActual?.Permissions);
+            }
         }
 
         #endregion ToGetAll

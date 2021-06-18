@@ -30,9 +30,9 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="T">Tipo de objeto.</typeparam>
         /// <param name="value">Valor del objeto.</param>
         /// <param name="action">Opciones de configuración.</param>
-        /// <returns>El objeto serializado.</returns>
+        /// <returns>string | null.</returns>
         public static string ToSerialize<T>(this T value, Action<JsonSerializerOptions>? action = null)
-        => JsonSerializer.Serialize(value, typeof(T), action.ToConfigureOrDefault());
+        => JsonSerializer.Serialize(value.ToIsNullOrEmptyThrow(nameof(value)), typeof(T), action.ToConfigureOrDefault());
 
         /// <summary>
         /// Deserializa un objeto.
@@ -40,8 +40,8 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="T">Tipo de objeto.</typeparam>
         /// <param name="value">Valor del objeto.</param>
         /// <param name="action">Opciones de configuración.</param>
-        /// <returns>El objeto deserializado.</returns>
-        public static T ToDeserialize<T>(this string value, Action<JsonSerializerOptions>? action = null)
-        => JsonSerializer.Deserialize<T>(value, action.ToConfigureOrDefault());
+        /// <returns>T | null.</returns>
+        public static T? ToDeserialize<T>(this string value, Action<JsonSerializerOptions>? action = null)
+        => JsonSerializer.Deserialize<T>(value.ToIsNullOrEmptyThrow(nameof(value)), action.ToConfigureOrDefault());
     }
 }

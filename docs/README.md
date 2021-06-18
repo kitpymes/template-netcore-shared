@@ -11,13 +11,13 @@
 
 ## 📋 Requerimientos 
 
-* Visual Studio >= 2019 (v16.3)
+* Visual Studio >= 2019
 
-* NET TargetFramework >= netcoreapp3.0
+* NET TargetFramework >= net5.0
 
-* Net Core SDK >= 3.0.100
+* Net Core SDK >= 5.0.100
 
-* C# >= 8.0
+* C# >= 9.0
 
 * Conocimientos sobre Inyección de Dependencias
 
@@ -45,7 +45,8 @@ dotnet add package Kitpymes.Core.Shared
 ```cs
 public static class ActionExtensions
 {
-    public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? defaultOptions = null)
+    [return: NotNull]
+    public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? overrideDefaultOptions = null)
         where TOptions : class, new() 
     { }
 }
@@ -55,7 +56,7 @@ public static class ActionExtensions
 public static class AgileMapperExtensions
 {
     public static TSource ToMapClone<TSource>(this TSource source, params Expression<Action<IFullMappingInlineConfigurator<TSource, TSource>>>[] configurations)
-        where TSource : class
+        where TSource : class 
     { }
 
     public static TDestination ToMapNew<TSource, TDestination>(this TSource source, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
@@ -91,20 +92,22 @@ public static class ApplicationBuilderExtensions
 
     public static bool ToExists<TService>(this IApplicationBuilder application) { }
  
-    public static TService ToService<TService>(this IApplicationBuilder application) { }
+    public static TService? ToService<TService>(this IApplicationBuilder application) { }
 }
 ```
 
 ```cs
 public static class ByteExtensions
 {
+    [return: NotNull]
     public static byte[] ToCompress(this byte[] bytes) { }
 
+    [return: NotNull]
     public static byte[] ToDecompress(this byte[] bytes) { }
 
-    public static TResult ToDecompress<TResult>(this byte[] bytes) { }
+    public static TResult? ToDecompress<TResult>(this byte[] bytes) { }
 
-    public static TResult ToObject<TResult>(this byte[] bytes) { }
+    public static TResult? ToObject<TResult>(this byte[] bytes) { }
 }
 ```
 
@@ -260,7 +263,7 @@ public static class ClaimsPrincipalExtensions
         where TResult : struct
     { }
 
-    public static IEnumerable<TResult>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType) { }
+    public static IEnumerable<TResult?>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType) { }
 }
 ```
 
@@ -333,7 +336,7 @@ public static class GenericExtensions
         where T : class
     { }
 
-    public static IDictionary ToDictionaryPropertyInfo<T>(this T input, bool includeNullOrEmptyProperty = false)
+    public static IDictionary? ToDictionaryPropertyInfo<T>(this T input, bool includeNullOrEmptyProperty = false)
         where T : class
     { }
 }
@@ -390,7 +393,7 @@ public static class JsonExtensions
 {
     public static string ToSerialize<T>(this T value, Action<JsonSerializerOptions>? action = null) { }
 
-    public static T ToDeserialize<T>(this string value, Action<JsonSerializerOptions>? action = null) { }
+    public static T? ToDeserialize<T>(this string value, Action<JsonSerializerOptions>? action = null) { }
 }
 ```
 
@@ -408,9 +411,9 @@ public static class QueryableExtensions
 ```cs
 public static class ServiceCollectionExtensions
 {
-    public static IWebHostEnvironment ToEnvironment(this IServiceProvider services) { }
+    public static IWebHostEnvironment? ToEnvironment(this IServiceProvider services) { }
 
-    public static IWebHostEnvironment ToEnvironment(this IServiceCollection services) { }
+    public static IWebHostEnvironment? ToEnvironment(this IServiceCollection services) { }
 
     public static bool ToExists<TService>(this IServiceCollection services) { }
 
@@ -424,11 +427,11 @@ public static class ServiceCollectionExtensions
 
     public static IServiceCollection ToConfiguration(this IServiceCollection services, IConfiguration configuration) { }
 
-    public static TSettings ToSettings<TSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
+    public static TSettings? ToSettings<TSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
         where TSettings : class, new()
     { }
 
-    public static TSettings ToSettings<TSettings, TConfigureSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
+    public static TSettings? ToSettings<TSettings, TConfigureSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
         where TSettings : class, new()
         where TConfigureSettings : class, IConfigureOptions<TSettings>
     { }

@@ -7,9 +7,11 @@
 
 namespace Kitpymes.Core.Shared
 {
+    using System.Diagnostics.CodeAnalysis;
     using System.IO;
     using System.IO.Compression;
-    using System.Runtime.Serialization.Formatters.Binary;
+    using System.Linq;
+    using System.Xml.Serialization;
 
     /*
         Clase de extensión ByteExtensions
@@ -29,16 +31,17 @@ namespace Kitpymes.Core.Shared
         /// Comprime bytes.
         /// </summary>
         /// <param name="bytes">Bytes a comprimir.</param>
-        /// <returns>byte[] | ApplicationException si los bytes son nulo o la cantidad es menor o igual que cero.</returns>
+        /// <returns>byte[] | ApplicationException: si bytes es nulo o no contiene bytes.</returns>
+        [return: NotNull]
         public static byte[] ToCompress(this byte[] bytes)
         {
-            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
+            bytes.ToIsNullOrAnyThrow(nameof(bytes));
 
             using var outputStream = new MemoryStream();
 
             using (var zip = new GZipStream(outputStream, CompressionMode.Compress))
             {
-                zip.Write(bytes, 0, validBytes.Length);
+                zip.Write(bytes, 0, bytes.Count());
             }
 
             return outputStream.ToArray();
@@ -48,14 +51,15 @@ namespace Kitpymes.Core.Shared
         /// Descomprime bytes.
         /// </summary>
         /// <param name="bytes">Bytes a descomprimir.</param>
-        /// <returns>byte[] | ApplicationException si los bytes son nulo o la cantidad es menor o igual que cero.</returns>
+        /// <returns>byte[] | ApplicationException: si bytes es nulo o no contiene bytes.</returns>
+        [return: NotNull]
         public static byte[] ToDecompress(this byte[] bytes)
         {
-            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
+            bytes.ToIsNullOrEmptyThrow(nameof(bytes));
 
             using var outputStream = new MemoryStream();
 
-            using (var inputStream = new MemoryStream(validBytes))
+            using (var inputStream = new MemoryStream(bytes))
 
             using (var gZipStream = new GZipStream(inputStream, CompressionMode.Decompress))
             {
@@ -70,22 +74,22 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <typeparam name="TResult">Tipo de objeto a devolver.</typeparam>
         /// <param name="bytes">Bytes a convertir en un objeto.</param>
-        /// <returns>TResult | ApplicationException si los bytes son nulo o la cantidad es menor o igual que cero.</returns>
-        public static TResult ToDecompress<TResult>(this byte[] bytes)
+        /// <returns>TResult | null | ApplicationException: si bytes es nulo o no contiene bytes.</returns>
+        public static TResult? ToDecompress<TResult>(this byte[] bytes)
         {
-            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
+            bytes.ToIsNullOrAnyThrow(nameof(bytes));
 
-            using var memoryStream = new MemoryStream();
+            using MemoryStream memoryStream = new ();
 
-            var binaryFormatter = new BinaryFormatter();
-
-            var decompressed = validBytes.ToDecompress();
+            var decompressed = bytes.ToDecompress();
 
             memoryStream.Write(decompressed, 0, decompressed.Length);
 
             memoryStream.Seek(0, SeekOrigin.Begin);
 
-            return (TResult)binaryFormatter.Deserialize(memoryStream);
+            var serializer = new XmlSerializer(typeof(TResult));
+
+            return (TResult?)serializer.Deserialize(memoryStream);
         }
 
         /// <summary>
@@ -93,16 +97,16 @@ namespace Kitpymes.Core.Shared
         /// </summary>
         /// <typeparam name="TResult">Tipo de objeto.</typeparam>
         /// <param name="bytes">Bytes a convertir en objeto.</param>
-        /// <returns>El objeto.</returns>
-        public static TResult ToObject<TResult>(this byte[] bytes)
+        /// <returns>TResult | null | ApplicationException: si bytes es nulo o no contiene bytes.</returns>
+        public static TResult? ToObject<TResult>(this byte[] bytes)
         {
-            var validBytes = bytes.ToIsNullOrEmptyThrow(nameof(bytes));
+            bytes.ToIsNullOrAnyThrow(nameof(bytes));
 
-            using MemoryStream memoryStream = new MemoryStream(validBytes);
+            using MemoryStream memoryStream = new (bytes);
 
-            var binaryFormatter = new BinaryFormatter();
+            var serializer = new XmlSerializer(typeof(TResult));
 
-            return (TResult)binaryFormatter.Deserialize(memoryStream);
+            return (TResult?)serializer.Deserialize(memoryStream);
         }
     }
 }

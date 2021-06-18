@@ -175,10 +175,13 @@ namespace Kitpymes.Core.Shared.Tests
 
             var properties = fakeUserExpected.ToDictionaryPropertyInfo();
 
-            Assert.IsTrue(properties.Count == 3);
-            Assert.AreEqual(fakeUserExpected.Age.ToString(), properties["Age"]);
-            Assert.AreEqual(fakeUserExpected.Email, properties["Email"]);
-            Assert.AreEqual(fakeUserExpected.Name, properties["Name"]);
+            if (properties is not null)
+            {
+                Assert.IsTrue(properties.Count == 3);
+                Assert.AreEqual(fakeUserExpected.Age.ToString(), properties["Age"]);
+                Assert.AreEqual(fakeUserExpected.Email, properties["Email"]);
+                Assert.AreEqual(fakeUserExpected.Name, properties["Name"]);
+            }
         }
 
         [TestMethod]
@@ -193,12 +196,15 @@ namespace Kitpymes.Core.Shared.Tests
 
             var properties = fakeUserExpected.ToDictionaryPropertyInfo(true);
 
-            Assert.IsTrue(properties.Count == 5);
-            Assert.AreEqual(fakeUserExpected.Id.ToString(), properties["Id"]);
-            Assert.AreEqual(fakeUserExpected.Age.ToString(), properties["Age"]);
-            Assert.AreEqual(fakeUserExpected.Email, properties["Email"]);
-            Assert.AreEqual(fakeUserExpected.Name, properties["Name"]);
-            Assert.AreEqual(fakeUserExpected.Permissions?.ToString(), properties["Permissions"]);
+            if (properties is not null)
+            {
+                Assert.IsTrue(properties.Count == 5);
+                Assert.AreEqual(fakeUserExpected.Id.ToString(), properties["Id"]);
+                Assert.AreEqual(fakeUserExpected.Age.ToString(), properties["Age"]);
+                Assert.AreEqual(fakeUserExpected.Email, properties["Email"]);
+                Assert.AreEqual(fakeUserExpected.Name, properties["Name"]);
+                Assert.AreEqual(fakeUserExpected.Permissions?.ToString(), properties["Permissions"]);
+            }
         }
 
         #endregion ToDictionaryPropertyInfo
@@ -219,9 +225,9 @@ namespace Kitpymes.Core.Shared.Tests
 
             var valueActual = bytes.ToObject<FakeUser>();
 
-            Assert.AreEqual(valueExpected.Age, valueActual.Age);
-            Assert.AreEqual(valueExpected.Email, valueActual.Email);
-            Assert.AreEqual(valueExpected.Name, valueActual.Name);
+            Assert.AreEqual(valueExpected.Age, valueActual?.Age);
+            Assert.AreEqual(valueExpected.Email, valueActual?.Email);
+            Assert.AreEqual(valueExpected.Name, valueActual?.Name);
         }
 
         #endregion ToBytes

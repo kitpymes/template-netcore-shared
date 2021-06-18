@@ -47,7 +47,7 @@ namespace Kitpymes.Core.Shared.Util
         {
             var errors = values.Where(value =>
             {
-                if (IsNullOrEmpty(value).HasErrors)
+                if (value is null)
                 {
                     return true;
                 }
@@ -190,7 +190,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsRegexMatch(string regex, params string?[] values)
         {
-            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !System.Text.RegularExpressions.Regex.IsMatch(value, regex, options: System.Text.RegularExpressions.RegexOptions.CultureInvariant));
+            var errors = values.Where(value => string.IsNullOrWhiteSpace(value) || !System.Text.RegularExpressions.Regex.IsMatch(value, regex, options: System.Text.RegularExpressions.RegexOptions.CultureInvariant));
 
             return (errors.Any(), errors.Count());
         }
@@ -230,7 +230,7 @@ namespace Kitpymes.Core.Shared.Util
         {
             var errors = values.Where(value =>
             {
-                if (IsNullOrEmpty(value).HasErrors || IsRegexMatch(Regexp.ForEmail, value).HasErrors)
+                if (string.IsNullOrWhiteSpace(value) || IsRegexMatch(Regexp.ForEmail, value).HasErrors)
                 {
                     return true;
                 }
@@ -329,7 +329,8 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsDigit(params string?[] values)
         {
-            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(char.IsDigit));
+            var errors = values.ToIsNullOrAnyThrow(nameof(values))
+                .Where(value => string.IsNullOrWhiteSpace(value) || !value.Any(char.IsDigit));
 
             return (errors.Any(), errors.Count());
         }
@@ -341,11 +342,11 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsUniqueChars(params string?[] values)
         {
-            var errors = values.Where(value =>
+            var errors = values.ToIsNullOrAnyThrow(nameof(values)).Where(value =>
             {
                 var set = new HashSet<char>();
 
-                return IsNullOrEmpty(value).HasErrors || value.Any(x => !set.Add(x));
+                return string.IsNullOrWhiteSpace(value) || value.Any(x => !set.Add(x));
             });
 
             return (errors.Any(), errors.Count());
@@ -358,7 +359,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsEspecialChars(params string?[] values)
         {
-            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(x => !char.IsLetterOrDigit(x)));
+            var errors = values.Where(value => string.IsNullOrWhiteSpace(value) || !value.Any(x => !char.IsLetterOrDigit(x)));
 
             return (errors.Any(), errors.Count());
         }
@@ -370,7 +371,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsLowercase(params string?[] values)
         {
-            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(char.IsLower));
+            var errors = values.Where(value => string.IsNullOrWhiteSpace(value) || !value.Any(char.IsLower));
 
             return (errors.Any(), errors.Count());
         }
@@ -382,7 +383,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>(bool HasErrors, int Count).</returns>
         public static (bool HasErrors, int Count) IsUppercase(params string?[] values)
         {
-            var errors = values.Where(value => IsNullOrEmpty(value).HasErrors || !value.Any(char.IsUpper));
+            var errors = values.Where(value => string.IsNullOrWhiteSpace(value) || !value.Any(char.IsUpper));
 
             return (errors.Any(), errors.Count());
         }

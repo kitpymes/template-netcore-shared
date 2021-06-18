@@ -44,7 +44,7 @@ namespace Kitpymes.Core.Shared.Tests
                 });
             }
 
-            var projectDirectoryName = Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName
+            var projectDirectoryName = Directory.GetParent(Environment.CurrentDirectory)?.Parent?.Parent?.FullName
                 .Split("\\")
                 .Last();
 

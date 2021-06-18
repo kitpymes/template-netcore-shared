@@ -22,7 +22,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = application.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsDevelopment());
          }
 
@@ -36,7 +36,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = application.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsProduction());
         }
 
@@ -50,7 +50,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = application.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsStaging());
         }
 
@@ -64,7 +64,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = application.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsEnvironment(environmentNameExpected));
         }
 
@@ -135,7 +135,7 @@ namespace Kitpymes.Core.Shared.Tests
             var serviceActual = application.ToService<IWebHostEnvironment>();
 
             Assert.IsNotNull(serviceActual);
-            Assert.AreEqual(environmentNameExpected, serviceActual.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, serviceActual?.EnvironmentName);
             Assert.IsTrue(serviceActual.IsDevelopment());
         }
 

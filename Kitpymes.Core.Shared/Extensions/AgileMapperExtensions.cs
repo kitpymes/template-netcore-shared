@@ -35,7 +35,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TSource">El tipo del objeto fuente a clonar.</typeparam>
         /// <param name="source">Objeto a clonar.</param>
         /// <param name="configurations">Configuraciones de mapeo.</param>
-        /// <returns>Nuevo objeto clonado.</returns>
+        /// <returns>TSource.</returns>
         public static TSource ToMapClone<TSource>(this TSource source, params Expression<Action<IFullMappingInlineConfigurator<TSource, TSource>>>[] configurations)
             where TSource : class
         => source.DeepClone(configurations);
@@ -47,7 +47,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TDestination">El tipo del objeto destino a mapear.</typeparam>
         /// <param name="source">Objeto fuente a mapear.</param>
         /// <param name="configurations">Configuraciones de mapeo.</param>
-        /// <returns>Nuevo objeto del tipo TDestination.</returns>
+        /// <returns>TDestination.</returns>
         public static TDestination ToMapNew<TSource, TDestination>(this TSource source, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
             where TSource : class
             where TDestination : class
@@ -59,7 +59,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TDestination">El tipo del objeto destino a mapear.</typeparam>
         /// <param name="source">Objeto fuente a mapear.</param>
         /// <param name="configurations">Configuraciones de mapeo.</param>
-        /// <returns>Nuevo objeto destino mapeado.</returns>
+        /// <returns>TDestination.</returns>
         public static TDestination ToMapNew<TDestination>(this object source, params Expression<Action<IFullMappingInlineConfigurator<object, TDestination>>>[] configurations)
             where TDestination : class
         => source.Map().ToANew(configurations);
@@ -73,7 +73,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">Objeto fuente a mapear.</param>
         /// <param name="destination">Objeto destino a mapear.</param>
         /// <param name="configurations">Configuraciones de mapeo.</param>
-        /// <returns>Nuevo objeto actualizado.</returns>
+        /// <returns>TDestination.</returns>
         public static TDestination ToMapUpdate<TSource, TDestination>(this TSource source, TDestination destination, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
             where TSource : class
             where TDestination : class
@@ -88,7 +88,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="source">Objeto fuente a mapear.</param>
         /// <param name="destination">Objeto destino a mapear.</param>
         /// <param name="configurations">Configuraciones de mapeo.</param>
-        /// <returns>Nuevo objeto combinado.</returns>
+        /// <returns>TDestination.</returns>
         public static TDestination ToMapMerge<TSource, TDestination>(this TSource source, TDestination destination, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
             where TSource : class
             where TDestination : class
@@ -101,7 +101,7 @@ namespace Kitpymes.Core.Shared
         /// <typeparam name="TDestination">El tipo del objeto destino a mapear.</typeparam>
         /// <param name="queryable">Lista fuente a mapear.</param>
         /// <param name="configuration">Configuracion del mapeo.</param>
-        /// <returns>Nueva lista destino mapeada.</returns>
+        /// <returns>IQueryable{TDestination}.</returns>
         public static IQueryable<TDestination> ToMapList<TSource, TDestination>(this IQueryable<TSource> queryable, Expression<Action<IFullProjectionInlineConfigurator<TSource, TDestination>>>? configuration = null)
             where TSource : class
             where TDestination : class

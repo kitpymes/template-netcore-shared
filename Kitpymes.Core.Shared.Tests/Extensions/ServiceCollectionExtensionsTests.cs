@@ -23,7 +23,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = services.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsDevelopment());
         }
 
@@ -36,7 +36,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = services.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsProduction());
         }
 
@@ -49,7 +49,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = services.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsStaging());
         }
 
@@ -62,7 +62,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = services.ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsEnvironment(environmentNameExpected));
         }
 
@@ -75,7 +75,7 @@ namespace Kitpymes.Core.Shared.Tests
             var result = services.BuildServiceProvider().ToEnvironment();
 
             Assert.IsNotNull(result);
-            Assert.AreEqual(environmentNameExpected, result.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
             Assert.IsTrue(result.IsDevelopment());
         }
 
@@ -127,7 +127,7 @@ namespace Kitpymes.Core.Shared.Tests
             var serviceActual = services.ToService<IWebHostEnvironment>();
 
             Assert.IsNotNull(serviceActual);
-            Assert.AreEqual(environmentNameExpected, serviceActual.EnvironmentName);
+            Assert.AreEqual(environmentNameExpected, serviceActual?.EnvironmentName);
             Assert.IsTrue(serviceActual.IsDevelopment());
         }
 
@@ -270,16 +270,17 @@ namespace Kitpymes.Core.Shared.Tests
                 .ToConfiguration(directoryPath, (jsonFilename, false, true))
                 .ToSettings<FakeSettings>();
 
-            Assert.IsNotNull(settingsActual);
+            if (settingsActual is not null)
+            {
+                Assert.IsTrue(settingsActual.FacebookSettings.Enabled);
+                Assert.IsNotNull(settingsActual.FacebookSettings.Key);
 
-            Assert.IsTrue(settingsActual.FacebookSettings.Enabled);
-            Assert.IsNotNull(settingsActual.FacebookSettings.Key);
+                Assert.IsFalse(settingsActual.GoogleSettings.Enabled);
+                Assert.IsTrue(string.IsNullOrWhiteSpace(settingsActual.GoogleSettings.Key));
 
-            Assert.IsFalse(settingsActual.GoogleSettings.Enabled);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(settingsActual.GoogleSettings.Key));
-
-            Assert.IsFalse(settingsActual.LinkedinSettings.Enabled);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(settingsActual.LinkedinSettings.Key));
+                Assert.IsFalse(settingsActual.LinkedinSettings.Enabled);
+                Assert.IsTrue(string.IsNullOrWhiteSpace(settingsActual.LinkedinSettings.Key));
+            }
         }
 
         [TestMethod]
@@ -297,16 +298,17 @@ namespace Kitpymes.Core.Shared.Tests
                 .ToConfiguration(expectedConfiguration)
                 .ToSettings<FakeSettings>();
 
-            Assert.IsNotNull(settingsActual);
+            if (settingsActual is not null)
+            {
+                Assert.AreEqual(Convert.ToBoolean(expectedConfiguration[0].value), settingsActual.FacebookSettings.Enabled);
+                Assert.AreEqual(expectedConfiguration[1].value, settingsActual.FacebookSettings.Key);
 
-            Assert.AreEqual(Convert.ToBoolean(expectedConfiguration[0].value), settingsActual.FacebookSettings.Enabled);
-            Assert.AreEqual(expectedConfiguration[1].value, settingsActual.FacebookSettings.Key);
+                Assert.AreEqual(Convert.ToBoolean(expectedConfiguration[2].value), settingsActual.GoogleSettings.Enabled);
+                Assert.AreEqual(expectedConfiguration[3].value, settingsActual.GoogleSettings.Key);
 
-            Assert.AreEqual(Convert.ToBoolean(expectedConfiguration[2].value), settingsActual.GoogleSettings.Enabled);
-            Assert.AreEqual(expectedConfiguration[3].value, settingsActual.GoogleSettings.Key);
-
-            Assert.IsFalse(settingsActual.LinkedinSettings.Enabled);
-            Assert.IsTrue(string.IsNullOrWhiteSpace(settingsActual.LinkedinSettings.Key));
+                Assert.IsFalse(settingsActual.LinkedinSettings.Enabled);
+                Assert.IsTrue(string.IsNullOrWhiteSpace(settingsActual.LinkedinSettings.Key));
+            }
         }
 
         #endregion ToSettings
