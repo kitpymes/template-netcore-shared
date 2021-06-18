@@ -21,7 +21,7 @@ jobs:
         dotnet-version: ${{ matrix.dotnet }}
        
     - name: Build 
-      run: dotnet build Solution.sln --configuration Release
+      run: dotnet build Solution.sln --configuration Release --no-restore
      
     - name: Tests
-      run: dotnet test --configuration Release --no-build
+      run: dotnet test --configuration Release --no-build --no-restore

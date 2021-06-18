@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.Extensions.Primitives;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
 namespace Kitpymes.Core.Shared.Tests
@@ -10,10 +11,11 @@ namespace Kitpymes.Core.Shared.Tests
 
         #region IntegerTypeNumbers
 
-        [DataTestMethod]
-        [DataRow(sbyte.MaxValue)]
-        public void ToDefaultValue_Passing_sbyte_Returns_Cero(sbyte value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_sbyte_Returns_Cero()
         {
+            sbyte value = sbyte.MaxValue;
+
             sbyte valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -21,10 +23,11 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        [DataTestMethod]
-        [DataRow(byte.MaxValue)]
-        public void ToDefaultValue_Passing_byte_Returns_Cero(byte value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_byte_Returns_Cero()
         {
+            byte value = byte.MaxValue;
+
             byte valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -32,10 +35,11 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        [DataTestMethod]
-        [DataRow(short.MaxValue)]
-        public void ToDefaultValue_Passing_short_Returns_Cero(short value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_short_Returns_Cero()
         {
+            short value = short.MaxValue;
+
             short valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -43,10 +47,11 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        [DataTestMethod]
-        [DataRow(ushort.MaxValue)]
-        public void ToDefaultValue_Passing_ushort_Returns_Cero(ushort value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_ushort_Returns_Cero()
         {
+            ushort value = ushort.MaxValue;
+
             ushort valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -65,10 +70,11 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        [DataTestMethod]
-        [DataRow(uint.MaxValue)]
-        public void ToDefaultValue_Passing_uint_Returns_Cero(uint value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_uint_Returns_Cero()
         {
+            uint value = uint.MaxValue;
+
             uint valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -87,10 +93,11 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        [DataTestMethod]
-        [DataRow(ulong.MaxValue)]
-        public void ToDefaultValue_Passing_ulong_Returns_Cero(ulong value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_ulong_Returns_Cero()
         {
+            ulong value = ulong.MaxValue;
+
             ulong valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -102,10 +109,11 @@ namespace Kitpymes.Core.Shared.Tests
 
         #region FloatingPointTypeNumbers
 
-        [DataTestMethod]
-        [DataRow(float.MaxValue)]
-        public void ToDefaultValue_Passing_float_Returns_Cero(float value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_float_Returns_Cero()
         {
+            float value = float.MaxValue;
+
             float valueExpected = 0;
 
             var valueActual = value.ToDefaultValue();
@@ -148,10 +156,11 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        [DataTestMethod]
-        [DataRow('*')]
-        public void ToDefaultValue_Passing_char_Returns_Cero(char value)
+        [TestMethod]
+        public void ToDefaultValue_Passing_char_Returns_Cero()
         {
+            char value = '*';
+
             char valueExpected = '\0';
 
             var valueActual = value.ToDefaultValue();
