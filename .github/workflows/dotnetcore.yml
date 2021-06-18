@@ -1,10 +1,6 @@
 name: Kitpymes.Core.Shared
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push]
 
 jobs:
   build:
@@ -12,20 +8,23 @@ jobs:
 
     strategy:
       matrix:
-        dotnet: [ '3.1.x', '5.0.x' ]
+        dotnet: [ '3.0.100', '3.1.100', '3.1.302' ]
 
-    name: Jobs for .NET Core ${{ matrix.dotnet }}
+    name: Build for .NET Core ${{ matrix.dotnet }}
 
     steps:  
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v1
      
     - name: Setup
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: ${{ matrix.dotnet }}
 
+    - name: Clean
+      run: dotnet clean Solution.sln --configuration Release && dotnet nuget locals all --clear
+       
     - name: Build 
-      run: dotnet build Solution.sln --configuration Release --no-restore
+      run: dotnet build Solution.sln --configuration Release
      
     - name: Tests
-      run: dotnet test --configuration Release --no-build --no-restore --verbosity normal
+      run: dotnet test --configuration Release --no-build
