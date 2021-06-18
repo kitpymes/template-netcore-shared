@@ -8,7 +8,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet: [ '5.0.100' ]
+        dotnet: [ '5.0.x' ]
 
     name: Build for .NET Core ${{ matrix.dotnet }}
 
