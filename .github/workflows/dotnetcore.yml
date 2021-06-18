@@ -12,7 +12,7 @@ jobs:
 
     strategy:
       matrix:
-        dotnet: [ '5.0.100', '5.0.6', '5.0.7' ]
+        dotnet-version: '5.0.x'
 
     name: Build for .NET Core ${{ matrix.dotnet }}
 
@@ -27,12 +27,6 @@ jobs:
     - name: Clean
       run: dotnet clean Solution.sln --configuration Release && dotnet nuget locals all --clear
 
-    - name: Restore
-      run: dotnet restore Project.sln
-
-    - name: Add nuget
-      run: dotnet nuget add source https://api.nuget.org/v3/index.json --name nuget.org
-       
     - name: Build 
       run: dotnet build Solution.sln --configuration Release --no-restore
      
