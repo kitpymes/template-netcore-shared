@@ -3,6 +3,6 @@
         "version": "3.0.100",
         "allowPrerelease": false,
         "rollForward": "latestMinor"
-        // latestMinor: Utiliza la versiÛn SDK instalada m·s alta con el mismo valor principal , por ejemplo: 3.x.xxx
+        // latestMinor: Utiliza la versi√≥n SDK instalada m√°s alta con el mismo valor principal , por ejemplo: 3.x.xxx
     }
 }
