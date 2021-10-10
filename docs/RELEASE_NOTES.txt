@@ -1,3 +1,6 @@
+# v.1.2.3
+- Se actualizan las extensions "ToSettings" de la clase "ServiceCollectionExtensions".
+
 # v.1.2.2
 - Se actualizan librerías.
 

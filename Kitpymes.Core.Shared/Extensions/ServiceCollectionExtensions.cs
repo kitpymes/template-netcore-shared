@@ -239,20 +239,6 @@ namespace Kitpymes.Core.Shared
         /// Configura las clases que coinciden con los archivos de configuración.
         /// </summary>
         /// <typeparam name="TSettings">Tipo de clase a configurar.</typeparam>
-        /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
-        /// <param name="defaultSettings">Configuración por defecto.</param>
-        /// <returns>TSettings | null.</returns>
-        public static TSettings? ToSettings<TSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
-            where TSettings : class, new()
-        => services
-            .ToIsNullOrEmptyThrow(nameof(services))
-            .ToSettings(defaultSettings.ToConfigureOrDefault())
-            .ToService<TSettings>();
-
-        /// <summary>
-        /// Configura las clases que coinciden con los archivos de configuración.
-        /// </summary>
-        /// <typeparam name="TSettings">Tipo de clase a configurar.</typeparam>
         /// <typeparam name="TConfigureSettings">Tipo de clase para configuraciones custom (Usada para obtener datos de la db en el momento de inicio del sistema).</typeparam>
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <param name="defaultSettings">Configuración por defecto.</param>
@@ -260,11 +246,22 @@ namespace Kitpymes.Core.Shared
         public static TSettings? ToSettings<TSettings, TConfigureSettings>(this IServiceCollection services, Action<TSettings>? defaultSettings = null)
             where TSettings : class, new()
             where TConfigureSettings : class, IConfigureOptions<TSettings>
-        => services
-            .ToIsNullOrEmptyThrow(nameof(services))
-            .ToSettings(defaultSettings.ToConfigureOrDefault())
-            .AddSingleton<IConfigureOptions<TSettings>, TConfigureSettings>()
-            .ToService<IOptions<TSettings>>()?.Value;
+        {
+            if (defaultSettings is null)
+            {
+                services.ToSettings((TSettings)null!);
+            }
+            else
+            {
+                services.ToSettings(defaultSettings.ToConfigureOrDefault());
+            }
+
+            var result = services
+                .AddSingleton<IConfigureOptions<TSettings>, TConfigureSettings>()
+                .ToService<IOptions<TSettings>>()?.Value;
+
+            return result;
+        }
 
         /// <summary>
         /// Configura las clases que coinciden con los archivos de configuración.
@@ -273,12 +270,12 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <param name="defaultSettings">Configuración por defecto.</param>
         /// <returns>IServiceCollection.</returns>
-        public static IServiceCollection ToSettings<TSettings>(this IServiceCollection services, TSettings? defaultSettings)
+        public static TSettings ToSettings<TSettings>(this IServiceCollection services, TSettings? defaultSettings = null)
             where TSettings : class, new()
         {
             TSettings? settings;
 
-            if (!services.ToIsNullOrEmptyThrow(nameof(services)).ToExists<TSettings>())
+            if (!services.ToExists<TSettings>())
             {
                 services.AddOptions<TSettings>();
 
@@ -292,7 +289,7 @@ namespace Kitpymes.Core.Shared
 
                     settings = service?.Value;
 
-                    if (defaultSettings != null)
+                    if (defaultSettings is not null)
                     {
                         settings = settings?.ToMapUpdate(defaultSettings);
                     }
@@ -308,7 +305,9 @@ namespace Kitpymes.Core.Shared
                 }
             }
 
-            return services;
+            var result = services.ToService<TSettings>().ToIsNullOrEmptyThrow(typeof(TSettings).Name);
+
+            return result;
         }
 
         private static IConfigurationBuilder ToJsonFiles(
