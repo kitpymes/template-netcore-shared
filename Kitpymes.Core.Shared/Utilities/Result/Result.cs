@@ -69,9 +69,7 @@ namespace Kitpymes.Core.Shared.Util
         public object? Details { get; set; }
 
         /// <inheritdoc/>
-#pragma warning disable CA2227 // Las propiedades de colección deben ser de solo lectura
         public IDictionary<string, IEnumerable<string>>? Errors { get; protected set; }
-#pragma warning restore CA2227 // Las propiedades de colección deben ser de solo lectura
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -79,7 +77,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <returns>Result.</returns>
         public static Result Ok()
-        => new Result(true, HttpStatusCode.OK, HttpStatusCode.OK.ToString(), Resources.MsgProcessRanSuccessfully);
+        => new (true, HttpStatusCode.OK, HttpStatusCode.OK.ToString(), Resources.MsgProcessRanSuccessfully);
 
         /// <summary>
         /// Devuelve un resultado de error cuando ocurre un error de autorización.
@@ -87,7 +85,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <returns>Result.</returns>
         public static Result Unauthorized()
-        => new Result(false, HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(), Resources.MsgUnauthorizedAccess);
+        => new (false, HttpStatusCode.Unauthorized, HttpStatusCode.Unauthorized.ToString(), Resources.MsgUnauthorizedAccess);
 
         /// <summary>
         /// Devuelve un resultado de error cuando ocurre un error no controlado.
@@ -95,7 +93,7 @@ namespace Kitpymes.Core.Shared.Util
         /// </summary>
         /// <returns>Result.</returns>
         public static Result InternalServerError()
-        => new Result(false, HttpStatusCode.InternalServerError, HttpStatusCode.InternalServerError.ToString(), Resources.MsgFriendlyUnexpectedError);
+        => new (false, HttpStatusCode.InternalServerError, HttpStatusCode.InternalServerError.ToString(), Resources.MsgFriendlyUnexpectedError);
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -105,9 +103,9 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>Result.</returns>
         public static Result BadRequest(IDictionary<string, IEnumerable<string>> errors)
         {
-            errors.ToIsNullOrAnyThrow(nameof(errors));
+            errors.ThrowIfNullOrAny();
 
-            return new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError)
+            return new (false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError)
             {
                 Errors = errors,
             };
@@ -121,7 +119,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>Result.</returns>
         public static Result BadRequest(IEnumerable<(string fieldName, string message)> errors)
         {
-            errors.ToIsNullOrAnyThrow(nameof(errors));
+            errors.ThrowIfNullOrAny();
 
             var result = new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), Resources.MsgValidationsError);
 
@@ -142,7 +140,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="messages">Agrega mensajes de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(IEnumerable<string> messages)
-        => new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), messages.ToIsNullOrAnyThrow(nameof(messages)).ToString(", "));
+        => new (false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), messages.ThrowIfNullOrAny().ToString(", "));
 
         /// <summary>
         /// Devuelve un resultado de error de validación.
@@ -151,7 +149,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="message">Agrega un mensaje de validación al resultado.</param>
         /// <returns>Result.</returns>
         public static Result BadRequest(string message)
-        => new Result(false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), message.ToIsNullOrEmptyThrow(nameof(message)));
+        => new (false, HttpStatusCode.BadRequest, HttpStatusCode.BadRequest.ToString(), message.ThrowIfNullOrEmpty());
 
         /// <summary>
         /// Agrega uno o varios errores al resultado.
@@ -162,16 +160,11 @@ namespace Kitpymes.Core.Shared.Util
         {
             var config = options.ToConfigureOrDefault().ErrorSettings;
 
-            if (config.Messages.ToIsNullOrAny() && config.Errors.ToIsNullOrAny())
-            {
-                Check.Throw($"{nameof(config.Messages)} and {nameof(config.Errors)} are null or not contains elements.");
-            }
-
             return new Result(false)
             {
                 Status = config.Status,
                 Title = config.Title,
-                TraceId = Guid.NewGuid().ToString("N", System.Globalization.CultureInfo.CurrentCulture),
+                TraceId = Guid.NewGuid().ToSecuencial().ToString(),
                 Details = config.Details,
                 Exception = config.Exception,
                 Message = config.Messages?.Count > 0 ? config.Messages.ToString(", ") : null,
@@ -180,6 +173,7 @@ namespace Kitpymes.Core.Shared.Util
         }
 
         /// <inheritdoc/>
-        public virtual string ToJson() => this.ToSerialize(x => x.IgnoreNullValues = true);
+        public virtual string ToJson()
+        => this.ToSerialize(x => x.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull);
     }
 }

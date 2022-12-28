@@ -9,7 +9,6 @@ namespace Kitpymes.Core.Shared
 {
     using System;
     using System.Diagnostics.CodeAnalysis;
-    using System.Globalization;
 
     /*
         Clase de extensión IntegerExtensions
@@ -33,6 +32,6 @@ namespace Kitpymes.Core.Shared
         /// <returns>El número convertido en string.</returns>
         [return: NotNull]
         public static string ToStringFormat(this int input, IFormatProvider? formatProvider = null)
-        => input.ToString(formatProvider ?? CultureInfo.CurrentCulture);
+        => input.ToString(formatProvider);
     }
 }

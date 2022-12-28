@@ -9,6 +9,7 @@ namespace Kitpymes.Core.Shared
 {
     using System;
     using System.Collections.Generic;
+    using System.Diagnostics.CodeAnalysis;
     using System.Globalization;
     using System.IO;
     using System.IO.Compression;
@@ -44,7 +45,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>La cadena con los caracteres removidos.</returns>
         public static string? ToRemove(this string? input, params string[] removes)
         {
-            if (input.ToIsNullOrEmpty() || removes.ToIsNullOrAny())
+            if (input.IsNullOrEmpty() || removes.IsNullOrAny())
             {
                 return input;
             }
@@ -71,7 +72,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>La cadena con el valor reemplazado.</returns>
         public static string? ToReplace(this string? input, string replace, int start, int count)
         {
-            if (input.ToIsNullOrEmpty() || replace.ToIsNullOrEmpty())
+            if (input.IsNullOrEmpty() || replace.IsNullOrEmpty())
             {
                 return input;
             }
@@ -100,7 +101,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>La cadena sin caracteres especiales.</returns>
         public static string? ToReplaceSpecialChars(this string? input, params string[] ignoreSpecialChars)
         {
-            if (input.ToIsNullOrEmpty())
+            if (input.IsNullOrEmpty())
             {
                 return input;
             }
@@ -166,7 +167,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>Enum de tipo {TEnum}.</returns>
         public static TEnum ToEnum<TEnum>(this string? input, TEnum defaultValue = default)
             where TEnum : struct, Enum
-            => input.ToIsNullOrEmpty() || !Enum.TryParse(input, false, out TEnum result) ? defaultValue : result;
+            => input.IsNullOrEmpty() || !Enum.TryParse(input, false, out TEnum result) ? defaultValue : result;
 
         /// <summary>
         /// Convierte un entero de tipo {TEnum} en un enum.
@@ -189,7 +190,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="input">Cadena a convertir.</param>
         /// <returns>Cadena convertida.</returns>
         public static string? ToFirstLetterUpper(this string input)
-        => string.IsNullOrWhiteSpace(input) ? input : char.ToUpperInvariant(input[0]) + input.Substring(1);
+        => input.IsNullOrEmpty() ? input : char.ToUpperInvariant(input[0]) + input[1..];
 
         /// <summary>
         /// Convierte la primer letra de una cadena en minúscula.
@@ -197,7 +198,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="input">Cadena a convertir.</param>
         /// <returns>Cadena convertida.</returns>
         public static string? ToFirstLetterLower(this string input)
-        => string.IsNullOrWhiteSpace(input) ? input : char.ToLowerInvariant(input[0]) + input.Substring(1);
+        => input.IsNullOrEmpty() ? input : char.ToLowerInvariant(input[0]) + input[1..];
 
         #endregion ToFirstLetter
 
@@ -318,15 +319,15 @@ namespace Kitpymes.Core.Shared
             CompressionLevel compressionLevel = CompressionLevel.Optimal,
             bool removeSourceDirectoryPath = false)
         {
-            var validSourceDirectoryPath = sourceDirectoryPath.ToIsNullOrEmptyThrow(nameof(sourceDirectoryPath));
+            sourceDirectoryPath.ThrowIfNullOrEmpty();
 
-            customZipName = string.IsNullOrWhiteSpace(customZipName) ? sourceDirectoryPath?.Split("\\").Last() : customZipName;
+            customZipName = customZipName.IsNullOrEmpty() ? sourceDirectoryPath.Split("\\").Last() : customZipName;
 
-            ZipFile.CreateFromDirectory(validSourceDirectoryPath, $"{destinationDirectoryPath}/{customZipName}.zip", compressionLevel, false);
+            ZipFile.CreateFromDirectory(sourceDirectoryPath, $"{destinationDirectoryPath}/{customZipName}.zip", compressionLevel, false);
 
             if (removeSourceDirectoryPath)
             {
-                Directory.Delete(validSourceDirectoryPath, true);
+                Directory.Delete(sourceDirectoryPath, true);
             }
         }
 
@@ -341,8 +342,8 @@ namespace Kitpymes.Core.Shared
             string? destinationDirectoryPath,
             bool overwriteFiles = false)
         => ZipFile.ExtractToDirectory(
-            sourceFilePath.ToIsNullOrEmptyThrow(nameof(sourceFilePath)),
-            destinationDirectoryPath.ToIsNullOrEmptyThrow(nameof(destinationDirectoryPath)),
+            sourceFilePath.ThrowIfNullOrEmpty(),
+            destinationDirectoryPath.ThrowIfNullOrEmpty(),
             overwriteFiles);
 
         #endregion ToZip
@@ -350,13 +351,15 @@ namespace Kitpymes.Core.Shared
         #region ToContentType
 
         /// <summary>
-        /// Obtiene el tipo de contenido de un archivo.
+        /// Obtiene el tipo del contenido de un archivo.
         /// </summary>
         /// <param name="fileName">Archivo.</param>
         /// <param name="defaultValue">Valor por defecto.</param>
         /// <returns>El tipo de contenido.</returns>
-        public static string ToContentType(this string? fileName, string defaultValue = MediaTypeNames.Application.Octet)
+        public static string ToContentType([NotNull] this string? fileName, string defaultValue = MediaTypeNames.Application.Octet)
         {
+            fileName.ThrowIfNullOrEmpty();
+
             var provider = new FileExtensionContentTypeProvider();
 
             if (!provider.TryGetContentType(fileName, out var contentType))
@@ -405,7 +408,7 @@ namespace Kitpymes.Core.Shared
             {
                 var file = path.ToDirectoryFindFilePath(fileName);
 
-                if (!string.IsNullOrEmpty(file))
+                if (!file.IsNullOrEmpty())
                 {
                     return file;
                 }
@@ -421,14 +424,9 @@ namespace Kitpymes.Core.Shared
         /// <param name="fileName">Nombre del archivo.</param>
         /// <returns>FileInfo | null.</returns>
         public static FileInfo? ToDirectoryFileInfo(this string? directoryPath, string fileName)
-        {
-            if (string.IsNullOrWhiteSpace(directoryPath) || string.IsNullOrWhiteSpace(fileName))
-            {
-                return null;
-            }
-
-            return new DirectoryInfo(directoryPath).GetFiles(string.Concat(fileName, ".", "*")).Single();
-        }
+        => new DirectoryInfo(directoryPath.ThrowIfNullOrEmpty())
+                .GetFiles(string.Concat(fileName.ThrowIfNullOrEmpty(), ".", "*"))
+                .Single();
 
         /// <summary>
         /// Elimina todas las filas de un directorio, y opcionalmente puede eliminar los subdirectorios y el directorio raiz.
@@ -438,24 +436,23 @@ namespace Kitpymes.Core.Shared
         /// <param name="directoryDelete">Si se quiere eliminar el directorio raiz.</param>
         public static void ToDirectoryDeleteFiles(this string directoryPath, bool recursive = false, bool directoryDelete = false)
         {
-            if (!string.IsNullOrWhiteSpace(directoryPath))
+            directoryPath.ThrowIfNullOrEmpty();
+
+            foreach (var file in Directory.GetFiles(directoryPath))
             {
-                foreach (var file in Directory.GetFiles(directoryPath))
+                var attr = File.GetAttributes(file);
+
+                if ((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                 {
-                    var attr = File.GetAttributes(file);
-
-                    if ((attr & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
-                    {
-                        File.SetAttributes(file, attr ^ FileAttributes.ReadOnly);
-                    }
-
-                    File.Delete(file);
+                    File.SetAttributes(file, attr ^ FileAttributes.ReadOnly);
                 }
 
-                if (directoryDelete)
-                {
-                    Directory.Delete(directoryPath, recursive);
-                }
+                File.Delete(file);
+            }
+
+            if (directoryDelete)
+            {
+                Directory.Delete(directoryPath, recursive);
             }
         }
 
@@ -469,17 +466,18 @@ namespace Kitpymes.Core.Shared
         /// <returns>Task.</returns>
         public static async Task ToDirectorySaveFileAsync(this string directoryPath, string fileName, byte[] bytes, bool ifNoExistDirectoryCreate = true)
         {
-            if (!string.IsNullOrWhiteSpace(directoryPath) && !string.IsNullOrWhiteSpace(fileName) && bytes != null && bytes.Length > 0)
+            directoryPath.ThrowIfNullOrEmpty();
+            fileName.ThrowIfNullOrEmpty();
+            bytes.ThrowIfNullOrAny();
+
+            if (ifNoExistDirectoryCreate && directoryPath.IsDirectory())
             {
-                if (ifNoExistDirectoryCreate && !Directory.Exists(directoryPath))
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-
-                var path = Path.Combine(directoryPath, fileName);
-
-                await File.WriteAllBytesAsync(path, bytes).ConfigureAwait(false);
+                Directory.CreateDirectory(directoryPath);
             }
+
+            var path = Path.Combine(directoryPath, fileName);
+
+            await File.WriteAllBytesAsync(path, bytes).ConfigureAwait(false);
         }
 
         /// <summary>
@@ -492,10 +490,8 @@ namespace Kitpymes.Core.Shared
             this string directoryPath,
             string fileName)
         {
-            if (!string.IsNullOrWhiteSpace(directoryPath) || !string.IsNullOrWhiteSpace(fileName))
-            {
-                return null;
-            }
+            directoryPath.ThrowIfNullOrEmpty();
+            fileName.ThrowIfNullOrEmpty();
 
             var fileInfo = ToDirectoryFileInfo(directoryPath, fileName);
 
@@ -525,12 +521,9 @@ namespace Kitpymes.Core.Shared
             SearchOption searchOption = SearchOption.AllDirectories,
             params string[] includeExtensions)
         {
-            if (string.IsNullOrWhiteSpace(directoryPath))
-            {
-                return null;
-            }
+            directoryPath.ThrowIfNullOrEmpty();
 
-            List<(string fileName, string filePath, string fileConvert, byte[] fileBytes, long fileLength, string fileContentType)?> filesReading = new List<(string fileName, string filePath, string fileConvert, byte[] fileBytes, long fileLength, string fileContentType)?>();
+            List<(string fileName, string filePath, string fileConvert, byte[] fileBytes, long fileLength, string fileContentType)?> filesReading = new ();
 
             includeExtensions ??= new[] { "*.*" };
 

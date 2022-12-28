@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
 
 namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
     public class HttpContextExtensionsTests
     {
+        #region IPv6
+
         [TestMethod]
         public void ToIPv6_Passing_HttpContext_IP_Value_Returns_IP()
         {
@@ -36,6 +36,10 @@ namespace Kitpymes.Core.Shared.Tests
             Assert.AreEqual(ipExpected.MapToIPv6().ToString(), ipActual);
         }
 
+        #endregion IPv6
+
+        #region ToDetails
+
         [TestMethod]
         public void ToDetails_Passing_HttpContext_Returns_Details_HttpContext()
         {
@@ -57,7 +61,7 @@ namespace Kitpymes.Core.Shared.Tests
             var httpContext = FakeHttpContext.Configure(x =>
             {
                 x.Connection.RemoteIpAddress = ipExpected;
-                x.User?.ToAdd(authenticationType, (claimTypeExpected, claimValueExpected));
+                x.User?.ToAddIdentity(authenticationType, (claimTypeExpected, claimValueExpected));
                 x.Request = new FakeHttpRequest
                 {
                     ContentType = contentTypeExpected,
@@ -108,7 +112,7 @@ namespace Kitpymes.Core.Shared.Tests
             var httpContext = FakeHttpContext.Configure(x =>
             {
                 x.Connection.RemoteIpAddress = ipExpected;
-                x.User?.ToAdd(authenticationType, (claimTypeExpected, claimValueExpected));
+                x.User?.ToAddIdentity(authenticationType, (claimTypeExpected, claimValueExpected));
                 x.Request = new FakeHttpRequest
                 {
                     ContentType = contentTypeExpected,
@@ -134,5 +138,7 @@ namespace Kitpymes.Core.Shared.Tests
                 Assert.IsTrue(result.Contains(valueOptionalData));
             }
         }
+
+        #endregion ToDetails
     }
 }

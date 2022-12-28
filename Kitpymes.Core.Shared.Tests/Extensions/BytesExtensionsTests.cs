@@ -1,5 +1,4 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -12,7 +11,7 @@ namespace Kitpymes.Core.Shared.Tests
         private readonly string expectedAddPermission = Guid.NewGuid().ToString();
         private readonly string expectedUpdatePermission = Guid.NewGuid().ToString();
 
-        private FakeUser FakeObject = new FakeUser();
+        private FakeUser FakeObject = new ();
 
         [TestInitialize]
         public void Initialize()
@@ -47,11 +46,15 @@ namespace Kitpymes.Core.Shared.Tests
 
             var decompressToObject = bytesToCompress?.ToDecompress<FakeUser>();
 
-            Assert.AreEqual(expectedId, decompressToObject?.Id);
-            Assert.AreEqual(expectedName, decompressToObject?.Name);
-            Assert.AreEqual(expectedAge, decompressToObject?.Age);
-            CollectionAssert.Contains(decompressToObject?.Permissions, expectedAddPermission);
-            CollectionAssert.Contains(decompressToObject?.Permissions, expectedUpdatePermission);
+            if (decompressToObject?.Permissions != null)
+            {
+                Assert.AreEqual(expectedId, decompressToObject.Id);
+                Assert.AreEqual(expectedName, decompressToObject.Name);
+                Assert.AreEqual(expectedAge, decompressToObject.Age);
+
+                CollectionAssert.Contains(decompressToObject.Permissions, expectedAddPermission);
+                CollectionAssert.Contains(decompressToObject.Permissions, expectedUpdatePermission);
+            }
         }
     }
 }

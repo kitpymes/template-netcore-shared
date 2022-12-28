@@ -5,110 +5,104 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Kitpymes.Core.Shared
-{
-    using System.Collections.Generic;
-    using System.Diagnostics.CodeAnalysis;
-    using System.Linq;
+using System.Diagnostics.CodeAnalysis;
 
-    /*
-        Clase de extensión DictionaryExtensions
-        Contiene las extensiones del delegado Action
-    */
+namespace Kitpymes.Core.Shared;
+
+/*
+    Clase de extensión DictionaryExtensions
+    Contiene las extensiones del delegado Action
+*/
+
+/// <summary>
+/// Clase de extensión <c>DictionaryExtensions</c>.
+/// Contiene las extensiones para el diccionario de valores.
+/// </summary>
+/// <remarks>
+/// <para>En esta clase se pueden agregar todas las extensiones para el diccionario de valores.</para>
+/// </remarks>
+public static class DictionaryExtensions
+{
+    /// <summary>
+    /// Agrega una clave si no existe o agrega un valor a la clave si esta existe.
+    /// </summary>
+    /// <param name="dictionary">Lista de diccionario.</param>
+    /// <param name="key">Clave del diccionario.</param>
+    /// <param name="value">Valor del diccionario.</param>
+    /// <returns>IDictionary{string, IList{string}} | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio o si value es nulo o vacio.</returns>
+    public static IDictionary<string, IEnumerable<string>> AddOrUpdate(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
+    {
+        var validDictionary = dictionary.ValidateThrow(key, value);
+
+        if (validDictionary.ContainsKey(key))
+        {
+            if (!validDictionary[key].Contains(value))
+            {
+                validDictionary[key] = validDictionary[key].Concat(new string[] { value });
+            }
+        }
+        else
+        {
+            validDictionary.Add(key, new List<string> { value });
+        }
+
+        return validDictionary;
+    }
 
     /// <summary>
-    /// Clase de extensión <c>DictionaryExtensions</c>.
-    /// Contiene las extensiones para el diccionario de valores.
+    /// Verifica si existe una clave y su valor en la lista de tipo diccionario.
     /// </summary>
-    /// <remarks>
-    /// <para>En esta clase se pueden agregar todas las extensiones para el diccionario de valores.</para>
-    /// </remarks>
-    public static class DictionaryExtensions
+    /// <param name="dictionary">Lista de diccionario.</param>
+    /// <param name="key">Clave del diccionario.</param>
+    /// <param name="value">Valor del diccionario.</param>
+    /// <returns>bool | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio o si value es nulo o vacio.</returns>
+    public static bool Contains(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
     {
-        /// <summary>
-        /// Agrega una clave si no existe o agrega un valor a la clave si esta existe.
-        /// </summary>
-        /// <param name="dictionary">Lista de diccionario.</param>
-        /// <param name="key">Clave del diccionario.</param>
-        /// <param name="value">Valor del diccionario.</param>
-        /// <returns>IDictionary{string, IList{string}} | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio o si value es nulo o vacio.</returns>
-        public static IDictionary<string, IEnumerable<string>> AddOrUpdate(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
+        var validDictionary = dictionary.ValidateThrow(key, value);
+
+        return validDictionary.ContainsKey(key) && validDictionary[key].Contains(value);
+    }
+
+    /// <summary>
+    /// Obtiene los valores de una clave.
+    /// </summary>
+    /// <param name="dictionary">Lista de diccionario.</param>
+    /// <param name="key">Clave del diccionario.</param>
+    /// <returns>IList{string} | null: si la key no existe o no contiene valores | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio.</returns>
+    public static IEnumerable<string>? GetValues(this IDictionary<string, IEnumerable<string>>? dictionary, string key)
+    {
+        var validDictionary = dictionary.ValidateThrow(key);
+
+        return validDictionary.TryGetValue(key, out IEnumerable<string>? value) ? value : null;
+    }
+
+    [return: NotNull]
+    private static IDictionary<string, IEnumerable<string>> ValidateThrow(this IDictionary<string, IEnumerable<string>>? dictionary, string key)
+    {
+        var errors = new List<string>();
+
+        if (dictionary.IsNullOrEmpty())
         {
-            var validDictionary = dictionary.ValidateThrow(key, value);
-
-            if (validDictionary.ContainsKey(key))
-            {
-                if (!validDictionary[key].Contains(value))
-                {
-                    validDictionary[key] = validDictionary[key].Concat(new string[] { value });
-                }
-            }
-            else
-            {
-                validDictionary.Add(key, new List<string> { value });
-            }
-
-            return validDictionary;
+            errors.Add(Util.Messages.NullOrEmpty(nameof(dictionary)));
         }
 
-        /// <summary>
-        /// Verifica si existe una clave y su valor en la lista de tipo diccionario.
-        /// </summary>
-        /// <param name="dictionary">Lista de diccionario.</param>
-        /// <param name="key">Clave del diccionario.</param>
-        /// <param name="value">Valor del diccionario.</param>
-        /// <returns>bool | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio o si value es nulo o vacio.</returns>
-        public static bool Contains(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
+        if (key.IsNullOrEmpty())
         {
-            var validDictionary = dictionary.ValidateThrow(key, value);
-
-            return validDictionary.ContainsKey(key) && validDictionary[key].Contains(value);
+            errors.Add(Util.Messages.NullOrEmpty(nameof(key)));
         }
 
-        /// <summary>
-        /// Obtiene los valores de una clave.
-        /// </summary>
-        /// <param name="dictionary">Lista de diccionario.</param>
-        /// <param name="key">Clave del diccionario.</param>
-        /// <returns>IList{string} | null: si la key no existe o no contiene valores | ApplicationException: si dictionary es nula o no contiene elementos, o si key es nulo o vacio.</returns>
-        public static IEnumerable<string>? GetValues(this IDictionary<string, IEnumerable<string>>? dictionary, string key)
-        {
-            var validDictionary = dictionary.ValidateThrow(key);
+        VerifyExtensions.ThrowIf(errors);
 
-            return validDictionary.ContainsKey(key) ? validDictionary[key] : null;
-        }
+        return dictionary!;
+    }
 
-        [return: NotNull]
-        private static IDictionary<string, IEnumerable<string>> ValidateThrow(this IDictionary<string, IEnumerable<string>>? dictionary, string key)
-        {
-            var errors = new List<string>();
+    [return: NotNull]
+    private static IDictionary<string, IEnumerable<string>> ValidateThrow(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
+    {
+        dictionary.ValidateThrow(key);
 
-            if (dictionary.ToIsNullOrEmpty())
-            {
-                errors.Add(Util.Messages.NullOrEmpty(nameof(dictionary)));
-            }
+        value.ThrowIfNullOrEmpty();
 
-            if (key.ToIsNullOrEmpty())
-            {
-                errors.Add(Util.Messages.NullOrEmpty(nameof(key)));
-            }
-
-            if (errors.Any())
-            {
-                Util.Check.Throw(errors);
-            }
-
-            return dictionary!;
-        }
-
-        [return: NotNull]
-        private static IDictionary<string, IEnumerable<string>> ValidateThrow(this IDictionary<string, IEnumerable<string>>? dictionary, string key, string value)
-        {
-            dictionary.ValidateThrow(key);
-
-            value.ToIsNullOrEmptyThrow(nameof(value));
-
-            return dictionary!;
-        }
+        return dictionary!;
     }
 }

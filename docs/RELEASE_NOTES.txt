@@ -1,3 +1,12 @@
+# v.1.2.4
+- Se actualizan librerías.
+- Se migra a net7.
+- Se agrega la extensions "GuidExtensions" para crear Guid secuenciales.
+- Se agrega la extensions "VerifyExtensions" para las validaciones.
+- Se elimina la Utilidad Check.
+- Se actualizan extensiones.
+- Se actualizan utilidades.
+
 # v.1.2.3
 - Se actualizan las extensions "ToSettings" de la clase "ServiceCollectionExtensions".
 

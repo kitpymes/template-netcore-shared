@@ -1,8 +1,5 @@
 using Kitpymes.Core.Shared.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 
 namespace Kitpymes.Core.Shared.Tests
@@ -142,17 +139,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var errors = new List<(string fieldName, string message)>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 errors.Add((nameof(classField), classFieldMessageExpected));
             }
@@ -177,17 +174,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var errors = new Dictionary<string, IEnumerable<string>>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 errors.Add(nameof(stringField), new List<string> { Messages.NullOrEmpty(nameof(stringField)) });
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 errors[nameof(stringField)] = errors[nameof(stringField)].Concat(new string[] { Messages.InvalidFormat(nameof(stringField)) });
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 errors.Add(nameof(classField), new List<string> { classFieldMessageExpected });
             }
@@ -212,17 +209,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var messages = new List<string>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 messages.Add(Messages.NullOrEmpty(nameof(stringField)));
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 messages.Add(Messages.InvalidFormat(nameof(stringField)));
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 messages.Add(classFieldMessageExpected);
             }
@@ -272,17 +269,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var errors = new List<(string fieldName, string message)>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 errors.Add((nameof(classField), classFieldMessageExpected));
             }
@@ -307,17 +304,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var errors = new Dictionary<string, IEnumerable<string>>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 errors.Add(nameof(stringField), new List<string> { Messages.NullOrEmpty(nameof(stringField)) });
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 errors[nameof(stringField)] = errors[nameof(stringField)].Concat(new string[] { Messages.InvalidFormat(nameof(stringField)) });
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 errors.Add(nameof(classField), new List<string> { classFieldMessageExpected });
             }
@@ -342,17 +339,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var messages = new List<string>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 messages.Add(Messages.NullOrEmpty(nameof(stringField)));
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 messages.Add(Messages.InvalidFormat(nameof(stringField)));
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 messages.Add(classFieldMessageExpected);
             }
@@ -390,17 +387,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var errors = new List<(string fieldName, string message)>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 errors.Add((nameof(classField), classFieldMessageExpected));
             }
@@ -472,17 +469,17 @@ namespace Kitpymes.Core.Shared.Tests
 
             var errors = new List<(string fieldName, string message)>();
 
-            if (stringField.ToIsNullOrEmpty())
+            if (stringField.IsNullOrEmpty())
             {
                 errors.Add((nameof(stringField), Messages.NullOrEmpty(nameof(stringField))));
             }
 
-            if (!stringField.ToIsEmail())
+            if (!stringField.IsEmail())
             {
                 errors.Add((nameof(stringField), Messages.InvalidFormat(nameof(stringField))));
             }
 
-            if (classField.ToIsNullOrEmpty())
+            if (classField.IsNullOrEmpty())
             {
                 errors.Add((nameof(classField), classFieldMessageExpected));
             }

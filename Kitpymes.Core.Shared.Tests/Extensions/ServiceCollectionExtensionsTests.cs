@@ -24,7 +24,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsDevelopment());
+            Assert.IsTrue(result?.IsDevelopment());
         }
 
         [TestMethod]
@@ -37,33 +37,33 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsProduction());
+            Assert.IsTrue(result?.IsProduction());
         }
 
         [TestMethod]
         public void ToEnvironment_ServiceCollection_Passing_Staging_Enviroment_Returns_Staging_Name()
         {
-            var environmentNameExpected = "Staging";
+            string? environmentNameExpected = "Staging";
             var services = new ServiceCollection().FakeAddEnviroment(x => x.EnvironmentName = environmentNameExpected);
 
             var result = services.ToEnvironment();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsStaging());
+            Assert.IsTrue(result?.IsStaging());
         }
 
         [TestMethod]
         public void ToEnvironment_ServiceCollection_Passing_Custom_Enviroment_Returns_Custom_Name()
         {
-            var environmentNameExpected = Guid.NewGuid().ToString();
+            string? environmentNameExpected = Guid.NewGuid().ToString();
             var services = new ServiceCollection().FakeAddEnviroment(x => x.EnvironmentName = environmentNameExpected);
 
             var result = services.ToEnvironment();
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsEnvironment(environmentNameExpected));
+            Assert.IsTrue(result?.IsEnvironment(environmentNameExpected));
         }
 
         [TestMethod]
@@ -76,7 +76,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsDevelopment());
+            Assert.IsTrue(result?.IsDevelopment());
         }
 
         #endregion ToEnvironment
@@ -128,7 +128,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(serviceActual);
             Assert.AreEqual(environmentNameExpected, serviceActual?.EnvironmentName);
-            Assert.IsTrue(serviceActual.IsDevelopment());
+            Assert.IsTrue(serviceActual?.IsDevelopment());
         }
 
         #endregion ToService
@@ -138,8 +138,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToServiceMatchingInterface_Passing_Empties_Assemblies_Returns_ApplicationException()
         {
-            var assemblies = new Assembly[] { };
-            var messageExpected = Util.Messages.NullOrAny(nameof(assemblies));
+            var assemblies = Array.Empty<Assembly>();
 
             var services = new ServiceCollection();
 
@@ -149,7 +148,18 @@ namespace Kitpymes.Core.Shared.Tests
             );
 
             Assert.IsNotNull(exceptionActual);
-            Assert.AreEqual(messageExpected, exceptionActual.Message);
+        }
+
+        [TestMethod]
+        public void ToServiceMatchingInterface_Passing_Valid_Assembly_And_Valid_Interface_Returns_Service()
+        {
+            var assemblies = new Assembly[] { this.GetType().Assembly };
+
+            var services = new ServiceCollection();
+
+            services.ToServiceMatchingInterface<IFakeLoggerService>(assemblies);
+
+            Assert.IsTrue(services.ToExists<IFakeLoggerService>());
         }
 
         [TestMethod]
@@ -166,6 +176,49 @@ namespace Kitpymes.Core.Shared.Tests
 
         #endregion ToServiceMatchingInterface
 
+        #region ToServiceMatchingClass
+
+        [TestMethod]
+        public void ToServiceMatchingClass_Passing_Empties_Assemblies_Returns_ApplicationException()
+        {
+            var assemblies = Array.Empty<Assembly>();
+
+            var services = new ServiceCollection();
+
+            var exceptionActual = Assert.ThrowsException<ApplicationException>
+            (
+                () => services.ToServiceMatchingClass(typeof(FakeLoggerService), assemblies)
+            );
+
+            Assert.IsNotNull(exceptionActual);
+        }
+
+        [TestMethod]
+        public void ToServiceMatchingClass_Passing_Valid_Assembly_And_Valid_Class_Returns_Service()
+        {
+            var assemblies = new Assembly[] { this.GetType().Assembly };
+
+            var services = new ServiceCollection();
+
+            services.ToServiceMatchingClass<FakeLoggerService>(assemblies);
+
+            Assert.IsTrue(services.ToExists<IFakeLoggerService>());
+        }
+
+        [TestMethod]
+        public void ToServiceMatchingClass_Passing_Valid_Assembly_And_Valid_Class_Type_Returns_Service()
+        {
+            var assemblies = new Assembly[] { this.GetType().Assembly };
+
+            var services = new ServiceCollection();
+
+            services.ToServiceMatchingClass(typeof(FakeLoggerService), assemblies);
+
+            Assert.IsTrue(services.ToExists<IFakeLoggerService>());
+        }
+
+        #endregion ToServiceMatchingInterface
+
         #region ToConfiguration
 
         [TestMethod]
@@ -173,7 +226,7 @@ namespace Kitpymes.Core.Shared.Tests
         {
             string? directoryPath = string.Empty;
             var jsonFileName = "FakeAppSettings";
-            var expectedMessage = Util.Messages.NullOrEmpty(nameof(directoryPath));
+            var expectedMessage = Util.Messages.NotFound(nameof(directoryPath));
 
             var services = new ServiceCollection();
             var exceptionActual = Assert.ThrowsException<ApplicationException>

@@ -51,15 +51,11 @@ namespace Kitpymes.Core.Shared.Util
         /// <summary>
         /// Obtiene o establece la lista de errores.
         /// </summary>
-#pragma warning disable CA2227 // Las propiedades de colección deben ser de solo lectura
         public IList<string>? Messages { get; set; }
-#pragma warning restore CA2227 // Las propiedades de colección deben ser de solo lectura
 
         /// <summary>
         /// Obtiene o establece la lista de errores de un modelo.
         /// </summary>
-#pragma warning disable CA2227 // Las propiedades de colección deben ser de solo lectura
         public IDictionary<string, IEnumerable<string>>? Errors { get; set; }
-#pragma warning restore CA2227 // Las propiedades de colección deben ser de solo lectura
     }
 }

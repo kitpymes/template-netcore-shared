@@ -1,32 +1,32 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
+using Newtonsoft.Json.Linq;
 
 namespace Kitpymes.Core.Shared.Tests
 {
     [TestClass]
-    public class CheckExtensionsTests
+    public class VerifyExtensionsTests
     {
         #region NullOrEmpty
 
         [TestMethod]
-        public void ToIsNullOrEmpty_Passing_InvalidValue_Returns_True()
+        public void IsNullOrEmpty_Passing_InvalidValue_Returns_True()
         {
             string? parameter = null;
             var valueExpected = true;
 
-            var valueActual = parameter.ToIsNullOrEmpty();
+            var valueActual = parameter.IsNullOrEmpty();
 
             Assert.AreEqual(valueExpected, valueActual);
         }
 
         [TestMethod]
-        public void ToIsNullOrEmptyThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIfNullOrEmpty_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
             string? parameter = null;
             var paramName = nameof(parameter);
             var valueExpected = Util.Messages.NullOrEmpty(paramName);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsNullOrEmptyThrow(paramName));
+            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ThrowIfNullOrEmpty(paramName));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -36,24 +36,24 @@ namespace Kitpymes.Core.Shared.Tests
         #region NullOrAny
 
         [TestMethod]
-        public void ToIsNullOrAny_Passing_InvalidValue_Returns_True()
+        public void IsNullOrAny_Passing_InvalidValue_Returns_True()
         {
-            string[] parameter = new string[] { };
+            string[] parameter = Array.Empty<string>();
             var valueExpected = true;
 
-            var valueActual = parameter.ToIsNullOrAny();
+            var valueActual = parameter.IsNullOrAny();
 
             Assert.AreEqual(valueExpected, valueActual);
         }
 
         [TestMethod]
-        public void ToIsNullOrAnyThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIfNullOrAny_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
-            string[] parameter = new string[] { };
+            string[] parameter = Array.Empty<string>();
             var paramName = nameof(parameter);
             var valueExpected = Util.Messages.NullOrAny(paramName);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsNullOrAnyThrow(paramName));
+            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ThrowIfNullOrAny(paramName));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -63,13 +63,13 @@ namespace Kitpymes.Core.Shared.Tests
         #region Directory
 
         [TestMethod]
-        public void ToIsDirectoryThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIfDirectoryNotExists_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
             string? parameter = Guid.NewGuid().ToString();
             var paramName = Guid.NewGuid().ToString();
             var valueExpected = Util.Messages.NotFound(parameter);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsDirectoryThrow(paramName));
+            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ThrowIfDirectoryNotExists(paramName));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -79,13 +79,13 @@ namespace Kitpymes.Core.Shared.Tests
         #region File
 
         [TestMethod]
-        public void ToIsFileThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIfFileNotExists_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
             string? parameter = Guid.NewGuid().ToString();
             var paramName = nameof(parameter);
             var valueExpected = Util.Messages.NotFound(parameter);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsFileThrow(paramName));
+            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ThrowIfFileNotExists(paramName));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -95,13 +95,13 @@ namespace Kitpymes.Core.Shared.Tests
         #region FileExtension
 
         [TestMethod]
-        public void ToIsFileExtensionThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIfNotFileExtension_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
             string? parameter = Guid.NewGuid().ToString();
             var paramName = nameof(parameter);
             var valueExpected = Util.Messages.InvalidFormat(parameter);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsFileExtensionThrow(paramName));
+            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ThrowIfNotFileExtension(paramName));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -116,9 +116,9 @@ namespace Kitpymes.Core.Shared.Tests
         [DataRow("")]
         [DataRow(null)]
         [DataRow("34?fsds@sdd.yy")]
-        public void ToIsEmailThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage(string? value)
+        public void ThrowIfNotEmail_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage(string? value)
         {
-            Assert.ThrowsException<ApplicationException>(() => value.ToIsEmailThrow(nameof(value)));
+            Assert.ThrowsException<ApplicationException>(() => value.ThrowIfNotEmail(nameof(value)));
         }
 
         #endregion Email
@@ -131,12 +131,12 @@ namespace Kitpymes.Core.Shared.Tests
         [DataRow("")]
         [DataRow(null)]
         [DataRow("34?fsds@sdd.yy")]
-        public void ToIsSubdomainThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage(string? value)
+        public void ThrowIfNotSubdomain_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage(string? value)
         {
             string? parameter = Guid.NewGuid().ToString();
             var valueExpected = Util.Messages.InvalidFormat(string.IsNullOrWhiteSpace(value) ? nameof(parameter) : value);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => value.ToIsSubdomainThrow(nameof(parameter)));
+            var result = Assert.ThrowsException<ApplicationException>(() => value.ThrowIfNotSubdomain(nameof(parameter)));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -148,11 +148,10 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
         public void ToIsNameThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
-            string? parameter = Guid.NewGuid().ToString();
-            var paramName = nameof(parameter);
-            var valueExpected = Util.Messages.InvalidFormat(parameter);
+            string? value = Guid.NewGuid().ToString();
+            var valueExpected = Util.Messages.InvalidFormat(value);
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsNameThrow(paramName));
+            var result = Assert.ThrowsException<ApplicationException>(() => value.ThrowIfNotName(nameof(value)));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
@@ -162,31 +161,27 @@ namespace Kitpymes.Core.Shared.Tests
         #region Throw
 
         [TestMethod]
-        public void ToThrow_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIf_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
         {
             string? parameter = null;
             var valueExpected = Guid.NewGuid().ToString();
 
-            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ToIsThrow(() => parameter is null, valueExpected));
+            var result = Assert.ThrowsException<ApplicationException>(() => parameter.ThrowIf(() => parameter is null, valueExpected));
 
             Assert.AreEqual(valueExpected, result.Message);
         }
 
-        #endregion Throw
-
-        #region IsErrors
-
         [TestMethod]
-        public void ToHasErrors_Passing_InvalidValue_Returns_ApplicationExceptionWithMessage()
+        public void ThrowIf_Passing_ValidValue_Returns_Value()
         {
-            string? parameter = null;
-            var valueExpected = true;
+            string value = Guid.NewGuid().ToString();
+            var valueExpected = value;
 
-            var valueActual = parameter.ToIsErrors(() => parameter is null);
+            var valueActual = value.ThrowIf(() => value is null, valueExpected);
 
             Assert.AreEqual(valueExpected, valueActual);
         }
 
-        #endregion IsErrors
+        #endregion Throw
     }
 }

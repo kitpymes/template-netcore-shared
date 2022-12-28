@@ -113,7 +113,7 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>ErrorOptions.</returns>
         public ErrorOptions WithMessages(IList<string> messages)
         {
-            if (messages?.Count() > 0)
+            if (messages?.Count > 0)
             {
                 foreach (var message in messages)
                 {

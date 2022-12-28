@@ -11,13 +11,13 @@
 
 ## 📋 Requerimientos 
 
-* Visual Studio >= 2019
+* Visual Studio = 2022
 
-* NET TargetFramework >= net5.0
+* NET TargetFramework = net7.0
 
-* Net Core SDK >= 5.0.100
+* Net Core SDK = 7.0.100
 
-* C# >= 9.0
+* C# = 11.0
 
 * Conocimientos sobre Inyección de Dependencias
 
@@ -46,9 +46,8 @@ dotnet add package Kitpymes.Core.Shared
 public static class ActionExtensions
 {
     [return: NotNull]
-    public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? overrideDefaultOptions = null)
-        where TOptions : class, new() 
-    { }
+    public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? defaultOptions = null)
+        where TOptions : class, new() {}
 }
 ```
 
@@ -56,43 +55,37 @@ public static class ActionExtensions
 public static class AgileMapperExtensions
 {
     public static TSource ToMapClone<TSource>(this TSource source, params Expression<Action<IFullMappingInlineConfigurator<TSource, TSource>>>[] configurations)
-        where TSource : class 
-    { }
+        where TSource : class {}
 
     public static TDestination ToMapNew<TSource, TDestination>(this TSource source, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
         where TSource : class
-        where TDestination : class
-    { }
+        where TDestination : class {}
 
     public static TDestination ToMapNew<TDestination>(this object source, params Expression<Action<IFullMappingInlineConfigurator<object, TDestination>>>[] configurations)
-        where TDestination : class
-    { }
+        where TDestination : class {}
 
     public static TDestination ToMapUpdate<TSource, TDestination>(this TSource source, TDestination destination, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
         where TSource : class
-        where TDestination : class
-    { }
+        where TDestination : class {}
 
     public static TDestination ToMapMerge<TSource, TDestination>(this TSource source, TDestination destination, params Expression<Action<IFullMappingInlineConfigurator<TSource, TDestination>>>[] configurations)
         where TSource : class
-        where TDestination : class
-    { }
+        where TDestination : class {}
 
     public static IQueryable<TDestination> ToMapList<TSource, TDestination>(this IQueryable<TSource> queryable, Expression<Action<IFullProjectionInlineConfigurator<TSource, TDestination>>>? configuration = null)
         where TSource : class
-        where TDestination : class
-    { }
+        where TDestination : class {}
 }
 ```
 
 ```cs
 public static class ApplicationBuilderExtensions
 {
-    public static IWebHostEnvironment ToEnvironment(this IApplicationBuilder application) { }
+    public static IWebHostEnvironment ToEnvironment(this IApplicationBuilder application) {}
 
-    public static bool ToExists<TService>(this IApplicationBuilder application) { }
+    public static bool ToExists<TService>(this IApplicationBuilder application) {}
  
-    public static TService? ToService<TService>(this IApplicationBuilder application) { }
+    public static TService? ToService<TService>(this IApplicationBuilder application) {}
 }
 ```
 
@@ -100,230 +93,98 @@ public static class ApplicationBuilderExtensions
 public static class ByteExtensions
 {
     [return: NotNull]
-    public static byte[] ToCompress(this byte[] bytes) { }
+    public static byte[] ToCompress(this byte[] bytes) {}
 
     [return: NotNull]
-    public static byte[] ToDecompress(this byte[] bytes) { }
+    public static byte[] ToDecompress(this byte[] bytes) {}
 
-    public static TResult? ToDecompress<TResult>(this byte[] bytes) { }
+    public static TResult? ToDecompress<TResult>(this byte[] bytes) {}
 
-    public static TResult? ToObject<TResult>(this byte[] bytes) { }
-}
-```
-
-```cs
-public static class CheckExtensions
-{
-    public static bool ToIsNullOrEmpty(this object? source) {}
-
-    public static TSource ToIsNullOrEmptyWithMessageThrow<TSource>(this TSource source, string message) {}
-
-    public static TSource ToIsNullOrEmptyThrow<TSource>(this TSource source, string paramName) {}
-
-    public static bool ToIsNullOrAny<TSource>(this IEnumerable<TSource>? input) {}
-
-    public static IEnumerable<TSource> ToIsNullOrAnyWithMessageThrow<TSource>(his IEnumerable<TSource> source, string message) {}
-
-    public static IEnumerable<TSource> ToIsNullOrAnyThrow<TSource>(this IEnumerable<TSource> source, string paramName) {}
-
-    public static bool ToIsGreater(this object? source, long max) {}
-
-    public static TSource ToIsGreaterWithMessageThrow<TSource>(this TSource source, long max, string message) {}
-
-    public static TSource ToIsGreaterThrow<TSource>(this TSource source, long max, string paramName) {}
-
-    public static bool ToIsLess(this object? source, long min) {}
-
-    public static TSource ToIsLessWithMessageThrow<TSource>(this TSource source, long min, string message) {}
-
-    public static TSource ToIsLessThrow<TSource>(this TSource source, long min, string paramName) {}
-
-    public static bool ToIsEqual(this object? source, object? compare) {}
-
-    public static TSource ToIsEqualWithMessageThrow<TSource>(this TSource source, TSource compare, string message) {}
-
-    public static TSource ToIsEqualThrow<TSource>(this TSource source, TSource compare, string paramName, string paramNameCompare) {}
-
-    public static bool ToIsRange(this object? source, long min, long max) {}
-
-    public static TSource ToIsRangeWithMessageThrow<TSource>(this TSource source, long min, long max, string message) {}
-
-    public static TSource ToIsRangeThrow<TSource>(this TSource source, long min, long max, string paramName) {}
-
-    public static bool ToIsRegexMatch(this string? source, string regex) {}
-
-    public static string ToIsRegexMatchWithMessageThrow(this string? source, string regex, string message) {}
-
-    public static string ToIsRegexMatchThrow(this string? source, string regex, string paramName) {}
-
-    public static bool ToIsName(this string? source) {}
-
-    public static string ToIsNameWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsNameThrow(this string? source, string paramName) {}
-
-    public static bool ToIsEmail(this string? source) {}
-
-    public static string ToIsEmailWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsEmailThrow(this string? source, string paramName) {}
-
-    public static bool ToIsDirectory(this string? input) {}
-
-    public static string? ToIsDirectoryWithMessageThrow(this string? source, string message) {}
-
-    public static string? ToIsDirectoryThrow(this string? source, string paramName) {}
-
-    public static bool ToIsFile(this string? input) {}
-
-    public static string ToIsFileWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsFileThrow(this string? source, string paramName) {}
-
-    public static bool ToIsFileExtension(this string? input) {}
-
-    public static string ToIsFileExtensionWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsFileExtensionThrow(this string? source, string paramName) {}
-
-    public static bool ToIsSubdomain(this string? source) {}
-
-    public static string ToIsSubdomainWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsSubdomainThrow(this string? source, string paramName) {}
-
-    public static bool ToIsDomain(this string? source) {}
-
-    public static string ToIsDomainWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsDomainThrow(this string? source, string paramName) {}
-
-    public static bool ToIsHostname(this string? source) {}
-
-    public static string ToIsHostnameWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsHostnameThrow(this string? source, string paramName) {}
-
-    public static bool ToIsDigit(this string? source) {}
-
-    public static string ToIsDigitWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsDigitThrow(this string? source, string paramName) {}
-
-    public static bool ToIsUniqueChars(this string? source) {}
-
-    public static string ToIsUniqueCharsWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsUniqueCharsThrow(this string? source, string paramName) {}
-
-    public static bool ToIsEspecialChars(this string? source) {}
-
-    public static string ToIsEspecialCharsWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsEspecialCharsThrow(this string? source, string paramName) {}
-
-    public static bool ToIsLowercase(this string? source) {}
-
-    public static string ToIsLowercaseWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsLowercaseThrow(this string? source, string paramName) {}
-
-    public static bool ToIsUppercase(this string? source) {}
-
-    public static string ToIsUppercaseWithMessageThrow(this string? source, string message) {}
-
-    public static string ToIsUppercaseThrow(this string? source, string paramName) {}
-
-    public static TSource ToIsThrow<TSource>(this TSource source, Func<bool> predicate, string message) {}
-
-    public static bool ToIsErrors<TSource>(this TSource source, Func<bool> predicate) {}
+    public static TResult? ToObject<TResult>(this byte[] bytes) {}
 }
 ```
 
 ```cs
 public static class ClaimsPrincipalExtensions
 {
-    public static bool ToIsAuthenticated(this ClaimsPrincipal claimsPrincipal) { }
+    public static bool ToIsAuthenticated(this ClaimsPrincipal claimsPrincipal) {}
 
-    public static string? ToAuthenticationType(this ClaimsPrincipal claimsPrincipal) { }
+    public static string? ToAuthenticationType(this ClaimsPrincipal claimsPrincipal) {}
 
-    public static string ToUserName(this ClaimsPrincipal claimsPrincipal) { }
+    public static string ToUserName(this ClaimsPrincipal claimsPrincipal) {}
 
-    public static bool ToExists(this ClaimsPrincipal claimsPrincipal, string claimType) { }
+    public static bool ToExists(this ClaimsPrincipal claimsPrincipal, string claimType) {}
 
-    public static void ToAdd(this ClaimsPrincipal claimsPrincipal, string authenticationType, IEnumerable<Claim> claims) { }
+    public static void ToAdd(this ClaimsPrincipal claimsPrincipal, string authenticationType, IEnumerable<Claim> claims) {}
 
-    public static void ToAdd<T>(this ClaimsPrincipal claimsPrincipal, string authenticationType, params (string claimType, T value)[] values) { }
+    public static void ToAdd<T>(this ClaimsPrincipal claimsPrincipal, string authenticationType, params (string claimType, T value)[] values) {}
 
     public static TResult? ToGet<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
-        where TResult : class
-    { }
+        where TResult : class {}
 
     public static TResult? ToGetValue<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType)
-        where TResult : struct
-    { }
+        where TResult : struct {}
 
-    public static IEnumerable<TResult?>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType) { }
+    public static IEnumerable<TResult?>? ToGetAll<TResult>(this ClaimsPrincipal claimsPrincipal, string claimType) {}
 }
 ```
 
 ```cs
 public static class DateTimeExtensions
 {
-    public static bool ToIsWeekend(this DateTime input) { }
+    public static bool ToIsWeekend(this DateTime input) {}
 
-    public static int ToAge(this DateTime input) { }
+    public static int ToAge(this DateTime input) {}
 
-    public static bool ToIsLastDayOfTheMonth(this DateTime input) { }
+    public static bool ToIsLastDayOfTheMonth(this DateTime input) {}
 
-    public static DateTime ToEndOfTheMonth(this DateTime input) { }
+    public static DateTime ToEndOfTheMonth(this DateTime input) {}
 
-    public static DateTime ToStartOfWeek(this DateTime input) { }
+    public static DateTime ToStartOfWeek(this DateTime input) {}
 
-    public static DateTime ToYesterday(this DateTime input) { }
+    public static DateTime ToYesterday(this DateTime input) {}
 
-    public static DateTime ToTomorrow(this DateTime input) { }
+    public static DateTime ToTomorrow(this DateTime input) {}
 
-    public static DateTime ToSetTime(this DateTime input, string time) { }
+    public static DateTime ToSetTime(this DateTime input, string time) {}
 
-    public static DateTime ToSetTime(this DateTime input, int hours, int minutes, int seconds) { }
+    public static DateTime ToSetTime(this DateTime input, int hours, int minutes, int seconds) {}
 }
 ```
 
 ```cs
 public static class EnumerableExtensions
 {
-    public static string ToString<T>(this IEnumerable<T> enumerable, string separator) { }
+    public static string ToString<T>(this IEnumerable<T> enumerable, string separator) {}
 
-    public static IEnumerable<T> ToEmptyIfNull<T>(this IEnumerable<T>? enumerable) { }
+    public static IEnumerable<T> ToEmptyIfNull<T>(this IEnumerable<T>? enumerable) {}
 
-    public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> enumerable) { }
+    public static ReadOnlyCollection<T> ToReadOnly<T>(this IEnumerable<T> enumerable) {}
 
-    public static IEnumerable<Assembly> ToAssembly(this IEnumerable<string> assemblies) { }
+    public static IEnumerable<Assembly> ToAssembly(this IEnumerable<string> assemblies) {}
 }
 ```
 
 ```cs
 public static class EnumExtensions
 {
-    public static int ToValue(this Enum name) { }
+    public static int ToValue(this Enum name) {}
 
-    public static string? ToDescription(this Enum name) { }
+    public static string? ToDescription(this Enum name) {}
 
-    public static (string? name, string? description) ToDisplay(this Enum name) { }
+    public static (string? name, string? description) ToDisplay(this Enum name) {}
 
     public static TAttribute? ToAttribute<TAttribute>(this Enum name)
-        where TAttribute : Attribute
-    { }
+        where TAttribute : Attribute {}
 }
 ```
 
 ```cs
 public static class ExceptionExtensions
 {
-    public static string ToMessage(this Exception exception) { }
+    public static string ToFullMessage(this Exception exception) {}
 
-    public static string ToFullMessage(this Exception exception) { }
+    public static string ToFullMessageDetail(this Exception exception, Action<ExceptionOptions>? options = null) {}
 }
 ```
 

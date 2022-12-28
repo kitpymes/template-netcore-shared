@@ -3,7 +3,8 @@
 <Project>
   <PropertyGroup>
     <IsTestsProject>$(MSBuildProjectName.Contains('Tests'))</IsTestsProject>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -11,13 +12,7 @@
 
   <!-- Muestra en la consola de errores, las advertencias como error en la compilación -->
   <Choose>
-    <When Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-      <PropertyGroup>
-        <MSBuildTreatWarningsAsErrors>false</MSBuildTreatWarningsAsErrors>
-        <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-      </PropertyGroup>
-    </When>
-    <When Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <When Condition=" '$(Configuration)|$(Platform)' == 'Debug|Release|AnyCPU' ">
       <PropertyGroup>
         <MSBuildTreatWarningsAsErrors>true</MSBuildTreatWarningsAsErrors>
         <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
@@ -97,7 +92,7 @@
       </PropertyGroup>
 
       <ItemGroup>
-        <PackageReference Include="Microsoft.VisualStudio.Threading.Analyzers" Version="16.10.56" PrivateAssets="All" />
+        <PackageReference Update="Microsoft.VisualStudio.Threading.Analyzers" Version="17.4.27" PrivateAssets="All" />
         <PackageReference Include="StyleCop.Analyzers" Version="1.1.118" IncludeAssets="Analyzers;Build" PrivateAssets="All" />
         <AdditionalFiles Include="$(SolutionDir)docs\analyzers\stylecop.json" Visible="false" />
       </ItemGroup>
@@ -117,11 +112,11 @@
   </PropertyGroup>
 
   <!-- SignAssembly -->
-  <PropertyGroup Condition=" '$(IsTestsProject)' == 'false' ">
-    <SignAssembly>true</SignAssembly>
-    <DelaySign>false</DelaySign>
-    <AssemblyOriginatorKeyFile>$(SolutionDir)docs\signassembly\SignStrong.snk</AssemblyOriginatorKeyFile>
-  </PropertyGroup>
+<PropertyGroup Condition=" '$(IsTestsProject)' == 'false' ">
+  <SignAssembly>true</SignAssembly>
+  <DelaySign>true</DelaySign>
+  <AssemblyOriginatorKeyFile>$(SolutionDir)docs\signassembly\SignStrong.snk</AssemblyOriginatorKeyFile>
+</PropertyGroup>
 
   <!-- MSTest -->
   <PropertyGroup>

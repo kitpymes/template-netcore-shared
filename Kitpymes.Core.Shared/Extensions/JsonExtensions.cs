@@ -32,7 +32,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="action">Opciones de configuración.</param>
         /// <returns>string | null.</returns>
         public static string ToSerialize<T>(this T value, Action<JsonSerializerOptions>? action = null)
-        => JsonSerializer.Serialize(value.ToIsNullOrEmptyThrow(nameof(value)), typeof(T), action.ToConfigureOrDefault());
+        => JsonSerializer.Serialize(value.ThrowIfNullOrEmpty(nameof(value)), typeof(T), action.ToConfigureOrDefault());
 
         /// <summary>
         /// Deserializa un objeto.
@@ -42,6 +42,6 @@ namespace Kitpymes.Core.Shared
         /// <param name="action">Opciones de configuración.</param>
         /// <returns>T | null.</returns>
         public static T? ToDeserialize<T>(this string value, Action<JsonSerializerOptions>? action = null)
-        => JsonSerializer.Deserialize<T>(value.ToIsNullOrEmptyThrow(nameof(value)), action.ToConfigureOrDefault());
+        => JsonSerializer.Deserialize<T>(value.ThrowIfNullOrEmpty(nameof(value)), action.ToConfigureOrDefault());
     }
 }

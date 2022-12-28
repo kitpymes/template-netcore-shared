@@ -5,7 +5,7 @@
   <Choose>
     <When Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
       <PropertyGroup>
-        <Version>1.2.3</Version>
+        <Version>1.2.4</Version>
         <ApplicationIcon>$(SolutionDir)docs\images\logo.ico</ApplicationIcon>
         <PackageId>$(AssemblyName)</PackageId>
         <Authors>Kitpymes, Sebastian R Ferrari</Authors>
@@ -54,7 +54,7 @@
 
       <ItemGroup>
         <!-- Required if your repository is on Github -->
-        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
       </ItemGroup>
     </When>
   </Choose>

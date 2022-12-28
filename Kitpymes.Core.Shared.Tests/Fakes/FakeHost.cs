@@ -19,16 +19,22 @@ namespace Kitpymes.Core.Shared.Tests
         {
             var options = action.ToConfigureOrDefault();
 
-            return WebHost.CreateDefaultBuilder()
+            var host = WebHost.CreateDefaultBuilder()
                 .UseStartup<TStartup>()
                 .UseEnvironment(options.EnvironmentName)
-                .UseSolutionRelativeContentRoot(options.SolutionRelativeContentRoot)
                 .ConfigureAppConfiguration((context, config) =>
                 {
                     var configPath = Path.Combine(options.DirectoryPath, options.JsonFile);
 
                     config.AddJsonFile(configPath, true);
                 });
+
+            if (!options.SolutionRelativeContentRoot.IsNullOrEmpty())
+            {
+                host.UseSolutionRelativeContentRoot(options.SolutionRelativeContentRoot);
+            }
+
+            return host;
         }
     }
 }

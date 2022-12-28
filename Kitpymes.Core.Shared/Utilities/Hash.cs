@@ -37,8 +37,8 @@ namespace Kitpymes.Core.Shared.Util
         /// <returns>string | ApplicationException: si length es menor que 1 o validChars es nulo o vacio.</returns>
         public static string CreateRandom(int length = 6, string validChars = "ABCDEFGHJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz!¡@#$%€^&*?¿_-+")
         {
-            length.ToIsLessThrow(1, nameof(length));
-            validChars.ToIsNullOrEmptyThrow(nameof(validChars));
+            length.ThrowIfLess(1);
+            validChars.ThrowIfNullOrEmpty();
 
             var random = new Random();
 
@@ -119,11 +119,11 @@ namespace Kitpymes.Core.Shared.Util
         [return: NotNull]
         private static string Create(HashAlgorithm algorithm, string text)
         {
-            text.ToIsNullOrEmptyThrow(nameof(text));
+            text.ThrowIfNullOrEmpty(nameof(text));
 
             algorithm.ComputeHash(Encoding.UTF8.GetBytes(text));
 
-            var hash = algorithm.Hash.ToIsNullOrAnyThrow(nameof(algorithm.Hash));
+            var hash = algorithm.Hash.ThrowIfNullOrAny(nameof(algorithm.Hash));
 
             var result = hash.Select(x => x.ToString("x2", System.Globalization.CultureInfo.CurrentCulture));
 
@@ -132,8 +132,8 @@ namespace Kitpymes.Core.Shared.Util
 
         private static bool Verify(HashAlgorithm algorithm, string text, string hash)
         {
-            text.ToIsNullOrEmptyThrow(nameof(text));
-            hash.ToIsNullOrEmptyThrow(nameof(hash));
+            text.ThrowIfNullOrEmpty(nameof(text));
+            hash.ThrowIfNullOrEmpty(nameof(hash));
 
             var result = Create(algorithm, text);
 

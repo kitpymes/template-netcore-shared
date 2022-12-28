@@ -1,10 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.IO;
 using System.Net.Mime;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -658,9 +654,9 @@ namespace Kitpymes.Core.Shared.Tests
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
 
-            var valueActual = destinationDirectoryPath.ToIsDirectory();
+            var valueActual = !destinationDirectoryPath.IsDirectory();
 
-            Assert.IsFalse(valueActual);
+            Assert.IsTrue(valueActual);
         }
 
         #endregion ToDirectoryDeleteFiles
@@ -676,7 +672,7 @@ namespace Kitpymes.Core.Shared.Tests
             var destinationDirectoryPath = folderName.ToDirectoryTemporary();
             var fileName = Guid.NewGuid().ToString() + ".txt";
             var fileContent = Guid.NewGuid().ToString();
-            var bytes = Encoding.UTF8.GetBytes(fileContent);
+            var bytes = System.Text.Encoding.UTF8.GetBytes(fileContent);
 
             await destinationDirectoryPath.ToDirectorySaveFileAsync(fileName, bytes);
 
@@ -722,11 +718,12 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToDirectoryTemporary_Passing_ValidValue_Returns_DirectoryExists()
         {
             var folderName = Guid.NewGuid().ToString();
+
             var destinationDirectoryPath = folderName.ToDirectoryTemporary();
 
-            var valueActual = destinationDirectoryPath.ToIsDirectory();
+            var valueActual = !destinationDirectoryPath.IsDirectory();
 
-            Assert.IsTrue(valueActual);
+            Assert.IsFalse(valueActual);
 
             destinationDirectoryPath.ToDirectoryDeleteFiles(true, true);
         }

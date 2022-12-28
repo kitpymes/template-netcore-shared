@@ -44,19 +44,17 @@ namespace Kitpymes.Core.Shared
             string contentType = MediaTypeNames.Application.Json,
             IDictionary<string, IEnumerable<string>>? headers = null)
         {
-            var validHttpResponse = httpResponse.ToIsNullOrEmptyThrow(nameof(httpResponse));
+            httpResponse.Clear();
 
-            validHttpResponse.Clear();
+            httpResponse.StatusCode = (int)status;
 
-            validHttpResponse.StatusCode = (int)status;
-
-            validHttpResponse.ContentType = contentType;
+            httpResponse.ContentType = contentType;
 
             if (headers?.Count > 0)
             {
                 foreach (var (key, values) in headers)
                 {
-                    validHttpResponse.Headers.AppendList(key, values.ToList());
+                    httpResponse.Headers.AppendList(key, values.ToList());
                 }
             }
 

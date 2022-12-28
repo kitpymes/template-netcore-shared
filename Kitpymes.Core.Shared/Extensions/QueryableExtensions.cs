@@ -61,12 +61,12 @@ namespace Kitpymes.Core.Shared
             int index = 1,
             int size = 20)
         {
-            if (queryable.ToIsNullOrAny())
+            if (queryable.IsNullOrAny())
             {
                 return queryable;
             }
 
-            if (!string.IsNullOrWhiteSpace(property))
+            if (!property.IsNullOrEmpty())
             {
                 queryable = queryable.ToOrder(property, ascending);
             }
@@ -81,8 +81,8 @@ namespace Kitpymes.Core.Shared
             string property,
             bool ascending)
         {
-            queryable.ToIsNullOrAnyThrow(nameof(queryable));
-            property.ToIsNullOrEmptyThrow(nameof(property));
+            queryable.ThrowIfNullOrAny();
+            property.ThrowIfNullOrEmpty();
 
             var properties = property.Split('.');
 
@@ -169,9 +169,6 @@ namespace Kitpymes.Core.Shared
             IEnumerable<string> properties,
             bool ascending)
         {
-            queryable.ToIsNullOrAnyThrow(nameof(queryable));
-            properties.ToIsNullOrAnyThrow(nameof(properties));
-
             var parameters = Expression.Parameter(typeof(T));
 
             var body = properties.Aggregate<string, Expression>(parameters, Expression.Property);

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -15,7 +14,7 @@ namespace Kitpymes.Core.Shared.Tests
         [TestMethod]
 		public void ToEnvironment_Passing_Development_Enviroment_Returns_Development_Name()
 		{
-            var environmentNameExpected = "Development";
+            string? environmentNameExpected = "Development";
             var services = new ServiceCollection().FakeAddEnviroment(x => x.EnvironmentName = environmentNameExpected);
             var application = new ApplicationBuilder(services.BuildServiceProvider());
 
@@ -23,7 +22,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsDevelopment());
+            Assert.IsTrue(result?.IsDevelopment());
          }
 
         [TestMethod]
@@ -37,7 +36,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsProduction());
+            Assert.IsTrue(result?.IsProduction());
         }
 
         [TestMethod]
@@ -51,7 +50,7 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsStaging());
+            Assert.IsTrue(result?.IsStaging());
         }
 
         [TestMethod]
@@ -65,22 +64,20 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(result);
             Assert.AreEqual(environmentNameExpected, result?.EnvironmentName);
-            Assert.IsTrue(result.IsEnvironment(environmentNameExpected));
+            Assert.IsTrue(result?.IsEnvironment(environmentNameExpected));
         }
 
         [TestMethod]
         public void ToEnvironment_Passing_Service_Not_Found_Returns_ApplicationException()
         {
             var paramName = typeof(IWebHostEnvironment).Name;
-            var messageExpected = Util.Messages.NotFound(paramName);
 
             var services = new ServiceCollection();
             var application = new ApplicationBuilder(services.BuildServiceProvider());
 
-            var exceptionActual = Assert.ThrowsException<ApplicationException>(() =>  application.ToEnvironment().ToIsNullOrEmptyWithMessageThrow(messageExpected));
+            var exceptionActual = Assert.ThrowsException<ApplicationException>(() =>  application.ToEnvironment().ThrowIfNullOrEmpty());
 
             Assert.IsNotNull(exceptionActual);
-            Assert.AreEqual(messageExpected, exceptionActual.Message);
         }
 
         #endregion ToEnvironment
@@ -136,22 +133,21 @@ namespace Kitpymes.Core.Shared.Tests
 
             Assert.IsNotNull(serviceActual);
             Assert.AreEqual(environmentNameExpected, serviceActual?.EnvironmentName);
-            Assert.IsTrue(serviceActual.IsDevelopment());
+            Assert.IsTrue(serviceActual?.IsDevelopment());
         }
 
         [TestMethod]
         public void ToService_Passing_Service_Not_Found_Returns_ApplicationException()
         {
             var paramName = typeof(IWebHostEnvironment).Name;
-            var messageExpected = Util.Messages.NotFound(paramName); ;
 
             var services = new ServiceCollection();
+
             var application = new ApplicationBuilder(services.BuildServiceProvider());
 
-            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => application.ToService<IWebHostEnvironment>().ToIsNullOrEmptyWithMessageThrow(messageExpected));
+            var exceptionActual = Assert.ThrowsException<ApplicationException>(() => application.ToService<IWebHostEnvironment>().ThrowIfNullOrEmpty());
 
             Assert.IsNotNull(exceptionActual);
-            Assert.AreEqual(messageExpected, exceptionActual.Message);
         }
 
         #endregion ToService

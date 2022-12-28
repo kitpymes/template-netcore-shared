@@ -19,21 +19,6 @@ namespace Kitpymes.Core.Shared.Tests
         #region ToIsAuthenticated
 
         [TestMethod]
-        public void ToIsAuthenticated_Passing_Null_ClaimsPrincipal_Returns_ApplicationException()
-        {
-            ClaimsPrincipal? claimsPrincipal = null;
-
-            var fakeHttpContext = FakeHttpContext.Configure(x =>
-            {
-                x.User = claimsPrincipal;
-            });
-
-            var claimsPrincipalActual = fakeHttpContext.User;
-
-            Assert.ThrowsException<ApplicationException>(() => claimsPrincipalActual.ToIsAuthenticated());
-        }
-
-        [TestMethod]
         public void ToIsAuthenticated_Passing_Claims_Returns_False()
         {
             var claimsPrincipal = new ClaimsPrincipal();
@@ -55,7 +40,7 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToIsAuthenticated_Passing_Claims_Returns_True()
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeName, claimValueName), (claimTypeId, claimValueId.ToString()));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeName, claimValueName), (claimTypeId, claimValueId.ToString()));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -73,21 +58,6 @@ namespace Kitpymes.Core.Shared.Tests
         #endregion ToIsAuthenticated
 
         #region ToAuthenticationType
-
-        [TestMethod]
-        public void ToAuthenticationType_Passing_Null_ClaimsPrincipal_Returns_ApplicationException()
-        {
-            ClaimsPrincipal? claimsPrincipal = null;
-
-            var fakeHttpContext = FakeHttpContext.Configure(x =>
-            {
-                x.User = claimsPrincipal;
-            });
-
-            var claimsPrincipalActual = fakeHttpContext.User;
-
-            Assert.ThrowsException<ApplicationException>(() => claimsPrincipalActual.ToAuthenticationType());
-        }
 
         [TestMethod]
         public void ToAuthenticationType_Passing_Claims_Returns_Null()
@@ -111,7 +81,7 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToAuthenticationType_Passing_Claims_Returns_AuthenticationType_Name()
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeName, claimValueName), (claimTypeId, claimValueId.ToString()));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeName, claimValueName), (claimTypeId, claimValueId.ToString()));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -129,21 +99,6 @@ namespace Kitpymes.Core.Shared.Tests
         #endregion ToAuthenticationType
 
         #region ToUserName
-
-        [TestMethod]
-        public void ToUserName_Passing_Null_ClaimsPrincipal_Returns_ApplicationException()
-        {
-            ClaimsPrincipal? claimsPrincipal = null;
-
-            var fakeHttpContext = FakeHttpContext.Configure(x =>
-            {
-                x.User = claimsPrincipal;
-            });
-
-            var claimsPrincipalActual = fakeHttpContext.User;
-
-            Assert.ThrowsException<ApplicationException>(() => claimsPrincipalActual.ToUserName());
-        }
 
         [TestMethod]
         public void ToUserName_Passing_Invalid_ClaimsPrincipal_Returns_Null()
@@ -167,7 +122,7 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToUserName_Passing_Valid_UserName_ClaimsPrincipal_Returns_String_UserName_Value()
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeName, claimValueName));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeName, claimValueName));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -190,7 +145,7 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToExists_Passing_Claims_Returns_True()
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeName, claimValueName), (claimTypeId, claimValueId.ToString()));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeName, claimValueName), (claimTypeId, claimValueId.ToString()));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -216,7 +171,7 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToGet_Passing_Claims_Returns_Claim_Value_String()
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeName, claimValueName));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeName, claimValueName));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -235,7 +190,7 @@ namespace Kitpymes.Core.Shared.Tests
         public void ToGet_Passing_Claims_Returns_Claim_Value_Int()
         {
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeId, claimValueId));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeId, claimValueId));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -262,7 +217,7 @@ namespace Kitpymes.Core.Shared.Tests
             };
 
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeUserData, fakeObject));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeUserData, fakeObject));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -296,7 +251,7 @@ namespace Kitpymes.Core.Shared.Tests
             var permission_edit = Guid.NewGuid().ToString();
 
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeRole, permission_add), (claimTypeRole, permission_edit));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeRole, permission_add), (claimTypeRole, permission_edit));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -330,7 +285,7 @@ namespace Kitpymes.Core.Shared.Tests
             var permissionId_edit = new Random().Next();
 
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeRole, permissionId_add), (claimTypeRole, permissionId_edit));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeRole, permissionId_add), (claimTypeRole, permissionId_edit));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>
@@ -376,7 +331,7 @@ namespace Kitpymes.Core.Shared.Tests
             };
 
             var claimsPrincipal = new ClaimsPrincipal();
-            claimsPrincipal.ToAdd(authenticationType, (claimTypeUserData, fakeObject), (claimTypeUserData, fakeObject1));
+            claimsPrincipal.ToAddIdentity(authenticationType, (claimTypeUserData, fakeObject), (claimTypeUserData, fakeObject1));
             Thread.CurrentPrincipal = claimsPrincipal;
 
             var fakeHttpContext = FakeHttpContext.Configure(x =>

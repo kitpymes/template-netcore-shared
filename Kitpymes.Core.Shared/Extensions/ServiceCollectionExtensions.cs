@@ -40,7 +40,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Define un mecanismo para recuperar un objeto de servicio.</param>
         /// <returns>IWebHostEnvironment | nulo.</returns>
         public static IWebHostEnvironment? ToEnvironment(this IServiceProvider services)
-        => services.ToIsNullOrEmptyThrow(nameof(services)).GetService<IWebHostEnvironment>();
+        => services.GetService<IWebHostEnvironment>();
 
         /// <summary>
         /// Obtiene los datos del ambiente de ejecución.
@@ -48,7 +48,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <returns>IWebHostEnvironment | nulo.</returns>
         public static IWebHostEnvironment? ToEnvironment(this IServiceCollection services)
-        => services.ToIsNullOrEmptyThrow(nameof(services)).ToService<IWebHostEnvironment>();
+        => services.ToService<IWebHostEnvironment>();
 
         #endregion ToEnvironment
 
@@ -61,7 +61,7 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <returns>Verdadero o falso.</returns>
         public static bool ToExists<TService>(this IServiceCollection services)
-        => services.ToIsNullOrEmptyThrow(nameof(services)).ToService<TService>() != null;
+        => services.ToService<TService>() != null;
 
         #endregion ToExists
 
@@ -74,7 +74,48 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <returns>TService | nulo.</returns>
         public static TService? ToService<TService>(this IServiceCollection services)
-        => services.ToIsNullOrEmptyThrow(nameof(services)).BuildServiceProvider().GetService<TService>();
+        => services.BuildServiceProvider().GetService<TService>();
+
+        /// <summary>
+        /// Registra los servicios que la clase coincidan con la interfaz, utilizando el patrón (ClassName coincide con IClassName).
+        /// </summary>
+        /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
+        /// <param name="implementation">Tipo de implementación.</param>
+        /// <param name="assemblies">Los assemblies se los servicios que queremos agregar a la colección.</param>
+        /// <param name="lifetime">Especifica la vida útil de un servicio.</param>
+        /// <returns>IServiceCollection.</returns>
+        public static IServiceCollection ToServiceMatchingClass(
+            this IServiceCollection services,
+            Type implementation,
+            Assembly[] assemblies,
+            ServiceLifetime lifetime = ServiceLifetime.Transient)
+        {
+            assemblies.ThrowIfNullOrAny();
+
+            services.Scan(scan => scan
+               .FromAssemblies(assemblies)
+               .AddClasses(classes => classes.AssignableTo(implementation))
+               .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+               .AsMatchingInterface()
+               .WithLifetime(lifetime));
+
+            return services;
+        }
+
+        /// <summary>
+        /// Registra los servicios que la clase coincidan con la interfaz, utilizando el patrón (ClassName coincide con IClassName).
+        /// </summary>
+        /// <typeparam name="TImplementation">Tipo de clase de la implementación.</typeparam>
+        /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
+        /// <param name="assemblies">Los assemblies se los servicios que queremos agregar a la colección.</param>
+        /// <param name="lifetime">Especifica la vida útil de un servicio.</param>
+        /// <returns>IServiceCollection.</returns>
+        public static IServiceCollection ToServiceMatchingClass<TImplementation>(
+            this IServiceCollection services,
+            Assembly[] assemblies,
+            ServiceLifetime lifetime = ServiceLifetime.Transient)
+            where TImplementation : class
+        => services.ToServiceMatchingClass(typeof(TImplementation), assemblies, lifetime);
 
         /// <summary>
         /// Registra los servicios que la clase coincidan con la interfaz, utilizando el patrón (ClassName coincide con IClassName).
@@ -82,28 +123,13 @@ namespace Kitpymes.Core.Shared
         /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
         /// <param name="assemblies">Los assemblies se los servicios que queremos agregar a la colección.</param>
         /// <param name="lifetime">Especifica la vida útil de un servicio.</param>
-        /// <returns>IServiceCollection.</returns>
+        /// <returns>IServiceCollection | ApplicationException: if assemblies is null or not contains elements.</returns>
         public static IServiceCollection ToServiceMatchingInterface(
             this IServiceCollection services,
             Assembly[] assemblies,
             ServiceLifetime lifetime = ServiceLifetime.Transient)
         {
-            var errors = new List<string>();
-
-            if (services.ToIsNullOrEmpty())
-            {
-                errors.Add(Util.Messages.NullOrEmpty(nameof(services)));
-            }
-
-            if (assemblies.ToIsNullOrAny())
-            {
-                errors.Add(Util.Messages.NullOrAny(nameof(assemblies)));
-            }
-
-            if (errors.Any())
-            {
-                Util.Check.Throw(errors);
-            }
+            assemblies.ThrowIfNullOrAny();
 
             services.Scan(scan => scan
                 .FromAssemblies(assemblies)
@@ -111,6 +137,32 @@ namespace Kitpymes.Core.Shared
                 .UsingRegistrationStrategy(RegistrationStrategy.Skip)
                 .AsMatchingInterface((service, filter) =>
                     filter.Where(implementation => implementation.Name.Equals($"I{service.Name}", StringComparison.OrdinalIgnoreCase)))
+                .WithLifetime(lifetime));
+
+            return services;
+        }
+
+        /// <summary>
+        /// Registra los servicios que la clase coincidan con la interfaz, utilizando el patrón (ClassName coincide con IClassName).
+        /// </summary>
+        /// <typeparam name="TInterface">Tipo de interface de la implementación.</typeparam>
+        /// <param name="services">Especifica el contrato para una colección de descriptores de servicio.</param>
+        /// <param name="assemblies">Los assemblies se los servicios que queremos agregar a la colección.</param>
+        /// <param name="lifetime">Especifica la vida útil de un servicio.</param>
+        /// <returns>IServiceCollection | ApplicationException: if assemblies is null or not contains elements.</returns>
+        public static IServiceCollection ToServiceMatchingInterface<TInterface>(
+            this IServiceCollection services,
+            Assembly[] assemblies,
+            ServiceLifetime lifetime = ServiceLifetime.Transient)
+        {
+            assemblies.ThrowIfNullOrAny();
+
+            services.Scan(scan => scan
+                .FromAssemblies(assemblies)
+                .AddClasses()
+                .UsingRegistrationStrategy(RegistrationStrategy.Skip)
+                .AsMatchingInterface((service, filter) =>
+                    filter.Where(implementation => implementation.Name.Equals(typeof(TInterface).Name, StringComparison.OrdinalIgnoreCase)))
                 .WithLifetime(lifetime));
 
             return services;
@@ -132,45 +184,16 @@ namespace Kitpymes.Core.Shared
             string directoryPath,
             params (string jsonFileName, bool optional, bool reloadOnChange)[] files)
         {
-            var errors = new List<string>();
+            directoryPath.ThrowIfDirectoryNotExists();
+            files.ThrowIfNullOrAny();
 
-            if (services.ToIsNullOrEmpty())
-            {
-                errors.Add(Util.Messages.NullOrEmpty(nameof(services)));
-            }
-
-            if (directoryPath.ToIsNullOrEmpty())
-            {
-                errors.Add(Util.Messages.NullOrEmpty(nameof(directoryPath)));
-            }
-            else
-            {
-                if (!directoryPath.ToIsDirectory())
-                {
-                    errors.Add(Util.Messages.NotFound(directoryPath));
-                }
-            }
-
-            if (files.ToIsNullOrAny())
-            {
-                errors.Add(Util.Messages.NullOrAny(nameof(files)));
-            }
-
-            if (errors.Any())
-            {
-                Util.Check.Throw(errors);
-            }
-
-            if (files != null)
-            {
-                var configurationBuilder = new ConfigurationBuilder()
+            var configurationBuilder = new ConfigurationBuilder()
                   .SetBasePath(directoryPath)
                   .ToJsonFiles(directoryPath, files)
                   .AddEnvironmentVariables()
                   .Build();
 
-                services.ToConfiguration(configurationBuilder);
-            }
+            services.ToConfiguration(configurationBuilder);
 
             return services;
         }
@@ -187,20 +210,17 @@ namespace Kitpymes.Core.Shared
         {
             var errors = new List<string>();
 
-            if (services.ToIsNullOrEmpty())
+            if (services.IsNullOrEmpty())
             {
                 errors.Add(Util.Messages.NullOrEmpty(nameof(services)));
             }
 
-            if (configuration.ToIsNullOrAny())
+            if (configuration.IsNullOrAny())
             {
                 errors.Add(Util.Messages.NullOrAny(nameof(configuration)));
             }
 
-            if (errors.Any())
-            {
-                Util.Check.Throw(errors);
-            }
+            VerifyExtensions.ThrowIf(errors);
 
             var list = new Dictionary<string, string?>();
 
@@ -226,7 +246,7 @@ namespace Kitpymes.Core.Shared
         /// <returns>La colección de servicios.</returns>
         public static IServiceCollection ToConfiguration(this IServiceCollection services, IConfiguration configuration)
         {
-            services.ToIsNullOrEmptyThrow(nameof(services)).TryAddSingleton(configuration);
+            services.ThrowIfNullOrEmpty().TryAddSingleton(configuration);
 
             return services;
         }
@@ -247,7 +267,7 @@ namespace Kitpymes.Core.Shared
             where TSettings : class, new()
             where TConfigureSettings : class, IConfigureOptions<TSettings>
         {
-            if (defaultSettings is null)
+            if (defaultSettings.IsNullOrEmpty())
             {
                 services.ToSettings((TSettings)null!);
             }
@@ -289,7 +309,7 @@ namespace Kitpymes.Core.Shared
 
                     settings = service?.Value;
 
-                    if (defaultSettings is not null)
+                    if (!defaultSettings.IsNullOrEmpty())
                     {
                         settings = settings?.ToMapUpdate(defaultSettings);
                     }
@@ -305,7 +325,7 @@ namespace Kitpymes.Core.Shared
                 }
             }
 
-            var result = services.ToService<TSettings>().ToIsNullOrEmptyThrow(typeof(TSettings).Name);
+            var result = services.ToService<TSettings>().ThrowIfNullOrEmpty(typeof(TSettings).Name);
 
             return result;
         }
@@ -319,9 +339,7 @@ namespace Kitpymes.Core.Shared
             {
                 var filePath = $"{directoryPath}/{jsonFileName}.json";
 
-                filePath.ToIsFileThrow(nameof(filePath));
-
-                builder.AddJsonFile(filePath, optional, reloadOnChange);
+                builder.AddJsonFile(filePath.ThrowIfFileNotExists(), optional, reloadOnChange);
             }
 
             return builder;

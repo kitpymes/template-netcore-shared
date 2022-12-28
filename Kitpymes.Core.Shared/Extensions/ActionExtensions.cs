@@ -5,41 +5,39 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
-namespace Kitpymes.Core.Shared
+using System.Diagnostics.CodeAnalysis;
+
+namespace Kitpymes.Core.Shared;
+
+/*
+    Clase de extensión ActionExtensions
+    Contiene las extensiones del delegado Action
+*/
+
+/// <summary>
+/// Clase de extensión <c>ActionExtensions</c>.
+/// Contiene las extensiones del delegado Action.
+/// </summary>
+/// <remarks>
+/// <para>En esta clase se pueden agregar todas las extensiones para el delegado Action.</para>
+/// </remarks>
+public static class ActionExtensions
 {
-    using System;
-    using System.Diagnostics.CodeAnalysis;
-
-    /*
-        Clase de extensión ActionExtensions
-        Contiene las extensiones del delegado Action
-    */
-
     /// <summary>
-    /// Clase de extensión <c>ActionExtensions</c>.
-    /// Contiene las extensiones del delegado Action.
+    /// Combina las opciones personalizadas <paramref name="action"/> con las opciones por defecto <paramref name="defaultOptions"/>.
     /// </summary>
-    /// <remarks>
-    /// <para>En esta clase se pueden agregar todas las extensiones para el delegado Action.</para>
-    /// </remarks>
-    public static class ActionExtensions
+    /// <typeparam name="TOptions">Tipo de opcion que es de tipo class.</typeparam>
+    /// <param name="action">Configuración personalizada que sobreescribe las opciones por defecto.</param>
+    /// <param name="defaultOptions">Opcionces por defecto.</param>
+    /// <returns>TOptions.</returns>
+    [return: NotNull]
+    public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? defaultOptions = null)
+        where TOptions : class, new()
     {
-        /// <summary>
-        /// Combina las opciones personalizadas <paramref name="action"/> de una acción con las opciones por defecto <paramref name="overrideDefaultOptions"/>.
-        /// </summary>
-        /// <typeparam name="TOptions">Tipo de opcion que es de tipo class.</typeparam>
-        /// <param name="action">Opciones personalizadas.</param>
-        /// <param name="overrideDefaultOptions">Sobreescribimos las opcionces por defecto.</param>
-        /// <returns>TOptions | ApplicationException: si action es nulo.</returns>
-        [return: NotNull]
-        public static TOptions ToConfigureOrDefault<TOptions>(this Action<TOptions>? action, TOptions? overrideDefaultOptions = null)
-            where TOptions : class, new()
-        {
-            overrideDefaultOptions ??= new TOptions();
+        defaultOptions ??= new TOptions();
 
-            action?.Invoke(overrideDefaultOptions);
+        action?.Invoke(defaultOptions);
 
-            return overrideDefaultOptions;
-        }
+        return defaultOptions;
     }
 }
