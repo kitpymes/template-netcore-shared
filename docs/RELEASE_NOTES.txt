@@ -1,3 +1,7 @@
+# v.1.2.5
+- Se actualizan librerías.
+- Se arregla un bug en el método "IsContainsUniqueChars" de la clase "VerifyExtensions".
+
 # v.1.2.4
 - Se actualizan librerías.
 - Se migra a net7.

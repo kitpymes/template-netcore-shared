@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using System.Net.Http;
 
 namespace Kitpymes.Core.Shared.Tests
 {

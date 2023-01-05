@@ -7,19 +7,23 @@
 
 namespace Kitpymes.Core.Shared;
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text.RegularExpressions;
 using Kitpymes.Core.Shared.Util;
 
 /*
-    Clase de extensión CheckExtensions
+    Clase de extensión VerifyExtensions
     Contiene las extensiones de las Excepciones
 */
 
 /// <summary>
-/// Clase de extensión <c>CheckExtensions</c>.
+/// Clase de extensión <c>VerifyExtensions</c>.
 /// Contiene las extensiones para validar argumentos.
 /// </summary>
 /// <remarks>
@@ -453,7 +457,27 @@ public static class VerifyExtensions
     /// </summary>
     /// <param name="value">El valor a verificar.</param>
     /// <returns>true | false.</returns>
-    public static bool IsContainsUniqueChars([NotNullWhen(true)] this string? value) => value?.Any(x => !new HashSet<char>().Add(x)) == true;
+    public static bool IsContainsUniqueChars([NotNullWhen(true)] this string? value)
+    {
+        if (value is null)
+        {
+            return false;
+        }
+
+        var list = new HashSet<char>(value.Length);
+
+        foreach (char val in value)
+        {
+            if (list.Contains(val))
+            {
+                return false;
+            }
+
+            list.Add(val);
+        }
+
+        return true;
+    }
 
     /// <summary>
     /// Verifica si un valor contiene caracteres repetidos.

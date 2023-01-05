@@ -5,6 +5,9 @@
 // </copyright>
 // -----------------------------------------------------------------------
 
+using System;
+using System.Threading;
+
 namespace Kitpymes.Core.Shared;
 
 /*

@@ -4,7 +4,6 @@
   <PropertyGroup>
     <IsTestsProject>$(MSBuildProjectName.Contains('Tests'))</IsTestsProject>
     <TargetFramework>net7.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
     <NeutralLanguage>en-US</NeutralLanguage>
@@ -112,11 +111,11 @@
   </PropertyGroup>
 
   <!-- SignAssembly -->
-<PropertyGroup Condition=" '$(IsTestsProject)' == 'false' ">
-  <SignAssembly>true</SignAssembly>
-  <DelaySign>true</DelaySign>
-  <AssemblyOriginatorKeyFile>$(SolutionDir)docs\signassembly\SignStrong.snk</AssemblyOriginatorKeyFile>
-</PropertyGroup>
+  <PropertyGroup Condition=" '$(IsTestsProject)' == 'false' ">
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>$(SolutionDir)docs\signassembly\SignStrong.snk</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
 
   <!-- MSTest -->
   <PropertyGroup>

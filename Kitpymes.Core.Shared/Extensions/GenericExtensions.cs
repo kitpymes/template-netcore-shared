@@ -6,6 +6,8 @@
 // -----------------------------------------------------------------------
 
 using System.Collections;
+using System.IO;
+using System.Linq;
 using System.Xml.Serialization;
 
 namespace Kitpymes.Core.Shared;

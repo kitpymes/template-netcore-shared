@@ -279,7 +279,8 @@ namespace Kitpymes.Core.Shared.Tests
             var services = new ServiceCollection();
             var configurationActual = services
                 .ToConfiguration(directoryPath, (jsonFileName, true, true))
-                .ToService<IConfiguration>();
+                .ToService<IConfiguration>()
+                .ThrowIfNullOrEmpty();
 
             var isEnabledFacebookActual = configurationActual.GetValue<bool>("FakeSettings:FacebookSettings:Enabled");
             var keyFacebookActual = configurationActual.GetValue<string>("FakeSettings:FacebookSettings:Key");
@@ -299,7 +300,8 @@ namespace Kitpymes.Core.Shared.Tests
             var services = new ServiceCollection();
             var configurationActual = services
                 .ToConfiguration(expectedConfiguration)
-                .ToService<IConfiguration>();
+                .ToService<IConfiguration>()
+                .ThrowIfNullOrEmpty();
 
             var isEnabledFacebookActual = configurationActual.GetValue<bool>("FakeSettings:FacebookSettings:Enabled");
             var keyFacebookActual = configurationActual.GetValue<string>("FakeSettings:FacebookSettings:Key");

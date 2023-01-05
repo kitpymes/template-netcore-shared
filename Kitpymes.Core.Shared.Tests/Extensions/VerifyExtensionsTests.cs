@@ -1,5 +1,6 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using System;
 
 namespace Kitpymes.Core.Shared.Tests
 {
@@ -183,5 +184,31 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         #endregion Throw
+
+        #region ContainsUniqueChars
+
+        [TestMethod]
+        public void IsContainsUniqueChars_Passing_ValidValue_Returns_True()
+        {
+            var value = "1aeiou2";
+            var valueExpected = true;
+
+            var result = value.IsContainsUniqueChars();
+
+            Assert.AreEqual(valueExpected, result);
+        }
+
+        [TestMethod]
+        public void IsContainsUniqueChars_Passing_InvalidValue_Returns_False()
+        {
+            var value = "1aeiou1";
+            var valueExpected = false;
+
+            var result = value.IsContainsUniqueChars();
+
+            Assert.AreEqual(valueExpected, result);
+        }
+
+        #endregion ContainsUniqueChars
     }
 }
