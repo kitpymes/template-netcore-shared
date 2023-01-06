@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Kitpymes.Core.Shared.Util;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 using System;
 
@@ -60,6 +61,63 @@ namespace Kitpymes.Core.Shared.Tests
         }
 
         #endregion NullOrAny
+
+        #region Range
+
+        [DataTestMethod]
+        [DataRow(-2)]
+        [DataRow(-1)]
+        [DataRow(0)]
+        [DataRow(6)]
+        [DataRow(7)]
+        [DataRow(8)]
+        public void ThrowIfOutRange_Passing_InvalidValue_Returns_ApplicationException(int value)
+        {
+            var min = 1;
+            var max = 5;
+
+            var valueExpected = Messages.InsideRange(nameof(value), min, max);
+
+            var result = Assert.ThrowsException<ApplicationException>(() => value.ThrowIfOutRange(min, max));
+
+            Assert.AreEqual(valueExpected, result.Message);
+        }
+
+        [DataTestMethod]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        public void ThrowIfInsideRange_Passing_InvalidValue_Returns_ApplicationException(int value)
+        {
+            var min = 1;
+            var max = 5;
+
+            var valueExpected = Messages.OutRange(nameof(value), min, max);
+
+            var result = Assert.ThrowsException<ApplicationException>(() => value.ThrowIfInsideRange(min, max));
+
+            Assert.AreEqual(valueExpected, result.Message);
+        }
+
+        [DataTestMethod]
+        [DataRow(1)]
+        [DataRow(2)]
+        [DataRow(3)]
+        [DataRow(4)]
+        [DataRow(5)]
+        public void ThrowIfInsideRangeOrEqual_Passing_InvalidValue_Returns_ApplicationException(int value)
+        {
+            var min = 1;
+            var max = 5;
+
+            var valueExpected = Messages.OutRange(nameof(value), min, max);
+
+            var result = Assert.ThrowsException<ApplicationException>(() => value.ThrowIfInsideRangeOrEqual(min, max));
+
+            Assert.AreEqual(valueExpected, result.Message);
+        }
+
+        #endregion Range
 
         #region Directory
 

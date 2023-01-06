@@ -132,6 +132,44 @@ public static class VerifyExtensions
     }
 
     /// <summary>
+    /// Verifica si un valor es mayor o igual que el valor máximo permitido.
+    /// </summary>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="max">El valor máximo.</param>
+    /// <returns>true | false.</returns>
+    public static bool IsGreaterOrEqual([NotNullWhen(true)] this object? value, long max)
+    {
+        if (value.IsNullOrEmpty())
+        {
+            return true;
+        }
+
+        switch (value)
+        {
+            case Enum _ when (int)value >= max:
+            case string s when s.Length >= max:
+            case sbyte sb when sb >= max:
+            case short sh when sh >= max:
+            case int inte when inte >= max:
+            case long lo when lo >= max:
+            case byte by when by >= max:
+            case ushort us when us >= max:
+            case uint ui when ui >= max:
+            case ulong ul when Convert.ToInt64(ul) >= max:
+            case char ch when ch >= max:
+            case float fl when fl >= max:
+            case double d when d >= max:
+            case decimal de when de >= max:
+            case Array a when a.Length >= max:
+            case ICollection c when c.Count >= max:
+            case IEnumerable e when e.Cast<object>().Count() >= max:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
     /// Verifica si un valor es mayor que el valor máximo permitido.
     /// </summary>
     /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
@@ -141,6 +179,17 @@ public static class VerifyExtensions
     /// <returns>TValue | ApplicationException: "{name} must be less than {max}".</returns>
     public static TValue ThrowIfGreater<TValue>([NotNull] this TValue? value, long max, [CallerArgumentExpression("value")] string name = "")
     => value.ThrowIf(() => value.IsGreater(max), Util.Messages.Greater(name, max));
+
+    /// <summary>
+    /// Verifica si un valor es mayor o igual que el valor máximo permitido.
+    /// </summary>
+    /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="max">El valor máximo.</param>
+    /// <param name="name">Nombre del parámetro.</param>
+    /// <returns>TValue | ApplicationException: "{name} must be less or equal than {max}".</returns>
+    public static TValue ThrowIfGreaterOrEqual<TValue>([NotNull] this TValue? value, long max, [CallerArgumentExpression("value")] string name = "")
+    => value.ThrowIf(() => value.IsGreaterOrEqual(max), Messages.GreaterOrEqual(name, max));
 
     #endregion Greater
 
@@ -185,6 +234,44 @@ public static class VerifyExtensions
     }
 
     /// <summary>
+    /// Verifica si un valor es menor o igual que el valor mínimo permitido.
+    /// </summary>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="min">El valor mínimo.</param>
+    /// <returns>true | false.</returns>
+    public static bool IsLessOrEqual([NotNullWhen(true)] this object? value, long min)
+    {
+        if (value.IsNullOrEmpty())
+        {
+            return false;
+        }
+
+        switch (value)
+        {
+            case Enum _ when (int)value <= min:
+            case string s when s.Length <= min:
+            case sbyte sb when sb <= min:
+            case short sh when sh <= min:
+            case int inte when inte <= min:
+            case long lo when lo <= min:
+            case byte by when by <= min:
+            case ushort us when us <= min:
+            case uint ui when ui <= min:
+            case ulong ul when Convert.ToInt64(ul) <= min:
+            case char ch when ch <= min:
+            case float fl when fl <= min:
+            case double d when d <= min:
+            case decimal de when de <= min:
+            case Array a when a.Length <= min:
+            case ICollection c when c.Count <= min:
+            case IEnumerable e when e.Cast<object>().Count() <= min:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    /// <summary>
     /// Verifica si un valor es menor que el valor mínimo permitido.
     /// </summary>
     /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
@@ -194,6 +281,17 @@ public static class VerifyExtensions
     /// <returns>TValue | ApplicationException: "{name} must be greater than {min}".</returns>
     public static TValue ThrowIfLess<TValue>([NotNull] this TValue? value, long min, [CallerArgumentExpression("value")] string name = "")
     => value.ThrowIf(() => value.IsLess(min), Util.Messages.Less(name, min));
+
+    /// <summary>
+    /// Verifica si un valor es menor o igual que el valor mínimo permitido.
+    /// </summary>
+    /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="min">El valor mínimo.</param>
+    /// <param name="name">Nombre del parámetro.</param>
+    /// <returns>TValue | ApplicationException: "{name} must be greater or equal than {min}".</returns>
+    public static TValue ThrowIfLessOrEqual<TValue>([NotNull] this TValue? value, long min, [CallerArgumentExpression("value")] string name = "")
+    => value.ThrowIf(() => value.IsLessOrEqual(min), Messages.LessOrEqual(name, min));
 
     #endregion Less
 
@@ -236,14 +334,48 @@ public static class VerifyExtensions
     /// <summary>
     /// Verifica si un valor se encuentra entre un rango.
     /// </summary>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="min">El valor mínimo.</param>
+    /// <param name="max">El valor máximo.</param>
+    /// <returns>true | false.</returns>
+    public static bool IsRangeOrEqual([NotNullWhen(true)] this object? value, long min, long max)
+    => !value.IsNullOrEmpty() && value.IsGreaterOrEqual(min) && value.IsLessOrEqual(max);
+
+    /// <summary>
+    /// Verifica si un valor se encuentra fuera de un rango.
+    /// </summary>
     /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
     /// <param name="value">El valor a verificar.</param>
     /// <param name="min">El valor mínimo.</param>
     /// <param name="max">El valor máximo.</param>
     /// <param name="name">Nombre del parámetro.</param>
     /// <returns>TValue | ApplicationException: "{name} must be in the range {min} to {max}".</returns>
-    public static TValue ThrowIfNotRange<TValue>([NotNull] this TValue? value, long min, long max, [CallerArgumentExpression("value")] string name = "")
-    => value.ThrowIf(() => !value.IsRange(min, max), Util.Messages.Range(name, min, max));
+    public static TValue ThrowIfOutRange<TValue>([NotNull] this TValue? value, long min, long max, [CallerArgumentExpression("value")] string name = "")
+    => value.ThrowIf(() => !value.IsRange(min, max), Messages.InsideRange(name, min, max));
+
+    /// <summary>
+    /// Verifica si un valor se encuentra entre un rango.
+    /// </summary>
+    /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="min">El valor mínimo.</param>
+    /// <param name="max">El valor máximo.</param>
+    /// <param name="name">Nombre del parámetro.</param>
+    /// <returns>TValue | ApplicationException: "{name} must be out the range {min} to {max}".</returns>
+    public static TValue ThrowIfInsideRange<TValue>([NotNull] this TValue? value, long min, long max, [CallerArgumentExpression("value")] string name = "")
+    => value.ThrowIf(() => value.IsRange(min, max), Messages.OutRange(name, min, max));
+
+    /// <summary>
+    /// Verifica si un valor se encuentra entre un rango.
+    /// </summary>
+    /// <typeparam name="TValue">Tipo del valor a verificar.</typeparam>
+    /// <param name="value">El valor a verificar.</param>
+    /// <param name="min">El valor mínimo.</param>
+    /// <param name="max">El valor máximo.</param>
+    /// <param name="name">Nombre del parámetro.</param>
+    /// <returns>TValue | ApplicationException: "{name} must be out the range {min} to {max}".</returns>
+    public static TValue ThrowIfInsideRangeOrEqual<TValue>([NotNull] this TValue? value, long min, long max, [CallerArgumentExpression("value")] string name = "")
+    => value.ThrowIf(() => value.IsRangeOrEqual(min, max), Messages.OutRange(name, min, max));
 
     #endregion Range
 

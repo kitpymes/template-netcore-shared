@@ -73,12 +73,28 @@ namespace Kitpymes.Core.Shared.Util
         public static string Less(string name, long min) => $"{name} must be greater than {min}";
 
         /// <summary>
+        /// Devuelve "{name} must be greater or equal than {min}".
+        /// </summary>
+        /// <param name="name">Nombre del parámetro.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <returns>"{name} must be greater or equal than {min}".</returns>
+        public static string LessOrEqual(string name, long min) => $"{name} must be greater or equal than {min}";
+
+        /// <summary>
         /// Devuelve "{name} must be less than {max}".
         /// </summary>
         /// <param name="name">Nombre del parámetro.</param>
         /// <param name="max">El valor máximo.</param>
-        /// <returns>"{name} is null or not values".</returns>
+        /// <returns>"{name} must be less than {max}".</returns>
         public static string Greater(string name, long max) => $"{name} must be less than {max}";
+
+        /// <summary>
+        /// Devuelve "{name} must be less or equal than {max}".
+        /// </summary>
+        /// <param name="name">Nombre del parámetro.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <returns>"{name} must be less or equal than {max}".</returns>
+        public static string GreaterOrEqual(string name, long max) => $"{name} must be less or equal than {max}";
 
         /// <summary>
         /// Devuelve "{name} must be in the range {min} to {max}".
@@ -87,7 +103,17 @@ namespace Kitpymes.Core.Shared.Util
         /// <param name="min">El valor mínimo.</param>
         /// <param name="max">El valor máximo.</param>
         /// <returns>"{name} must be in the range {min} to {max}".</returns>
-        public static string Range(string name, long min, long max)
+        public static string InsideRange(string name, long min, long max)
             => $"{name} must be in the range {min} to {max}";
+
+        /// <summary>
+        /// Devuelve "{name} must be out the range {min} to {max}".
+        /// </summary>
+        /// <param name="name">Nombre del parámetro.</param>
+        /// <param name="min">El valor mínimo.</param>
+        /// <param name="max">El valor máximo.</param>
+        /// <returns>"{name} must be out the range {min} to {max}".</returns>
+        public static string OutRange(string name, long min, long max)
+            => $"{name} must be out the range {min} to {max}";
     }
 }

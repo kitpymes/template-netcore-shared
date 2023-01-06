@@ -1,3 +1,14 @@
+# v.1.2.6
+- Se agregan los siguientes métodos de verificación en la clase "VerifyExtensions":
+  - IsRangeOrEqual: para verificar si un número se encuentra dentro de un rango.
+  - IsGreaterOrEqual: para verificar si un número es mayor o igual a un rango.
+  - ThrowIfGreaterOrEqual: para lanzar una excepción cuando se verifica que un número es mayor o igual a un rango.
+  - IsLessOrEqual: para verificar si un número es menor o igual a un rango.
+  - ThrowIfLessOrEqual: para lanzar una excepción cuando se verifica que un número es menor o igual a un rango.
+  - ThrowIfOutRange: para lanzar una excepción cuando se verifica que un número se encuentra fuera de un rango.
+  - ThrowIfInsideRange: para lanzar una excepción cuando se verifica que un número se encuentra dentro de un rango.
+  - ThrowIfInsideRangeOrEqual: para lanzar una excepción cuando se verifica que un número se encuentra dentro de un rango incluido los números min y max.
+
 # v.1.2.5
 - Se actualizan librerías.
 - Se arregla un bug en el método "IsContainsUniqueChars" de la clase "VerifyExtensions".
